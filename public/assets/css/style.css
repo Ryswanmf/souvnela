@@ -1,0 +1,52 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar-brand {
+    color: #002254;
+}
+
+.navbar-nav .nav-link.active {
+    color: #002254;
+}
+
+.hero {
+    background: linear-gradient(135deg, #4facfe 0%, #002254 100%);
+    color: white;
+    padding: 120px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.2rem;
+}
+
+.features .icon {
+    font-size: 40px;
+    color: #002254;
+}
+
+/* Produk Card Hover */
+.product-card:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+/* Footer Link Hover */
+.footer-link:hover {
+    color: #ffc107;
+    text-decoration: underline;
+    transition: 0.3s;
+}
+
+/* Social Icon Hover */
+.social-icon:hover {
+    color: #ffc107;
+    transform: scale(1.2);
+    transition: 0.3s;
+}
