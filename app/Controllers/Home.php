@@ -61,4 +61,19 @@ class Home extends BaseController
     {
         return view('login/register.php', ['title' => 'Register']);
     }
+
+    public function mug()
+    {
+        return view('produk/mug.php', ['title' => 'Mug']);
+    }
+    
+    public function kaos()
+    {
+        return view('produk/kaos.php', ['title' => 'Kaos']);
+    }
+
+    public function tumbler()
+    {
+        return view('produk/tumbler.php', ['title' => 'tumbler']);
+    }
 }

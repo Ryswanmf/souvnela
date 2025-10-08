@@ -115,7 +115,7 @@
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/blog1.jpg') ?>" class="card-img-top" alt="Blog 1">
+                    <img src="<?= base_url('assets/images/1.jpg') ?>" class="card-img-top" alt="Blog 1">
                     <div class="card-body">
                         <h5 class="card-title">Tips Memilih Souvenir Kampus</h5>
                         <p class="card-text">Panduan lengkap memilih souvenir yang tepat untuk mahasiswa dan dosen.</p>
@@ -125,7 +125,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/blog2.jpg') ?>" class="card-img-top" alt="Blog 2">
+                    <img src="<?= base_url('assets/images/2.jpg') ?>" class="card-img-top" alt="Blog 2">
                     <div class="card-body">
                         <h5 class="card-title">Trend Merchandise Kampus 2025</h5>
                         <p class="card-text">Cari tahu tren terbaru merchandise eksklusif di kalangan mahasiswa.</p>
@@ -135,7 +135,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/blog3.jpg') ?>" class="card-img-top" alt="Blog 3">
+                    <img src="<?= base_url('assets/images/3.jpg') ?>" class="card-img-top" alt="Blog 3">
                     <div class="card-body">
                         <h5 class="card-title">Kenapa Pilih Souvenir Resmi?</h5>
                         <p class="card-text">Alasan mengapa membeli souvenir resmi kampus lebih bernilai.</p>

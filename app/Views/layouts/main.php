@@ -27,11 +27,10 @@
                         Produk
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="<?= base_url('produk#mug') ?>">Mug Polinela</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('produk#kaos') ?>">Kaos Polinela</a></li>
-                        <li><a class="dropdown-item" href="<?= base_url('produk#tumbler') ?>">Tumbler Polinela</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('mug') ?>">Mug Polinela</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('kaos') ?>">Kaos Polinela</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('tumbler') ?>">Tumbler Polinela</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<?= base_url('produk') ?>">Semua Produk</a></li>
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link <?= ($title ?? '') == 'Kontak' ? 'active' : '' ?>" href="<?= base_url('kontak') ?>">Kontak</a></li>
@@ -56,6 +55,88 @@
 <main>
     <?= $this->renderSection('content') ?>
 </main>
+<!-- Floating WhatsApp Bubble -->
+<style>
+#wa-bubble {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+#wa-bubble .wa-pill {
+    background: #25D366;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#wa-bubble .wa-pill:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.25);
+}
+
+#wa-bubble .wa-icon {
+    width: 40px;
+    height: 40px;
+    background: #056E3D;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 480px) {
+    #wa-bubble .wa-text {
+        display: none;
+    }
+    #wa-bubble {
+        right: 14px;
+        bottom: 14px;
+    }
+}
+</style>
+
+<div id="wa-bubble">
+    <a id="wa-link" class="wa-pill" href="#" target="_blank" rel="noopener noreferrer">
+        <span class="wa-icon">
+            <!-- WhatsApp icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.05 11.54a9 9 0 1 1-16.25-5.3L4 4l2.3.8A9 9 0 0 1 21 11.54z"></path>
+                <path d="M12 17a5 5 0 0 0 5-5"></path>
+            </svg>
+        </span>
+        <span class="wa-text">Pesan Sekarang</span>
+    </a>
+</div>
+
+<script>
+// Floating WhatsApp script (CodeIgniter 4 version)
+document.addEventListener("DOMContentLoaded", function () {
+    // === KONFIGURASI ===
+    const phoneNumber = "6282183150556"; // Nomor WhatsApp kamu (format internasional tanpa + atau 0)
+    const defaultMessage = "Halo Souvnela, saya tertarik dengan produk souvenir Polinela."; 
+
+    // Bangun URL WhatsApp
+    const encodedMsg = encodeURIComponent(defaultMessage);
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodedMsg}`;
+    
+    // Set link ke tombol
+    const waLink = document.getElementById("wa-link");
+    if (waLink) waLink.href = waUrl;
+});
+</script>
 
 <!-- Footer -->
 <footer class="text-white pt-5" style="background-color:#002254;">
@@ -67,12 +148,6 @@
                     <strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>.
                     Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.
                 </p>
-            </div>
-            <div class="col-md-3 mb-4">
-                <h5 class="fw-bold mb-3">Lokasi</h5>
-                <div class="ratio ratio-4x3">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." style="border:0; min-height:200px;" allowfullscreen="" loading="lazy"></iframe>
-                </div>
             </div>
             
             <div class="col-md-3 mb-4">

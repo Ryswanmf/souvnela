@@ -13,7 +13,7 @@
         <div class="row align-items-center g-4">
             <!-- Gambar -->
             <div class="col-lg-6">
-                <img src="<?= base_url('assets/images/team.jpg') ?>" class="img-fluid rounded shadow" alt="Tim Souvnela">
+                <img src="<?= base_url('assets/images/logobiru.png') ?>" class="img-fluid rounded shadow" alt="Tim Souvnela">
             </div>
 
             <!-- Deskripsi -->

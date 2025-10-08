@@ -14,7 +14,7 @@
             <!-- Artikel 1 -->
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog1.jpg') ?>" class="card-img-top" alt="Event Polinela">
+                    <img src="<?= base_url('assets/images/1.jpg') ?>" class="card-img-top" alt="Event Polinela">
                     <div class="card-body">
                         <h5 class="card-title">Launching Souvenir Baru</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 15 September 2025</p>
@@ -27,7 +27,7 @@
             <!-- Artikel 2 -->
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog2.jpg') ?>" class="card-img-top" alt="Merchandise Polinela">
+                    <img src="<?= base_url('assets/images/2.jpg') ?>" class="card-img-top" alt="Merchandise Polinela">
                     <div class="card-body">
                         <h5 class="card-title">Tips Memilih Merchandise</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 10 September 2025</p>
@@ -40,7 +40,7 @@
             <!-- Artikel 3 -->
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog3.jpg') ?>" class="card-img-top" alt="Event Kampus">
+                    <img src="<?= base_url('assets/images/3.jpg') ?>" class="card-img-top" alt="Event Kampus">
                     <div class="card-body">
                         <h5 class="card-title">Souvenir di Acara Kampus</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 5 September 2025</p>
@@ -52,7 +52,7 @@
 
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog1.jpg') ?>" class="card-img-top" alt="Event Polinela">
+                    <img src="<?= base_url('assets/images/1.jpg') ?>" class="card-img-top" alt="Event Polinela">
                     <div class="card-body">
                         <h5 class="card-title">Launching Souvenir Baru</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 15 September 2025</p>
@@ -65,7 +65,7 @@
             <!-- Artikel 2 -->
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog2.jpg') ?>" class="card-img-top" alt="Merchandise Polinela">
+                    <img src="<?= base_url('assets/images/2.jpg') ?>" class="card-img-top" alt="Merchandise Polinela">
                     <div class="card-body">
                         <h5 class="card-title">Tips Memilih Merchandise</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 10 September 2025</p>
@@ -78,7 +78,7 @@
             <!-- Artikel 3 -->
             <div class="col-md-4">
                 <div class="card shadow-sm border-0 h-100">
-                    <img src="<?= base_url('assets/images/blog3.jpg') ?>" class="card-img-top" alt="Event Kampus">
+                    <img src="<?= base_url('assets/images/2.jpg') ?>" class="card-img-top" alt="Event Kampus">
                     <div class="card-body">
                         <h5 class="card-title">Souvenir di Acara Kampus</h5>
                         <p class="text-muted small mb-2"><i class="bi bi-calendar-event me-1"></i> 5 September 2025</p>

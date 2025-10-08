@@ -21,3 +21,7 @@ $routes->get('/checkout', 'Home::checkout');
 $routes->get('/login', 'Home::login');
 $routes->get('/register', 'Home::register');
 
+$routes->get('/mug', 'Home::mug');
+$routes->get('/kaos', 'Home::kaos');
+$routes->get('/tumbler', 'Home::tumbler');
+
