@@ -25,3 +25,23 @@ $routes->get('/mug', 'Home::mug');
 $routes->get('/kaos', 'Home::kaos');
 $routes->get('/tumbler', 'Home::tumbler');
 
+
+
+// ==========================
+// ADMIN ROUTES
+// ==========================
+// ==============================
+// ADMIN ROUTES
+// ==============================
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function($routes) {
+    $routes->get('/', 'Dashboard::index');
+    $routes->get('dashboard', 'Dashboard::index');
+    $routes->get('produk', 'Produk::index');
+    $routes->get('pesanan', 'Pesanan::index');
+    $routes->get('blog', 'Blog::index');
+    $routes->get('pengguna', 'Pengguna::index');
+    $routes->get('kontak', 'Kontak::index');
+});
+
+
+
