@@ -149,9 +149,36 @@
     <a href="<?= base_url('admin/blog') ?>" class="nav-link <?= url_is('admin/blog*') ? 'active' : '' ?>">
       <i class="bi bi-journal-text"></i> Blog
     </a>
-    <a href="<?= base_url('admin/kontak') ?>" class="nav-link <?= url_is('admin/kontak*') ? 'active' : '' ?>">
-      <i class="bi bi-envelope"></i> Kontak
-    </a>
+<li class="nav-item">
+                <a class="nav-link" href="<?= base_url('admin/kontak') ?>">
+                    <i class="bi bi-envelope"></i>
+                    <span>Kontak</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                    <i class="bi bi-gear"></i>
+                    <span>Pengaturan</span>
+                </a>
+                <div id="collapseSettings" class="collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSidebar">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/setting/hero') ?>"><i class="bi bi-aspect-ratio"></i> Hero</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/setting/features') ?>"><i class="bi bi-star"></i> Features</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/setting/about') ?>"><i class="bi bi-info-circle"></i> Tentang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/setting/contact') ?>"><i class="bi bi-telephone"></i> Kontak</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/setting/general') ?>"><i class="bi bi-gear"></i> Umum</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('admin/testimonial') ?>"><i class="bi bi-chat-quote"></i> Testimoni</a>
+                        </li>
     <a href="<?= base_url('admin/pengguna') ?>" class="nav-link <?= url_is('admin/pengguna*') ? 'active' : '' ?>">
       <i class="bi bi-people"></i> Pengguna
     </a>
@@ -164,9 +191,16 @@
     <i class="bi bi-list"></i>
   </button>
   <h5 class="m-0 fw-semibold"><?= $pageTitle ?? 'Dashboard' ?></h5>
-  <div class="user d-flex align-items-center gap-2">
-    <img src="<?= base_url('assets/images/admin.png') ?>" alt="Admin" width="38" height="38">
-    <span class="fw-medium">Admin</span>
+  <div class="dropdown">
+      <a href="#" class="user d-flex align-items-center gap-2 text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="<?= base_url('assets/images/admin.png') ?>" alt="Admin" width="38" height="38">
+          <span class="fw-medium text-dark">Admin <i class="bi bi-chevron-down small"></i></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+          <li><a class="dropdown-item" href="<?= base_url('/') ?>" target="_blank"><i class="bi bi-house me-2"></i>Lihat Situs</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="<?= base_url('logout') ?>"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+      </ul>
   </div>
 </div>
 

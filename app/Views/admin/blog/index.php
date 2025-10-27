@@ -15,7 +15,7 @@
                         <th>#</th>
                         <th>Judul</th>
                         <th>Kategori</th>
-                        <th>Tanggal</th>
+                        <th>Tanggal Dibuat</th>
                         <th>Penulis</th>
                         <th class="text-end">Aksi</th>
                     </tr>
@@ -27,7 +27,7 @@
                             <td><?= $i + 1 ?></td>
                             <td><?= esc($b['judul']) ?></td>
                             <td><?= esc($b['kategori']) ?></td>
-                            <td><?= date('d M Y', strtotime($b['tanggal'])) ?></td>
+                            <td><?= date('d M Y', strtotime($b['created_at'])) ?></td>
                             <td><?= esc($b['penulis']) ?></td>
                             <td class="text-end">
                                 <a href="<?= base_url('admin/blog/edit/'.$b['id']) ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>

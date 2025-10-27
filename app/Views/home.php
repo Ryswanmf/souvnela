@@ -7,18 +7,17 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-white text-center text-lg-start mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-3">Souvenir Eksklusif Polinela</h1>
+                <h1 class="display-4 fw-bold mb-3"><?= esc($settings['home']['hero_title'] ?? 'Souvenir Eksklusif Polinela') ?></h1>
                 <p class="lead mb-4">
-                    Selamat datang di Souvnela, pusat merchandise dan suvenir resmi Polinela. Kami mengundang Anda untuk menjelajahi koleksi yang tidak hanya unik, tetapi juga dibuat dengan kualitas premium.
+                    <?= esc($settings['home']['hero_subtitle1'] ?? 'Selamat datang di Souvnela, pusat merchandise dan suvenir resmi Polinela. Kami mengundang Anda untuk menjelajahi koleksi yang tidak hanya unik, tetapi juga dibuat dengan kualitas premium.') ?>
                 </p>
                 <p class="lead mb-4">
-                    Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung.
-                    Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.
+                    <?= esc($settings['home']['hero_subtitle2'] ?? 'Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung. Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.') ?>
                 </p>
-                <a href="#produk" class="btn btn-warning btn-lg px-4 py-2">Lihat Produk</a>
+                <a href="#produk" class="btn btn-warning btn-lg px-4 py-2"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="<?= base_url('assets/images/oo.png') ?>" class="img-fluid" alt="Souvenir Polinela">
+                <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid" alt="Souvenir Polinela">
             </div>
         </div>
     </div>
@@ -27,22 +26,40 @@
 <!-- Features -->
 <section class="features py-5">
     <div class="container text-center">
-        <h2 class="mb-4">Kenapa Memilih Kami?</h2>
+        <h2 class="mb-4"><?= esc($settings['home']['features_title'] ?? 'Kenapa Memilih Kami?') ?></h2>
         <div class="row">
             <div class="col-md-4">
-                <div class="icon mb-3">🎁</div>
-                <h5>Kualitas Premium</h5>
-                <p>Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.</p>
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature1_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature1_image']) ?>" alt="Feature 1 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature1_icon'] ?? '🎁') ?>
+                    <?php endif; ?>
+                </div>
+                <h5><?= esc($settings['home']['feature1_title'] ?? 'Kualitas Premium') ?></h5>
+                <p><?= esc($settings['home']['feature1_description'] ?? 'Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.') ?></p>
             </div>
             <div class="col-md-4">
-                <div class="icon mb-3">⚡</div>
-                <h5>Proses Cepat</h5>
-                <p>Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.</p>
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature2_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature2_image']) ?>" alt="Feature 2 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature2_icon'] ?? '⚡') ?>
+                    <?php endif; ?>
+                </div>
+                <h5><?= esc($settings['home']['feature2_title'] ?? 'Proses Cepat') ?></h5>
+                <p><?= esc($settings['home']['feature2_description'] ?? 'Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.') ?></p>
             </div>
             <div class="col-md-4">
-                <div class="icon mb-3">💳</div>
-                <h5>Transaksi Mudah</h5>
-                <p>Metode pembayaran yang fleksibel dan aman digunakan.</p>
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature3_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature3_image']) ?>" alt="Feature 3 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature3_icon'] ?? '💳') ?>
+                    <?php endif; ?>
+                </div>
+                <h5><?= esc($settings['home']['feature3_title'] ?? 'Transaksi Mudah') ?></h5>
+                <p><?= esc($settings['home']['feature3_description'] ?? 'Metode pembayaran yang fleksibel dan aman digunakan.') ?></p>
             </div>
         </div>
     </div>
@@ -53,36 +70,28 @@
     <div class="container text-center">
         <h2 class="mb-4">Produk Unggulan</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm product-card">
-                    <img src="<?= base_url('assets/images/mug.png') ?>" class="card-img-top" alt="Mug Polinela Eksklusif">
-                    <div class="card-body">
-                        <h5 class="card-title">Mug Polinela</h5>
-                        <p class="card-text">Rp 50.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
+            <?php if (!empty($products)): ?>
+                <?php foreach ($products as $product): ?>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm product-card">
+                            <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>" class="card-img-top" alt="<?= esc($product['nama']) ?>" style="height: 240px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= esc($product['nama']) ?></h5>
+                                <p class="card-text">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                                        <form action="<?= base_url('cart/add') ?>" method="post">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-cart-plus"></i> Pesan
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm product-card">
-                    <img src="<?= base_url('assets/images/kaos.png') ?>" class="card-img-top" alt="Kaos Polinela Eksklusif">
-                    <div class="card-body">
-                        <h5 class="card-title">Kaos Polinela</h5>
-                        <p class="card-text">Rp 100.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm product-card">
-                    <img src="<?= base_url('assets/images/tumbler.png') ?>" class="card-img-top" alt="Tumbler Polinela Eksklusif">
-                    <div class="card-body">
-                        <h5 class="card-title">Tumbler Polinela</h5>
-                        <p class="card-text">Rp 75.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
-                    </div>
-                </div>
-            </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-muted">Belum ada produk unggulan.</p>
+            <?php endif; ?>
         </div>
     </div>
 </section>
@@ -90,20 +99,18 @@
 <!-- Tentang -->
 <section id="tentang" class="py-5">
     <div class="container">
-        <h2 class="fw-bold text-center">Souvnela - Souvenir Eksklusif Polinela</h2>
+        <h2 class="fw-bold text-center"><?= esc($settings['home']['about_title'] ?? 'Souvnela - Souvenir Eksklusif Polinela') ?></h2>
         <br>
                 <p>
-                    <strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>.
-                    Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.
+                    <?= $settings['home']['about_description1'] ?? '<strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>. Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.' ?>
                 </p>
                 <p>
-                    Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen
-                    untuk memberikan pengalaman terbaik bagi seluruh pelanggan.
+                    <?= $settings['home']['about_description2'] ?? 'Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen untuk memberikan pengalaman terbaik bagi seluruh pelanggan.' ?>
                 </p>
                 <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Produk eksklusif dan original</li>
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Bahan berkualitas premium</li>
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> Transaksi aman & cepat</li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list1'] ?? 'Produk eksklusif dan original') ?></li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list2'] ?? 'Bahan berkualitas premium') ?></li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list3'] ?? 'Transaksi aman & cepat') ?></li>
                 </ul>
     </div>
 </section>
@@ -113,35 +120,78 @@
     <div class="container text-center">
         <h2 class="mb-4">Blog</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/1.jpg') ?>" class="card-img-top" alt="Blog 1">
-                    <div class="card-body">
-                        <h5 class="card-title">Tips Memilih Souvenir Kampus</h5>
-                        <p class="card-text">Panduan lengkap memilih souvenir yang tepat untuk mahasiswa dan dosen.</p>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Baca Selengkapnya</a>
+            <?php if (!empty($posts)): ?>
+                <?php foreach ($posts as $post): ?>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm h-100">
+                            <img src="<?= base_url('uploads/' . esc($post['gambar'])) ?>" class="card-img-top" alt="<?= esc($post['judul']) ?>" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= esc($post['judul']) ?></h5>
+                                <p class="card-text"><?= esc(substr(strip_tags($post['konten']), 0, 100)) ?>...</p>
+                                <a href="<?= base_url('blog/detail/' . $post['id']) ?>" class="btn btn-outline-primary btn-sm">Baca Selengkapnya</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/2.jpg') ?>" class="card-img-top" alt="Blog 2">
-                    <div class="card-body">
-                        <h5 class="card-title">Trend Merchandise Kampus 2025</h5>
-                        <p class="card-text">Cari tahu tren terbaru merchandise eksklusif di kalangan mahasiswa.</p>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Baca Selengkapnya</a>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p class="text-muted">Belum ada artikel.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</section>
+
+<style>
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 1 !important;
+        width: 50px;
+        height: 50px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+    }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 20px;
+        height: 20px;
+    }
+    .features .col-md-4 .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    .features .col-md-4 .card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
+
+<!-- Testimonials -->
+<section id="testimonials" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Testimoni</h2>
+        <div id="testimonialCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false">
+            <div class="carousel-inner">
+                <?php if (!empty($testimonials)): ?>
+                    <?php foreach ($testimonials as $i => $testimonial): ?>
+                        <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+                            <div class="testimonial-item text-center">
+                                <?php if (!empty($testimonial['photo'])): ?>
+                                    <img src="<?= base_url('uploads/' . $testimonial['photo']) ?>" alt="Author Photo" class="rounded-circle mb-3" width="100" height="100" style="object-fit: cover;">
+                                <?php endif; ?>
+                                <p class="fs-5 fst-italic">"<?= esc($testimonial['content']) ?>"</p>
+                                <h5 class="fw-bold mt-3"><?= esc($testimonial['author']) ?></h5>
+                                <p class="text-muted"><?= esc($testimonial['author_title']) ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="carousel-item active">
+                        <div class="testimonial-item text-center">
+                            <p class="fs-5 fst-italic">Belum ada testimoni.</p>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100">
-                    <img src="<?= base_url('assets/images/3.jpg') ?>" class="card-img-top" alt="Blog 3">
-                    <div class="card-body">
-                        <h5 class="card-title">Kenapa Pilih Souvenir Resmi?</h5>
-                        <p class="card-text">Alasan mengapa membeli souvenir resmi kampus lebih bernilai.</p>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Baca Selengkapnya</a>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -150,7 +200,7 @@
 <!-- Kontak Kami -->
 <section id="kontak" class="py-5">
     <div class="container">
-        <div class="h2 text-center">Kontak</div>
+        <div class="h2 text-center"><?= esc($settings['home']['contact_title'] ?? 'Kontak') ?></div>
         <div class="row">
             <!-- Form -->
             <div class="row g-4">
@@ -190,23 +240,23 @@
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-geo-alt-fill me-2"></i>
-                            <strong>Alamat:</strong> Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141
+                            <strong>Alamat:</strong> <?= esc($settings['home']['contact_address'] ?? 'Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-telephone-fill me-2"></i>
-                            <strong>Telepon:</strong> +62 812 3456 7890
+                            <strong>Telepon:</strong> <?= esc($settings['home']['contact_phone'] ?? '+62 812 3456 7890') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-envelope-fill me-2"></i>
-                            <strong>Instagram:</strong> souvnela
+                            <strong>Instagram:</strong> <?= esc($settings['home']['contact_instagram'] ?? 'souvnela') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-tiktok me-2"></i>
-                            <strong>TikTok:</strong> @souvnela
+                            <strong>TikTok:</strong> <?= esc($settings['home']['contact_tiktok'] ?? '@souvnela') ?>
                         </p>
                         <p class="mb-0">
                             <i class="bi bi-globe me-2"></i>
-                            <strong>Email:</strong> souvnela@gmail.com
+                            <strong>Email:</strong> <?= esc($settings['home']['contact_email'] ?? 'souvnela@gmail.com') ?>
                         </p>
                     </div>
                 </div>

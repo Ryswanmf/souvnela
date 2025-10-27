@@ -1,0 +1,49 @@
+#wa-bubble {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+#wa-bubble .wa-pill {
+    background: #25D366;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+
+#wa-bubble .wa-pill:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.25);
+}
+
+#wa-bubble .wa-icon {
+    width: 40px;
+    height: 40px;
+    background: #056E3D;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 480px) {
+    #wa-bubble .wa-text {
+        display: none;
+    }
+    #wa-bubble {
+        right: 14px;
+        bottom: 14px;
+    }
+}

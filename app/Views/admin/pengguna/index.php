@@ -35,11 +35,11 @@
                                     <?= !empty($u['created_at']) ? date('d M Y', strtotime($u['created_at'])) : '-' ?>
                                 </td>
                                 <td class="text-end">
-                                    <a href="<?= base_url('admin/users/edit/' . ($u['id'] ?? 0)) ?>" 
+                                    <a href="<?= base_url('admin/pengguna/edit/' . ($u['id'] ?? 0)) ?>" 
                                        class="btn btn-sm btn-outline-primary">
                                         <i class="bi bi-pencil"></i>
                                     </a>
-                                    <a href="<?= base_url('admin/users/hapus/' . ($u['id'] ?? 0)) ?>" 
+                                    <a href="<?= base_url('admin/pengguna/hapus/' . ($u['id'] ?? 0)) ?>" 
                                        onclick="return confirm('Hapus pengguna ini?')" 
                                        class="btn btn-sm btn-outline-danger">
                                         <i class="bi bi-trash"></i>

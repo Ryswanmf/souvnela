@@ -1,4 +1,6 @@
-<!doctype html>
+
+
+✕ [API Error: Model stream ended with empty response text.]<!doctype html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
@@ -19,7 +21,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto fw-semibold">
-                <li class="nav-item"><a class="nav-link active" href="#">Beranda</a></li>
+                <li class="nav-item"><a class="nav-link active" href="<?= base_url('/') ?>">Beranda</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#produk" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Produk
@@ -29,19 +31,19 @@
                         <li><a class="dropdown-item" href="#kaos">Kaos Polinela</a></li>
                         <li><a class="dropdown-item" href="#tumbler">Tumbler Polinela</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#all">Semua Produk</a></li>
+                        <li><a class="dropdown-item" href="<?= base_url('produk') ?>">Semua Produk</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
-                <li class="nav-item"><a class="nav-link" href="#blog">Blog</a></li>
-                <li class="nav-item"><a class="nav-link" href="#tentang">Tentang Kami</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= base_url('kontak') ?>">Kontak</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= base_url('blog') ?>">Blog</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?= base_url('tentang') ?>">Tentang Kami</a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#checkout" title="Keranjang">
+                    <a class="nav-link" href="<?= base_url('cart') ?>" title="Keranjang">
                         <i class="bi bi-cart3"></i>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#signin" title="Login">
+                    <a class="nav-link" href="<?= base_url('login') ?>" title="Login">
                         <i class="bi bi-person-circle"></i>
                     </a>
                 </li>
@@ -95,33 +97,33 @@
     <div class="container text-center">
         <h2 class="mb-4">Produk Unggulan</h2>
         <div class="row g-4">
-            <div class="col-md-4">
+            <div class="col-md-4" id="mug">
                 <div class="card shadow-sm product-card">
                     <img src="<?= base_url('assets/images/mug.png') ?>" class="card-img-top" alt="Mug Polinela Eksklusif">
                     <div class="card-body">
                         <h5 class="card-title">Mug Polinela</h5>
                         <p class="card-text">Rp 50.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
+                        <a href="<?= base_url('produk') ?>" class="btn btn-primary">Pesan</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="kaos">
                 <div class="card shadow-sm product-card">
                     <img src="<?= base_url('assets/images/kaos.png') ?>" class="card-img-top" alt="Kaos Polinela Eksklusif">
                     <div class="card-body">
                         <h5 class="card-title">Kaos Polinela</h5>
                         <p class="card-text">Rp 100.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
+                        <a href="<?= base_url('produk') ?>" class="btn btn-primary">Pesan</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="tumbler">
                 <div class="card shadow-sm product-card">
                     <img src="<?= base_url('assets/images/tumbler.png') ?>" class="card-img-top" alt="Tumbler Polinela Eksklusif">
                     <div class="card-body">
                         <h5 class="card-title">Tumbler Polinela</h5>
                         <p class="card-text">Rp 75.000</p>
-                        <a href="#" class="btn btn-primary">Pesan</a>
+                        <a href="<?= base_url('produk') ?>" class="btn btn-primary">Pesan</a>
                     </div>
                 </div>
             </div>
@@ -171,17 +173,21 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Lokasi</h5>
                 <div class="ratio ratio-4x3">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." style="border:0; min-height:200px;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.233393349332!2d105.242879314765!3d-5.380172996095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e40db05f772c729%3A0x112d2d40e1e2b3c!2sPoliteknik%20Negeri%20Lampung!5e0!3m2!1sen!2sid" style="border:0; min-height:200px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
             </div>
         </div>
     </div>
     <hr class="my-0">
     <div class="text-center py-3" style="background-color: #001a40;">
-        <small>&copy; <?= date('Y'); ?> Souvnela - Souvenir Polinela. Wayan dan Riswan.</small>
+        <small><?= esc($settings['general']['copyright_text'] ?? ('&copy; ' . date('Y') . ' Souvnela - Souvenir Eksklusif Polinela. Proyek Mandiri.')) ?></small>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const settings = <?= isset($settings) ? json_encode($settings) : '{}' ?>;
+</script>
+<script src="<?= base_url('assets/js/whatsapp.js') ?>"></script>
 </body>
 </html>

@@ -2,97 +2,126 @@
 
 <?= $this->section('content') ?>
 
-<!-- Produk Page -->
 <section id="produk" class="py-5 bg-light">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="fw-bold">Daftar Produk Souvnela</h2>
+            <h2 class="fw-bold"><?= esc($title ?? 'Semua Produk') ?></h2>
             <p class="text-muted">Pilih souvenir eksklusif Polinela favoritmu!</p>
         </div>
 
-        <div class="row g-4">
-            <!-- Produk Mug -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/mug.png') ?>" class="card-img-top" alt="Mug Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Mug Polinela</h5>
-                        <p class="card-text text-muted small">Mug keramik eksklusif dengan logo Polinela.</p>
-                        <p class="fw-bold mb-3">Rp 50.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
+        <?php if (!empty($produk)): ?>
+        <div id="produkCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                <?php 
+                // 6 produk per slide (3 atas + 3 bawah)
+                $chunked = array_chunk($produk, 6);
+                $first = true;
+                foreach ($chunked as $group): 
+                    $atas = array_slice($group, 0, 3);
+                    $bawah = array_slice($group, 3);
+                ?>
+                    <div class="carousel-item <?= $first ? 'active' : '' ?>">
+
+                        <!-- Baris Atas -->
+                        <div class="row g-4 justify-content-center mb-4">
+                            <?php foreach ($atas as $p): ?>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card shadow-sm h-100 product-card">
+                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>" 
+                                             class="card-img-top" 
+                                             alt="<?= esc($p['nama']) ?>" 
+                                             style="height:240px; object-fit:cover;">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title"><?= esc($p['nama']) ?></h5>
+                                            <p class="card-text text-muted small flex-grow-1"><?= esc($p['deskripsi']) ?></p>
+                                            <p class="fw-bold mb-1">Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
+                                            <p class="text-muted small mb-3">
+                                                Stok: <?= esc($p['stok']) ?> | <?= esc($p['kategori']) ?>
+                                            </p>
+                                            <form action="<?= base_url('cart/add') ?>" method="post" class="mt-auto">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="bi bi-cart-plus"></i> Pesan
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- Baris Bawah -->
+                        <div class="row g-4 justify-content-center">
+                            <?php foreach ($bawah as $p): ?>
+                                <div class="col-md-4 col-sm-6">
+                                    <div class="card shadow-sm h-100 product-card">
+                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>" 
+                                             class="card-img-top" 
+                                             alt="<?= esc($p['nama']) ?>" 
+                                             style="height:240px; object-fit:cover;">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title"><?= esc($p['nama']) ?></h5>
+                                            <p class="card-text text-muted small flex-grow-1"><?= esc($p['deskripsi']) ?></p>
+                                            <p class="fw-bold mb-1">Rp <?= number_format($p['harga'], 0, ',', '.') ?></p>
+                                            <p class="text-muted small mb-3">
+                                                Stok: <?= esc($p['stok']) ?> | <?= esc($p['kategori']) ?>
+                                            </p>
+                                            <form action="<?= base_url('cart/add') ?>" method="post" class="mt-auto">
+                                                <?= csrf_field() ?>
+                                                <input type="hidden" name="product_id" value="<?= $p['id'] ?>">
+                                                <button type="submit" class="btn btn-primary w-100">
+                                                    <i class="bi bi-cart-plus"></i> Pesan
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                </div>
+                <?php 
+                $first = false;
+                endforeach; 
+                ?>
             </div>
 
-            <!-- Produk Kaos -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/kaos.png') ?>" class="card-img-top" alt="Kaos Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Kaos Polinela</h5>
-                        <p class="card-text text-muted small">Kaos cotton combed 30s dengan desain modern.</p>
-                        <p class="fw-bold mb-3">Rp 100.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produk Tumbler -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/tumbler.png') ?>" class="card-img-top" alt="Tumbler Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Tumbler Polinela</h5>
-                        <p class="card-text text-muted small">Tumbler stainless steel tahan lama dan stylish.</p>
-                        <p class="fw-bold mb-3">Rp 75.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
-                    </div>
-                </div>
-            </div>
+            <!-- Navigasi -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#produkCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Sebelumnya</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#produkCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Berikutnya</span>
+            </button>
         </div>
 
-        <!-- Tambahan produk lainnya -->
-        <div class="row g-4 mt-4">
-            <!-- Produk Topi -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/topi.png') ?>" class="card-img-top" alt="Topi Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Topi Polinela</h5>
-                        <p class="card-text text-muted small">Topi keren dengan bordir logo Polinela.</p>
-                        <p class="fw-bold mb-3">Rp 60.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
-                    </div>
-                </div>
+        <?php else: ?>
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-box"></i> Belum ada produk.
             </div>
-
-            <!-- Produk Tote Bag -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/totebag.png') ?>" class="card-img-top" alt="Tote Bag Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Tote Bag Polinela</h5>
-                        <p class="card-text text-muted small">Tote bag eco-friendly untuk kebutuhan sehari-hari.</p>
-                        <p class="fw-bold mb-3">Rp 40.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Produk Lanyard -->
-            <div class="col-md-4">
-                <div class="card shadow-sm h-100 product-card">
-                    <img src="<?= base_url('assets/images/lanyard.png') ?>" class="card-img-top" alt="Lanyard Polinela Eksklusif">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Lanyard Polinela</h5>
-                        <p class="card-text text-muted small">Lanyard dengan desain unik untuk ID card kampusmu.</p>
-                        <p class="fw-bold mb-3">Rp 25.000</p>
-                        <a href="#" class="btn btn-primary mt-auto">Pesan</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 </section>
+
+<style>
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-size: 50%, 50%;
+}
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+</style>
 
 <?= $this->endSection() ?>

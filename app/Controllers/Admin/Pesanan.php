@@ -3,17 +3,35 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\PesananModel; // Import model
 
 class Pesanan extends BaseController
 {
     public function index()
     {
-        $pesanan = [
-            ['id' => 1, 'kode' => 'ORD-001', 'pelanggan' => 'Andi', 'tanggal' => '2025-10-11', 'total' => 250000, 'status' => 'Proses'],
-            ['id' => 2, 'kode' => 'ORD-002', 'pelanggan' => 'Budi', 'tanggal' => '2025-10-10', 'total' => 480000, 'status' => 'Selesai'],
-            ['id' => 3, 'kode' => 'ORD-003', 'pelanggan' => 'Citra', 'tanggal' => '2025-10-09', 'total' => 120000, 'status' => 'Baru'],
+        $model = new PesananModel();
+        $data = [
+            'pesanan' => $model->orderBy('created_at', 'DESC')->findAll(), 
+            'pageTitle' => 'Daftar Pesanan'
         ];
 
-        return view('admin/pesanan', compact('pesanan'));
+        return view('admin/pesanan', $data);
+    }
+
+    public function detail($id)
+    {
+        $model = new PesananModel();
+        $pesanan = $model->find($id);
+
+        if (!$pesanan) {
+            return redirect()->to('admin/pesanan')->with('error', 'Pesanan tidak ditemukan.');
+        }
+
+        // TODO: Buat view untuk detail pesanan jika diperlukan
+        // Untuk sekarang, kita bisa tampilkan data mentah atau redirect.
+        echo "<h1>Detail Pesanan: {$pesanan['kode_pesanan']}</h1>";
+        echo "<pre>";
+        print_r($pesanan);
+        echo "</pre>";
     }
 }

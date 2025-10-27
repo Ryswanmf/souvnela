@@ -19,13 +19,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($pesanan)): ?>
-                        <?php foreach ($pesanan as $i => $p): ?>
+                    <?php if (!empty($pesanan)):
+                        foreach ($pesanan as $i => $p):
+                        ?>
                         <tr>
                             <td><?= $i + 1 ?></td>
                             <td><?= esc($p['kode']) ?></td>
                             <td><?= esc($p['pelanggan']) ?></td>
-                            <td><?= date('d M Y', strtotime($p['tanggal'])) ?></td>
+                            <td><?= date('d M Y', strtotime($p['created_at'])) ?></td>
                             <td>Rp <?= number_format($p['total'], 0, ',', '.') ?></td>
                             <td>
                                 <?php if ($p['status'] == 'Selesai'): ?>
@@ -40,8 +41,9 @@
                                 <a href="<?= base_url('admin/pesanan/detail/'.$p['id']) ?>" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
                             </td>
                         </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+                        <?php endforeach;
+                    else:
+                        ?>
                         <tr><td colspan="7" class="text-center text-muted">Belum ada pesanan.</td></tr>
                     <?php endif; ?>
                 </tbody>

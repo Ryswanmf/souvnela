@@ -3,27 +3,36 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
+use App\Models\ProdukModel;
+use App\Models\PesananModel;
 
 class Dashboard extends BaseController
 {
     public function index()
     {
+        $produkModel = new ProdukModel();
+        $pesananModel = new PesananModel();
+
+        // Kalkulasi Statistik
+        $totalSales = $pesananModel->selectSum('total')->where('status', 'Selesai')->first()['total'] ?? 0;
+        $totalProducts = $produkModel->countAllResults();
+        $totalOrders = $pesananModel->countAllResults();
+        $lowStock = $produkModel->where('stok <', 5)->countAllResults();
+
         $stats = [
-            'sales' => 1500000,
-            'products' => 25,
-            'orders' => 8,
-            'visitors' => 120,
-            'lowstock' => 3
+            'sales'    => $totalSales,
+            'products' => $totalProducts,
+            'orders'   => $totalOrders,
+            'visitors' => 120, // Data statis untuk saat ini
+            'lowstock' => $lowStock
         ];
 
+        // Data untuk chart (statis untuk saat ini)
         $chart_labels = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
         $chart_sales = [120000, 150000, 90000, 170000, 140000, 190000, 220000];
 
-        $products = [
-            ['id' => 1, 'name' => 'Kaos Polos', 'price' => 80000, 'stock' => 10],
-            ['id' => 2, 'name' => 'Sweater Hoodie', 'price' => 150000, 'stock' => 4],
-            ['id' => 3, 'name' => 'Topi Custom', 'price' => 60000, 'stock' => 0],
-        ];
+        // Ambil beberapa produk terbaru untuk ditampilkan di tabel
+        $products = $produkModel->orderBy('id', 'DESC')->limit(5)->findAll();
 
         return view('admin/dashboard', compact('stats', 'chart_labels', 'chart_sales', 'products'));
     }

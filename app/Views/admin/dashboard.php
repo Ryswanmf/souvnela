@@ -63,14 +63,13 @@
                     <?php foreach ($products ?? [] as $i => $p): ?>
                     <tr>
                         <td><?= $i + 1 ?></td>
-                        <td><?= esc($p['name']) ?></td>
-                        <td>Rp <?= number_format($p['price'], 0, ',', '.') ?></td>
-                        <td><?= $p['stock'] ?></td>
+                        <td><?= esc($p['nama']) ?></td>
+                        <td>Rp <?= number_format($p['harga'], 0, ',', '.') ?></td>
+                        <td><?= $p['stok'] ?></td>
                         <td>
-                            <?php if ($p['stock'] <= 0): ?>
-                                <span class="badge bg-danger">Habis</span>
-                            <?php elseif ($p['stock'] < 5): ?>
-                                <span class="badge bg-warning text-dark">Menipis</span>
+                                                         <?php if ($p['stok'] <= 0): ?>
+                                                             <span class="badge bg-danger">Habis</span>
+                                                         <?php elseif ($p['stok'] < 5): ?>                                <span class="badge bg-warning text-dark">Menipis</span>
                             <?php else: ?>
                                 <span class="badge bg-success">Tersedia</span>
                             <?php endif; ?>
