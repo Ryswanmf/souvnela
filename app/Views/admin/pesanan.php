@@ -38,7 +38,26 @@
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <a href="<?= base_url('admin/pesanan/detail/'.$p['id']) ?>" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+                                <a href="<?= base_url('admin/pesanan/detail/'.$p['id']) ?>" class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></a>
+                                        
+                                <?php if ($p['status'] === 'Baru'): ?>
+                                    <form action="<?= base_url('admin/pesanan/updateStatus/'.$p['id']) ?>" method="post" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="status" value="Proses">
+                                        <button type="submit" class="btn btn-sm btn-success me-1" title="Konfirmasi Pesanan"><i class="bi bi-check-circle"></i></button>
+                                    </form>
+                                    <form action="<?= base_url('admin/pesanan/updateStatus/'.$p['id']) ?>" method="post" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="status" value="Dibatalkan">
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Tolak Pesanan"><i class="bi bi-x-circle"></i></button>
+                                    </form>
+                                <?php elseif ($p['status'] === 'Proses'): ?>
+                                    <form action="<?= base_url('admin/pesanan/updateStatus/'.$p['id']) ?>" method="post" class="d-inline">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="status" value="Selesai">
+                                        <button type="submit" class="btn btn-sm btn-primary" title="Tandai Selesai"><i class="bi bi-check-circle-fill"></i></button>
+                                    </form>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach;

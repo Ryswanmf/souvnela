@@ -162,8 +162,26 @@ class Setting extends BaseController
             'about_list1' => $this->request->getPost('about_list1'),
             'about_list2' => $this->request->getPost('about_list2'),
             'about_list3' => $this->request->getPost('about_list3'),
+            'visi' => $this->request->getPost('visi'),
+            'misi' => $this->request->getPost('misi'),
             'footer_description' => $this->request->getPost('footer_description'),
         ];
+
+        // Handle file upload for about_image
+        $aboutImage = $this->request->getFile('about_image');
+        if ($aboutImage && $aboutImage->isValid() && !$aboutImage->hasMoved()) {
+            $currentSettings = $this->homeSettingModel->first();
+            if ($currentSettings && !empty($currentSettings['about_image'])) {
+                $oldImagePath = ROOTPATH . 'public/uploads/' . $currentSettings['about_image'];
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+
+            $newName = $aboutImage->getRandomName();
+            $aboutImage->move(ROOTPATH . 'public/uploads', $newName);
+            $data['about_image'] = $newName;
+        }
 
         $currentSettings = $this->homeSettingModel->first();
         if ($currentSettings) {

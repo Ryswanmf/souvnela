@@ -91,7 +91,6 @@
       transition: left 0.3s ease;
     }
 
-    /* Main Content */
     main {
       margin-left: 250px;
       padding: 2rem;
@@ -142,6 +141,9 @@
     </a>
     <a href="<?= base_url('admin/produk') ?>" class="nav-link <?= url_is('admin/produk*') ? 'active' : '' ?>">
       <i class="bi bi-box-seam"></i> Produk
+    </a>
+    <a href="<?= base_url('admin/kategori') ?>" class="nav-link <?= url_is('admin/kategori*') ? 'active' : '' ?>">
+      <i class="bi bi-tags"></i> Kategori Produk
     </a>
     <a href="<?= base_url('admin/pesanan') ?>" class="nav-link <?= url_is('admin/pesanan*') ? 'active' : '' ?>">
       <i class="bi bi-receipt"></i> Pesanan

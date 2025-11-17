@@ -15,7 +15,7 @@
 
     <div class="card shadow mb-4">
         <div class="card-body">
-            <form action="<?= base_url('admin/setting/update_about') ?>" method="post">
+            <form action="<?= base_url('admin/setting/update_about') ?>" method="post" enctype="multipart/form-data">
                 <?= csrf_field() ?>
 
                 <h5 class="mt-4">Tentang Section</h5>
@@ -42,6 +42,24 @@
                 <div class="mb-3">
                     <label for="about_list3" class="form-label">List Tentang 3</label>
                     <input type="text" class="form-control" id="about_list3" name="about_list3" value="<?= esc($settings['about_list3'] ?? '') ?>">
+                </div>
+
+                <div class="mb-3">
+                    <label for="about_image" class="form-label">Gambar Tentang</label>
+                    <input type="file" class="form-control" id="about_image" name="about_image">
+                    <?php if (!empty($settings['about_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['about_image']) ?>" alt="About Image" class="img-thumbnail mt-2" width="200">
+                    <?php endif; ?>
+                </div>
+
+                <div class="mb-3">
+                    <label for="visi" class="form-label">Visi</label>
+                    <textarea class="form-control" id="visi" name="visi" rows="4"><?= esc($settings['visi'] ?? '') ?></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="misi" class="form-label">Misi</label>
+                    <textarea class="form-control" id="misi" name="misi" rows="4"><?= esc($settings['misi'] ?? '') ?></textarea>
                 </div>
 
                 <div class="mb-3">

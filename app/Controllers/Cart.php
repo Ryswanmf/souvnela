@@ -89,6 +89,26 @@ class Cart extends BaseController
         return redirect()->to('/cart')->with('success', 'Produk berhasil dihapus dari keranjang.');
     }
 
+    public function checkout()
+    {
+        if (!session()->get('isLoggedIn')) {
+            session()->set('redirect_url', base_url('checkout'));
+            return redirect()->to('/login')->with('error', 'Anda harus login untuk melanjutkan ke checkout.');
+        }
+
+        $cart = session()->get('cart') ?? [];
+        if (empty($cart)) {
+            return redirect()->to('/cart')->with('error', 'Keranjang Anda kosong.');
+        }
+
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['harga'] * $item['quantity'];
+        }
+
+        return view('checkout', ['cart' => $cart, 'total' => $total, 'title' => 'Checkout']);
+    }
+
     public function placeOrder()
     {
         // Validasi dasar
@@ -101,6 +121,7 @@ class Cart extends BaseController
         }
 
         $pesananModel = new \App\Models\PesananModel();
+        $pesananItemModel = new \App\Models\PesananItemModel();
         $produkModel = new \App\Models\ProdukModel();
 
         // Hitung total
@@ -122,11 +143,22 @@ class Cart extends BaseController
         $db = \Config\Database::connect();
         $db->transStart();
 
-        // 1. Simpan data pesanan
+        // 1. Simpan data pesanan utama
         $pesananModel->save($orderData);
+        $pesananId = $pesananModel->getInsertID();
 
-        // 2. Kurangi stok produk
+        // 2. Simpan item-item pesanan
         foreach ($cart as $item) {
+            $itemData = [
+                'pesanan_id'  => $pesananId,
+                'produk_id'   => $item['id'],
+                'nama_produk' => $item['nama'],
+                'quantity'    => $item['quantity'],
+                'harga'       => $item['harga'],
+            ];
+            $pesananItemModel->save($itemData);
+
+            // 3. Kurangi stok produk
             $produkModel->where('id', $item['id'])->set('stok', 'stok - ' . $item['quantity'], false)->update();
         }
 
@@ -138,7 +170,7 @@ class Cart extends BaseController
             return redirect()->to('/checkout')->with('error', 'Gagal memproses pesanan, silakan coba lagi.');
         }
 
-        // 3. Kosongkan keranjang
+        // 4. Kosongkan keranjang
         session()->remove('cart');
 
         // Redirect ke halaman sukses

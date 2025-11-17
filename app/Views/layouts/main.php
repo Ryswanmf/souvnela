@@ -49,10 +49,11 @@
                             <i class="bi bi-person-circle"></i> <?= esc(session()->get('nama_lengkap')) ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="<?= base_url('account') ?>">Pesanan Saya</a></li>
                             <?php if (session()->get('role') === 'admin'): ?>
                                 <li><a class="dropdown-item" href="<?= base_url('admin') ?>">Dashboard Admin</a></li>
-                                <li><hr class="dropdown-divider"></li>
                             <?php endif; ?>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Logout</a></li>
                         </ul>
                     </li>
@@ -94,7 +95,7 @@
             </div>
             
             <div class="col-md-3 mb-4">
-                <h5 class="fw-bold mb-3">Link Penting</h5>
+                <h5 class="fw-bold mb-3">Informasi</h5>
                 <ul class="list-unstyled small">
                     <li class="mb-2"><a href="<?= base_url('konfirmasi-pembayaran') ?>" class="text-white text-decoration-none footer-link">Konfirmasi Pembayaran</a></li>
                     <li class="mb-2"><a href="<?= base_url('pembayaran-pengiriman') ?>" class="text-white text-decoration-none footer-link">Pembayaran & Pengiriman</a></li>
@@ -103,14 +104,6 @@
                 </ul>
             </div>
 
-            <div class="col-md-3 mb-4">
-                <h5 class="fw-bold mb-3">Marketplace</h5>
-                <div class="d-flex flex-wrap gap-3 align-items-center">
-                    <a href="<?= esc($settings['general']['tokopedia_link'] ?? '#') ?>"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Tokopedia_2022.svg" alt="Tokopedia" height="40"></a>
-                    <a href="<?= esc($settings['general']['shopee_link'] ?? '#') ?>"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Shopee.svg" alt="Shopee" height="40"></a>
-                    <a href="<?= esc($settings['general']['tiktok_link'] ?? '#') ?>"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Tiktok_logo.svg" alt="TikTok" height="40"></a>
-                </div>
-            </div>
 
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Lokasi</h5>

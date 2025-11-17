@@ -3,15 +3,18 @@
 namespace App\Controllers\Admin;
 
 use App\Models\ProdukModel;
+use App\Models\KategoriProdukModel;
 use App\Controllers\BaseController;
 
 class Produk extends BaseController
 {
     protected $produkModel;
+    protected $kategoriProdukModel;
 
     public function __construct()
     {
         $this->produkModel = new ProdukModel();
+        $this->kategoriProdukModel = new KategoriProdukModel();
     }
 
     public function index()
@@ -29,7 +32,8 @@ class Produk extends BaseController
         $data = [
             'title' => 'Tambah Produk Baru',
             'action' => base_url('admin/produk/store'),
-            'produk' => []
+            'produk' => [],
+            'kategori' => $this->kategoriProdukModel->findAll()
         ];
 
         return view('admin/produk/form', $data);
@@ -71,7 +75,8 @@ class Produk extends BaseController
         $data = [
             'title' => 'Edit Produk',
             'action' => base_url('admin/produk/update/' . $id),
-            'produk' => $this->produkModel->find($id)
+            'produk' => $this->produkModel->find($id),
+            'kategori' => $this->kategoriProdukModel->findAll()
         ];
 
         return view('admin/produk/form', $data);
@@ -127,5 +132,19 @@ class Produk extends BaseController
         }
         $this->produkModel->delete($id);
         return redirect()->to('admin/produk')->with('success', 'Produk berhasil dihapus.');
+    }
+
+    public function toggleFeatured($id)
+    {
+        $product = $this->produkModel->find($id);
+
+        if ($product) {
+            $newStatus = $product['is_unggulan'] ? 0 : 1;
+            $this->produkModel->update($id, ['is_unggulan' => $newStatus]);
+            $message = $newStatus ? 'Produk dijadikan unggulan.' : 'Produk dihapus dari unggulan.';
+            return redirect()->to('admin/produk')->with('success', $message);
+        }
+
+        return redirect()->to('admin/produk')->with('error', 'Produk tidak ditemukan.');
     }
 }

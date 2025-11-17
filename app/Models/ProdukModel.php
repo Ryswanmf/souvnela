@@ -15,7 +15,8 @@ class ProdukModel extends Model
         'stok', 
         'gambar', 
         'kategori', 
-        'tanggal_dibuat'
+        'tanggal_dibuat',
+        'is_unggulan'
     ];
     public $useTimestamps = false; // karena kamu pakai kolom tanggal_dibuat manual
 }

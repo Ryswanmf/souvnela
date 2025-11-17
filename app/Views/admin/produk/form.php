@@ -67,10 +67,11 @@
                     <label for="kategori" class="form-label">Kategori</label>
                     <select name="kategori" id="kategori" class="form-select" required>
                         <option value="">-- Pilih Kategori --</option>
-                        <option value="Kaos" <?= (old('kategori', $produk['kategori'] ?? '') == 'Kaos') ? 'selected' : '' ?>>Kaos</option>
-                        <option value="Mug" <?= (old('kategori', $produk['kategori'] ?? '') == 'Mug') ? 'selected' : '' ?>>Mug</option>
-                        <option value="Tumbler" <?= (old('kategori', $produk['kategori'] ?? '') == 'Tumbler') ? 'selected' : '' ?>>Tumbler</other>
-                        <option value="Lainnya" <?= (old('kategori', $produk['kategori'] ?? '') == 'Lainnya') ? 'selected' : '' ?>>Lainnya</option>
+                        <?php foreach ($kategori as $kat): ?>
+                            <option value="<?= esc($kat['nama_kategori']) ?>" <?= (old('kategori', $produk['kategori'] ?? '') == $kat['nama_kategori']) ? 'selected' : '' ?>>
+                                <?= esc($kat['nama_kategori']) ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>

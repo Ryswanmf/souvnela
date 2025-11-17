@@ -5,7 +5,7 @@
 <div class="container-fluid">
 
     <div class="mb-4">
-        <h4 class="fw-bold">Selamat datang, Admin 👋</h4>
+        <h4 class="fw-bold">Selamat datang, Admin</h4>
         <p class="text-muted">Lihat ringkasan toko Souvnela hari ini</p>
     </div>
 
@@ -43,7 +43,7 @@
     <div class="card p-4 shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="fw-semibold m-0"><i class="bi bi-box2-fill me-2"></i>Daftar Produk</h6>
-            <a href="<?= base_url('admin/produk/tambah') ?>" class="btn btn-sm btn-primary">
+            <a href="<?= base_url('admin/produk/create') ?>" class="btn btn-sm btn-primary">
                 <i class="bi bi-plus-lg me-1"></i>Tambah Produk
             </a>
         </div>
@@ -76,7 +76,7 @@
                         </td>
                         <td class="text-end">
                             <a href="<?= base_url('admin/produk/edit/'.$p['id']) ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                            <a href="<?= base_url('admin/produk/delete/'.$p['id']) ?>" onclick="return confirm('Hapus produk ini?')" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                            <a href="<?= base_url('admin/produk/hapus/'.$p['id']) ?>" onclick="return confirm('Hapus produk ini?')" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>
                     <?php endforeach; ?>

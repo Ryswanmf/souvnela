@@ -9,10 +9,11 @@ class PesananModel extends Model
     protected $table = 'pesanan';
     protected $primaryKey = 'id';
     protected $allowedFields = [
-        'kode_pesanan',
-        'nama_pelanggan',
-        'total_harga',
+        'kode',
+        'pelanggan',
+        'total',
         'status',
+        'created_at'
     ];
     protected $useTimestamps = true;
     protected $createdField  = 'created_at';

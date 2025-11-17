@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <!-- Hero Section -->
-<section class="hero">
+<section class="hero py-5" style="min-height: 85vh; display: flex; align-items: center;">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-white text-center text-lg-start mb-4 mb-lg-0">
@@ -14,7 +14,7 @@
                 <p class="lead mb-4">
                     <?= esc($settings['home']['hero_subtitle2'] ?? 'Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung. Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.') ?>
                 </p>
-                <a href="#produk" class="btn btn-warning btn-lg px-4 py-2"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
+                <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
             </div>
             <div class="col-lg-6 text-center">
                 <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid" alt="Souvenir Polinela">
@@ -78,6 +78,7 @@
                             <div class="card-body">
                                 <h5 class="card-title"><?= esc($product['nama']) ?></h5>
                                 <p class="card-text">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                                <p class="card-text text-muted small"><?= esc(substr(strip_tags($product['deskripsi']), 0, 70)) ?>...</p>
                                         <form action="<?= base_url('cart/add') ?>" method="post">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
@@ -108,9 +109,18 @@
                     <?= $settings['home']['about_description2'] ?? 'Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen untuk memberikan pengalaman terbaik bagi seluruh pelanggan.' ?>
                 </p>
                 <ul class="list-unstyled">
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list1'] ?? 'Produk eksklusif dan original') ?></li>
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list2'] ?? 'Bahan berkualitas premium') ?></li>
-                    <li><i class="bi bi-check-circle-fill text-success me-2"></i> <?= esc($settings['home']['about_list3'] ?? 'Transaksi aman & cepat') ?></li>
+                    <li>
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <?= esc($settings['home']['about_list1'] ?? 'Produk eksklusif dan original') ?>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <?= esc($settings['home']['about_list2'] ?? 'Bahan berkualitas premium') ?>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        <?= esc($settings['home']['about_list3'] ?? 'Transaksi aman & cepat') ?>
+                    </li>
                 </ul>
     </div>
 </section>

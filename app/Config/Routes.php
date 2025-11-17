@@ -16,7 +16,7 @@ $routes->post('kontak/kirim', 'Home::kirimPesan');
 $routes->get('blog', 'Home::blog');
 $routes->get('blog/detail/(:num)', 'Home::blogDetail/$1');
 $routes->get('tentang', 'Home::tentang');
-$routes->get('checkout', 'Home::checkout');
+$routes->get('checkout', 'Cart::checkout');
 
 $routes->get('mug', 'Home::mug');
 $routes->get('kaos', 'Home::kaos');
@@ -40,6 +40,12 @@ $routes->get('register', 'Auth::register'); // Menampilkan form
 $routes->post('registerProcess', 'Auth::registerProcess'); // Memproses form
 
 // ==========================
+// ACCOUNT ROUTES
+// ==========================
+$routes->get('account', 'AccountController::index');
+$routes->get('account/cancel/(:num)', 'AccountController::cancelOrder/$1');
+
+// ==========================
 // ADMIN ROUTES
 // ==========================
 $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'adminauth'], function($routes) {
@@ -50,14 +56,25 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->post('produk/store', 'Produk::store');
     $routes->get('produk/edit/(:num)', 'Produk::edit/$1');
     $routes->post('produk/update/(:num)', 'Produk::update/$1');
+    $routes->get('produk/toggleFeatured/(:num)', 'Produk::toggleFeatured/$1');
     $routes->get('produk/hapus/(:num)', 'Produk::hapus/$1');
     $routes->get('pesanan', 'Pesanan::index');
+    $routes->post('pesanan/updateStatus/(:num)', 'Pesanan::updateStatus/$1');
     $routes->get('blog', 'Blog::index');
     $routes->get('blog/create', 'Blog::create');
     $routes->post('blog/store', 'Blog::store');
     $routes->get('blog/edit/(:num)', 'Blog::edit/$1');
     $routes->post('blog/update/(:num)', 'Blog::update/$1');
     $routes->get('blog/hapus/(:num)', 'Blog::hapus/$1');
+
+    // Kategori Produk Routes
+    $routes->get('kategori', 'KategoriProdukController::index');
+    $routes->get('kategori/create', 'KategoriProdukController::create');
+    $routes->post('kategori/store', 'KategoriProdukController::store');
+    $routes->get('kategori/edit/(:num)', 'KategoriProdukController::edit/$1');
+    $routes->post('kategori/update/(:num)', 'KategoriProdukController::update/$1');
+    $routes->get('kategori/delete/(:num)', 'KategoriProdukController::delete/$1');
+
     $routes->get('pengguna', 'Pengguna::index');
     $routes->get('pengguna/edit/(:num)', 'Pengguna::edit/$1');
     $routes->post('pengguna/update/(:num)', 'Pengguna::update/$1');

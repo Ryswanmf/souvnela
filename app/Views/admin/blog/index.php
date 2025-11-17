@@ -4,7 +4,7 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold mb-0"><i class="bi bi-journal-text me-2"></i>Manajemen Blog</h4>
-        <a href="<?= base_url('admin/blog/tambah') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Tulis Artikel</a>
+        <a href="<?= base_url('admin/blog/create') ?>" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Tulis Artikel</a>
     </div>
 
     <div class="card shadow-sm p-4">

@@ -6,8 +6,14 @@
         <i class="bi bi-people me-2"></i>Daftar Pengguna
     </h4>
 
-    <div class="card border-0 shadow-sm p-4">
-        <div class="table-responsive">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-0 py-3">
+            <a href="<?= base_url('admin/pengguna/create') ?>" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Tambah Pengguna Baru
+            </a>
+        </div>
+        <div class="card-body p-4">
+            <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
