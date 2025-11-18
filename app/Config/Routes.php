@@ -11,6 +11,7 @@ use CodeIgniter\Router\RouteCollection;
 // ==========================
 $routes->get('/', 'Home::index');
 $routes->get('produk', 'Produk::index');
+$routes->get('produk/detail/(:num)', 'Produk::detail/$1');
 $routes->get('kontak', 'Home::kontak');
 $routes->post('kontak/kirim', 'Home::kirimPesan');
 $routes->get('blog', 'Home::blog');

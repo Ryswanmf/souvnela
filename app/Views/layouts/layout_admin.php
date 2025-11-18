@@ -208,6 +208,40 @@
 
 <!-- Content -->
 <main>
+  <!-- Flash Messages -->
+  <?php if (session()->getFlashdata('success')): ?>
+    <div class="container-fluid mb-3">
+      <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #28a745;">
+        <div class="d-flex align-items-center">
+          <div class="flex-shrink-0">
+            <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="alert-heading mb-1 fw-bold">Berhasil!</h6>
+            <p class="mb-0"><?= session()->getFlashdata('success') ?></p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+  <?php if (session()->getFlashdata('error')): ?>
+    <div class="container-fluid mb-3">
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #dc3545;">
+        <div class="d-flex align-items-center">
+          <div class="flex-shrink-0">
+            <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
+          </div>
+          <div class="flex-grow-1">
+            <h6 class="alert-heading mb-1 fw-bold">Oops!</h6>
+            <p class="mb-0"><?= session()->getFlashdata('error') ?></p>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
+  
   <?= $this->renderSection('content') ?>
 </main>
 
@@ -221,7 +255,51 @@
 document.getElementById('toggleSidebar').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('show');
 });
+
+// Auto dismiss alerts after 5 seconds with slide animation
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        // Add slide-in animation
+        alert.style.animation = 'slideInRight 0.5s ease-out';
+        
+        setTimeout(function() {
+            // Add slide-out animation before closing
+            alert.style.animation = 'fadeOut 0.5s ease-out';
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 500);
+        }, 5000); // 5 seconds
+    });
+});
 </script>
+
+<style>
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.alert {
+    animation: slideInRight 0.5s ease-out;
+}
+</style>
 
 </body>
 </html>

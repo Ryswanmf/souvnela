@@ -37,6 +37,20 @@ class Home extends BaseController
         return view('blog/blog', $data);
     }
 
+    public function blogDetail($id)
+    {
+        $blogModel = new BlogModel();
+        $post = $blogModel->find($id);
+
+        if (!$post) {
+            return redirect()->to('/blog')->with('error', 'Artikel tidak ditemukan');
+        }
+
+        $data['title'] = esc($post['judul']);
+        $data['post'] = $post;
+        return view('blog/blog_detail', $data);
+    }
+
     public function tentang(): string
     {
         $homeSettingModel = new HomeSettingModel();
