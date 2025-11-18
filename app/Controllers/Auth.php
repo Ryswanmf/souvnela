@@ -111,16 +111,18 @@ class Auth extends BaseController
         $session->remove('login_first_at');
 
         if ($user['role'] === 'admin') {
+            $session->setFlashdata('success', 'Selamat datang Admin ' . $user['nama_lengkap'] . '! Anda berhasil login ke Dashboard Admin.');
             return redirect()->to('/admin');
         } elseif ($user['role'] === 'pembeli') {
-            $session->setFlashdata('success', 'Selamat datang kembali, ' . $user['nama_lengkap'] . '! Anda login sebagai pembeli.');
-                            if (session()->get('redirect_url')) {
-                                $redirect_url = session()->get('redirect_url');
-                                session()->remove('redirect_url');
-                                return redirect()->to($redirect_url);
-                            }
+            $session->setFlashdata('success', 'Selamat datang kembali, ' . $user['nama_lengkap'] . '! Login berhasil.');
+            if (session()->get('redirect_url')) {
+                $redirect_url = session()->get('redirect_url');
+                session()->remove('redirect_url');
+                return redirect()->to($redirect_url);
+            }
             
-                            return redirect()->to('/');        } else {
+            return redirect()->to('/');
+        } else {
             // Jika role tidak dikenali, hancurkan session dan tolak akses dengan pesan debug
             $session->destroy();
             $role_ditemukan = $user['role'] ?? '[KOSONG]'; // Ambil role, atau tampilkan [KOSONG] jika tidak ada
@@ -160,10 +162,10 @@ class Auth extends BaseController
         ];
 
         if ($model->save($data)) {
-            $session->setFlashdata('success', 'Registrasi berhasil! Silakan login.');
+            $session->setFlashdata('success', 'Selamat! Registrasi berhasil. Silakan login dengan akun Anda.');
             return redirect()->to('/login');
         } else {
-            $session->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data.');
+            $session->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
             return redirect()->back()->withInput();
         }
     }
@@ -171,8 +173,17 @@ class Auth extends BaseController
     public function logout()
     {
         $session = session();
-        $session->setFlashdata('success', 'Anda berhasil logout.');
-        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn']);
+        $nama = $session->get('nama_lengkap');
+        $role = $session->get('role');
+        
+        // Set pesan sesuai role
+        if ($role === 'admin') {
+            $session->setFlashdata('success', 'Admin ' . $nama . ' telah logout. Terima kasih!');
+        } else {
+            $session->setFlashdata('success', 'Anda telah logout. Terima kasih ' . $nama . ', sampai jumpa lagi!');
+        }
+        
+        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn', 'email']);
         return redirect()->to('/');
     }
 }

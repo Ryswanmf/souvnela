@@ -18,6 +18,16 @@ class Cart extends BaseController
     {
         if (!session()->get('isLoggedIn')) {
             session()->set('redirect_url', current_url());
+            
+            // Check if AJAX request
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Anda harus login untuk menambahkan produk ke keranjang.',
+                    'redirect' => '/login'
+                ]);
+            }
+            
             return redirect()->to('/login')->with('error', 'Anda harus login untuk menambahkan produk ke keranjang.');
         }
 
@@ -28,6 +38,12 @@ class Cart extends BaseController
         $product = $this->produkModel->find($productId);
 
         if (!$product) {
+            if ($this->request->isAJAX()) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Produk tidak ditemukan.'
+                ]);
+            }
             return redirect()->back()->with('error', 'Produk tidak ditemukan.');
         }
 
@@ -45,6 +61,22 @@ class Cart extends BaseController
         }
 
         session()->set('cart', $cart);
+
+        // Calculate total items
+        $totalItems = 0;
+        foreach ($cart as $item) {
+            $totalItems += $item['quantity'];
+        }
+
+        // If AJAX request, return JSON
+        if ($this->request->isAJAX()) {
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Produk berhasil ditambahkan ke keranjang!',
+                'totalItems' => $totalItems,
+                'productName' => $product['nama']
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
