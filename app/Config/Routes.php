@@ -11,6 +11,8 @@ use CodeIgniter\Router\RouteCollection;
 // ==========================
 $routes->get('/', 'Home::index');
 $routes->get('produk', 'Produk::index');
+$routes->get('produk/search', 'Produk::search');
+$routes->get('produk/detail/(:num)', 'Produk::detail/$1');
 $routes->get('kontak', 'Home::kontak');
 $routes->post('kontak/kirim', 'Home::kirimPesan');
 $routes->get('blog', 'Home::blog');
@@ -27,8 +29,32 @@ $routes->post('cart/add', 'Cart::add');
 $routes->get('cart', 'Cart::index');
 $routes->post('cart/update', 'Cart::update');
 $routes->get('cart/remove/(:any)', 'Cart::remove/$1');
-$routes->post('place-order', 'Cart::placeOrder');
-$routes->get('order-success', 'Cart::success');
+$routes->get('cart/checkout', 'Cart::checkout');
+
+// Payment Routes
+$routes->post('payment/process', 'Payment::process');
+$routes->post('payment/check-voucher', 'Payment::checkVoucher');
+$routes->post('payment/notification', 'Payment::notification');
+$routes->get('payment/finish', 'Payment::finish');
+$routes->get('payment/unfinish', 'Payment::unfinish');
+$routes->get('payment/error', 'Payment::error');
+
+// Wishlist Routes
+$routes->get('wishlist', 'Wishlist::index');
+$routes->post('wishlist/toggle', 'Wishlist::toggle');
+$routes->get('wishlist/remove/(:num)', 'Wishlist::remove/$1');
+
+// Order Routes
+$routes->get('orders', 'Orders::index');
+$routes->get('orders/detail/(:num)', 'Orders::detail/$1');
+$routes->get('orders/track/(:num)', 'Orders::track/$1');
+$routes->get('orders/success/(:num)', 'Orders::success/$1');
+$routes->get('orders/pending/(:num)', 'Orders::pending/$1');
+
+// Review Routes
+$routes->get('reviews/add/(:num)', 'Reviews::add/$1');
+$routes->post('reviews/submit', 'Reviews::submit');
+$routes->post('reviews/helpful/(:num)', 'Reviews::markHelpful/$1');
 
 // ==========================
 // AUTH ROUTES
@@ -98,6 +124,10 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('testimonial/edit/(:num)', 'Testimonial::edit/$1');
     $routes->post('testimonial/update/(:num)', 'Testimonial::update/$1');
     $routes->get('testimonial/delete/(:num)', 'Testimonial::delete/$1');
+
+    // Midtrans Routes
+    $routes->get('midtrans', 'Midtrans::index');
+    $routes->post('midtrans/update', 'Midtrans::update');
 });
 
 

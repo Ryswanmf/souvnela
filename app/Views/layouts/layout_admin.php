@@ -136,55 +136,78 @@
   </div>
 
   <nav class="nav flex-column">
-    <a href="<?= base_url('admin') ?>" class="nav-link <?= url_is('admin') ? 'active' : '' ?>">
-      <i class="bi bi-speedometer2"></i> Dashboard
-    </a>
-    <a href="<?= base_url('admin/produk') ?>" class="nav-link <?= url_is('admin/produk*') ? 'active' : '' ?>">
-      <i class="bi bi-box-seam"></i> Produk
-    </a>
-    <a href="<?= base_url('admin/kategori') ?>" class="nav-link <?= url_is('admin/kategori*') ? 'active' : '' ?>">
-      <i class="bi bi-tags"></i> Kategori Produk
-    </a>
-    <a href="<?= base_url('admin/pesanan') ?>" class="nav-link <?= url_is('admin/pesanan*') ? 'active' : '' ?>">
-      <i class="bi bi-receipt"></i> Pesanan
-    </a>
-    <a href="<?= base_url('admin/blog') ?>" class="nav-link <?= url_is('admin/blog*') ? 'active' : '' ?>">
-      <i class="bi bi-journal-text"></i> Blog
-    </a>
-<li class="nav-item">
-                <a class="nav-link" href="<?= base_url('admin/kontak') ?>">
-                    <i class="bi bi-envelope"></i>
-                    <span>Kontak</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                    <i class="bi bi-gear"></i>
-                    <span>Pengaturan</span>
-                </a>
-                <div id="collapseSettings" class="collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSidebar">
-                    <ul class="nav flex-column ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/hero') ?>"><i class="bi bi-aspect-ratio"></i> Hero</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/features') ?>"><i class="bi bi-star"></i> Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/about') ?>"><i class="bi bi-info-circle"></i> Tentang</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/contact') ?>"><i class="bi bi-telephone"></i> Kontak</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/general') ?>"><i class="bi bi-gear"></i> Umum</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/testimonial') ?>"><i class="bi bi-chat-quote"></i> Testimoni</a>
-                        </li>
-    <a href="<?= base_url('admin/pengguna') ?>" class="nav-link <?= url_is('admin/pengguna*') ? 'active' : '' ?>">
-      <i class="bi bi-people"></i> Pengguna
-    </a>
-  </nav>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="<?= base_url('admin') ?>" class="nav-link <?= url_is('admin') ? 'active' : '' ?>">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/produk') ?>" class="nav-link <?= url_is('admin/produk*') ? 'active' : '' ?>">
+                <i class="bi bi-box-seam"></i> Produk
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/kategori') ?>" class="nav-link <?= url_is('admin/kategori*') ? 'active' : '' ?>">
+                <i class="bi bi-tags"></i> Kategori Produk
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/pesanan') ?>" class="nav-link <?= url_is('admin/pesanan*') ? 'active' : '' ?>">
+                <i class="bi bi-receipt"></i> Pesanan
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/midtrans') ?>" class="nav-link <?= url_is('admin/midtrans*') ? 'active' : '' ?>">
+                <i class="bi bi-credit-card"></i> Midtrans
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/blog') ?>" class="nav-link <?= url_is('admin/blog*') ? 'active' : '' ?>">
+                <i class="bi bi-journal-text"></i> Blog
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('admin/kontak') ?>">
+                <i class="bi bi-envelope"></i>
+                <span>Kontak</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                <i class="bi bi-gear"></i>
+                <span>Pengaturan</span>
+            </a>
+            <div id="collapseSettings" class="collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSidebar">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/hero') ?>"><i class="bi bi-aspect-ratio"></i> Hero</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/features') ?>"><i class="bi bi-star"></i> Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/about') ?>"><i class="bi bi-info-circle"></i> Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/contact') ?>"><i class="bi bi-telephone"></i> Kontak</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/general') ?>"><i class="bi bi-gear"></i> Umum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/testimonial') ?>"><i class="bi bi-chat-quote"></i> Testimoni</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/pengguna') ?>" class="nav-link <?= url_is('admin/pengguna*') ? 'active' : '' ?>">
+                <i class="bi bi-people"></i> Pengguna
+            </a>
+        </li>
+    </ul>
+</nav>
 </aside>
 
 <!-- Topbar -->
