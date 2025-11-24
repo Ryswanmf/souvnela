@@ -8,6 +8,54 @@ class InfoPageSeeder extends Seeder
 {
     public function run()
     {
+        // Update Konfirmasi Pembayaran
+        $this->db->table('info_pages')->where('slug', 'konfirmasi-pembayaran')->update([
+            'content' => '
+                <h2>Konfirmasi Pembayaran</h2>
+                <p>Setelah melakukan pembayaran melalui transfer bank, Anda diwajibkan untuk melakukan konfirmasi agar pesanan Anda dapat segera kami proses.</p>
+                <h3>Cara Konfirmasi:</h3>
+                <ol>
+                    <li>Siapkan bukti transfer Anda (screenshot atau foto struk).</li>
+                    <li>Hubungi kami melalui WhatsApp di nomor <strong>(nomor WhatsApp Anda)</strong> atau melalui email di <strong>(email Anda)</strong>.</li>
+                    <li>Sertakan informasi berikut dalam pesan Anda:
+                        <ul>
+                            <li>Nomor Pesanan (contoh: #123)</li>
+                            <li>Nama Lengkap</li>
+                            <li>Jumlah Transfer</li>
+                            <li>Bank Tujuan Transfer</li>
+                            <li>Lampirkan bukti transfer</li>
+                        </ul>
+                    </li>
+                    <li>Tim kami akan segera memverifikasi pembayaran Anda dalam waktu 1x24 jam.</li>
+                </ol>
+                <p>Terima kasih atas kerja sama Anda.</p>
+            '
+        ]);
+        
+        // Update Pembayaran & Pengiriman
+        $this->db->table('info_pages')->where('slug', 'pembayaran-pengiriman')->update([
+            'content' => '
+                <h2>Pembayaran & Pengiriman</h2>
+                <h3>Metode Pembayaran</h3>
+                <p>Kami menerima pembayaran melalui metode berikut:</p>
+                <ul>
+                    <li><strong>Transfer Bank:</strong> Anda dapat melakukan transfer ke rekening kami di Bank BCA, Mandiri, atau BRI. Nomor rekening akan diinformasikan setelah Anda menyelesaikan proses checkout.</li>
+                    <li><strong>E-Wallet:</strong> Kami mendukung pembayaran melalui GoPay, OVO, dan Dana.</li>
+                    <li><strong>Kartu Kredit:</strong> Pembayaran aman menggunakan kartu kredit Visa dan MasterCard melalui gateway pembayaran Midtrans.</li>
+                </ul>
+
+                <h3>Proses Pengiriman</h3>
+                <p>Semua pesanan akan diproses dalam waktu 1-2 hari kerja setelah pembayaran dikonfirmasi.</p>
+                <p>Kami menawarkan beberapa pilihan metode pengiriman:</p>
+                <ul>
+                    <li><strong>Reguler (3-5 hari):</strong> Pengiriman standar ke seluruh Indonesia.</li>
+                    <li><strong>Express (1-2 hari):</strong> Pengiriman lebih cepat untuk kota-kota besar.</li>
+                    <li><strong>Same Day:</strong> Pengiriman di hari yang sama untuk wilayah Bandar Lampung (pemesanan sebelum jam 12:00 WIB).</li>
+                </ul>
+                <p>Nomor resi akan dikirimkan ke email Anda setelah pesanan dikirimkan.</p>
+            '
+        ]);
+
         // Update Kebijakan Privasi
         $this->db->table('info_pages')->where('slug', 'kebijakan-privasi')->update([
             'content' => '
