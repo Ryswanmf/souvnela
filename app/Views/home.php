@@ -26,46 +26,40 @@
 <!-- Features -->
 <section class="features py-5">
     <div class="container text-center">
-        <h2 class="mb-4" data-aos="fade-up"><?= esc($settings['home']['features_title'] ?? 'Kenapa Memilih Kami?') ?></h2>
+        <h2 class="mb-4"><?= esc($settings['home']['features_title'] ?? 'Kenapa Memilih Kami?') ?></h2>
         <div class="row">
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="feature-box">
-                    <div class="icon mb-3">
-                        <?php if (!empty($settings['home']['feature1_image'])): ?>
-                            <img src="<?= base_url('uploads/' . $settings['home']['feature1_image']) ?>" alt="Feature 1 Icon" width="50">
-                        <?php else: ?>
-                            <?= esc($settings['home']['feature1_icon'] ?? '🎁') ?>
-                        <?php endif; ?>
-                    </div>
-                    <h5><?= esc($settings['home']['feature1_title'] ?? 'Kualitas Premium') ?></h5>
-                    <p><?= esc($settings['home']['feature1_description'] ?? 'Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.') ?></p>
+            <div class="col-md-4">
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature1_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature1_image']) ?>" alt="Feature 1 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature1_icon'] ?? '🎁') ?>
+                    <?php endif; ?>
                 </div>
+                <h5><?= esc($settings['home']['feature1_title'] ?? 'Kualitas Premium') ?></h5>
+                <p><?= esc($settings['home']['feature1_description'] ?? 'Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.') ?></p>
             </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="feature-box">
-                    <div class="icon mb-3">
-                        <?php if (!empty($settings['home']['feature2_image'])): ?>
-                            <img src="<?= base_url('uploads/' . $settings['home']['feature2_image']) ?>" alt="Feature 2 Icon" width="50">
-                        <?php else: ?>
-                            <?= esc($settings['home']['feature2_icon'] ?? '⚡') ?>
-                        <?php endif; ?>
-                    </div>
-                    <h5><?= esc($settings['home']['feature2_title'] ?? 'Proses Cepat') ?></h5>
-                    <p><?= esc($settings['home']['feature2_description'] ?? 'Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.') ?></p>
+            <div class="col-md-4">
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature2_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature2_image']) ?>" alt="Feature 2 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature2_icon'] ?? '⚡') ?>
+                    <?php endif; ?>
                 </div>
+                <h5><?= esc($settings['home']['feature2_title'] ?? 'Proses Cepat') ?></h5>
+                <p><?= esc($settings['home']['feature2_description'] ?? 'Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.') ?></p>
             </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="feature-box">
-                    <div class="icon mb-3">
-                        <?php if (!empty($settings['home']['feature3_image'])): ?>
-                            <img src="<?= base_url('uploads/' . $settings['home']['feature3_image']) ?>" alt="Feature 3 Icon" width="50">
-                        <?php else: ?>
-                            <?= esc($settings['home']['feature3_icon'] ?? '💳') ?>
-                        <?php endif; ?>
-                    </div>
-                    <h5><?= esc($settings['home']['feature3_title'] ?? 'Transaksi Mudah') ?></h5>
-                    <p><?= esc($settings['home']['feature3_description'] ?? 'Metode pembayaran yang fleksibel dan aman digunakan.') ?></p>
+            <div class="col-md-4">
+                <div class="icon mb-3">
+                    <?php if (!empty($settings['home']['feature3_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['home']['feature3_image']) ?>" alt="Feature 3 Icon" width="50">
+                    <?php else: ?>
+                        <?= esc($settings['home']['feature3_icon'] ?? '💳') ?>
+                    <?php endif; ?>
                 </div>
+                <h5><?= esc($settings['home']['feature3_title'] ?? 'Transaksi Mudah') ?></h5>
+                <p><?= esc($settings['home']['feature3_description'] ?? 'Metode pembayaran yang fleksibel dan aman digunakan.') ?></p>
             </div>
         </div>
     </div>
@@ -74,49 +68,148 @@
 <!-- Produk -->
 <section id="produk" class="py-5 bg-light">
     <div class="container text-center">
-        <h2 class="mb-4" data-aos="fade-up">Produk Unggulan</h2>
-        <div class="row g-4">
-            <?php if (!empty($products)): ?>
-                <?php $delay = 0; ?>
-                <?php foreach ($products as $product): ?>
-                    <div class="col-md-4" data-aos="zoom-in" data-aos-delay="<?= $delay ?>">
-                        <div class="card shadow-sm product-card">
-                            <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>" class="card-img-top" alt="<?= esc($product['nama']) ?>" style="height: 240px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= esc($product['nama']) ?></h5>
-                                <p class="card-text">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
-                                <p class="card-text text-muted small"><?= esc(substr(strip_tags($product['deskripsi']), 0, 70)) ?>...</p>
-                                        <form action="<?= base_url('cart/add') ?>" method="post" class="add-to-cart-form">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                                    <button type="submit" class="btn btn-primary w-100">
-                                        <i class="bi bi-cart-plus"></i> Pesan
-                                    </button>
-                                </form>
-                            </div>
+        <h2 class="mb-4">Produk Unggulan</h2>
+        <?php if (!empty($products)): ?>
+        <div id="produkCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                <?php
+                // 6 produk per slide (3 atas + 3 bawah)
+                $chunked = array_chunk($products, 6);
+                $first = true;
+                foreach ($chunked as $group):
+                    $atas = array_slice($group, 0, 3);
+                    $bawah = array_slice($group, 3);
+                ?>
+                    <div class="carousel-item <?= $first ? 'active' : '' ?>">
+
+                        <!-- Baris Atas -->
+                        <div class="row g-3 justify-content-center mb-3">
+                            <?php foreach ($atas as $product): ?>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="card shadow-sm h-100 product-card position-relative">
+                                        <!-- Wishlist Heart Icon -->
+                                        <?php if (session()->get('isLoggedIn')): ?>
+                                            <?php
+                                            $isInWishlist = in_array($product['id'], $wishlist);
+                                            ?>
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
+                                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
+                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
+                                             class="card-img-top"
+                                             alt="<?= esc($product['nama']) ?>"
+                                             style="height:200px; object-fit:cover;">
+                                        <div class="card-body d-flex flex-column p-2">
+                                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
+                                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
+                                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
+                                            </p>
+                                            <div class="d-flex gap-1 mt-auto">
+                                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
+                                                    <i class="bi bi-info-circle"></i> Detail
+                                                </a>
+                                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
+                                                    <?= csrf_field() ?>
+                                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
+                                                        <i class="bi bi-cart-plus"></i> Pesan
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- Baris Bawah -->
+                        <div class="row g-3 justify-content-center">
+                            <?php foreach ($bawah as $product): ?>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="card shadow-sm h-100 product-card position-relative">
+                                        <!-- Wishlist Heart Icon -->
+                                        <?php if (session()->get('isLoggedIn')): ?>
+                                            <?php
+                                            $isInWishlist = in_array($product['id'], $wishlist);
+                                            ?>
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
+                                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
+                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                                            </button>
+                                        <?php endif; ?>
+
+                                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
+                                             class="card-img-top"
+                                             alt="<?= esc($product['nama']) ?>"
+                                             style="height:200px; object-fit:cover;">
+                                        <div class="card-body d-flex flex-column p-2">
+                                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
+                                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
+                                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
+                                            </p>
+                                            <div class="d-flex gap-1 mt-auto">
+                                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
+                                                    <i class="bi bi-info-circle"></i> Detail
+                                                </a>
+                                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
+                                                    <?= csrf_field() ?>
+                                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
+                                                        <i class="bi bi-cart-plus"></i> Pesan
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
-                    <?php $delay += 100; ?>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Belum ada produk unggulan.</p>
-            <?php endif; ?>
+                <?php
+                $first = false;
+                endforeach;
+                ?>
+            </div>
+
+            <!-- Navigasi -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#produkCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Sebelumnya</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#produkCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Berikutnya</span>
+            </button>
         </div>
+
+        <?php else: ?>
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-box"></i> Belum ada produk unggulan.
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 
 <!-- Tentang -->
 <section id="tentang" class="py-5">
     <div class="container">
-        <h2 class="fw-bold text-center" data-aos="fade-up"><?= esc($settings['home']['about_title'] ?? 'Souvnela - Souvenir Eksklusif Polinela') ?></h2>
+        <h2 class="fw-bold text-center"><?= esc($settings['home']['about_title'] ?? 'Souvnela - Souvenir Eksklusif Polinela') ?></h2>
         <br>
-                <p data-aos="fade-up" data-aos-delay="100">
+                <p>
                     <?= $settings['home']['about_description1'] ?? '<strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>. Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.' ?>
                 </p>
-                <p data-aos="fade-up" data-aos-delay="200">
+                <p>
                     <?= $settings['home']['about_description2'] ?? 'Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen untuk memberikan pengalaman terbaik bagi seluruh pelanggan.' ?>
                 </p>
-                <ul class="list-unstyled" data-aos="fade-up" data-aos-delay="300">
+                <ul class="list-unstyled">
                     <li>
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
                         <?= esc($settings['home']['about_list1'] ?? 'Produk eksklusif dan original') ?>
@@ -136,13 +229,12 @@
 <!-- Blog -->
 <section id="blog" class="py-5 bg-light">
     <div class="container text-center">
-        <h2 class="mb-4" data-aos="fade-up">Blog</h2>
+        <h2 class="mb-4">Blog</h2>
         <div class="row g-4">
             <?php if (!empty($posts)): ?>
-                <?php $delay = 0; ?>
                 <?php foreach ($posts as $post): ?>
-                    <div class="col-md-4" data-aos="flip-left" data-aos-delay="<?= $delay ?>">
-                        <div class="card shadow-sm h-100 blog-card-hover">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm h-100">
                             <img src="<?= base_url('uploads/' . esc($post['gambar'])) ?>" class="card-img-top" alt="<?= esc($post['judul']) ?>" style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h5 class="card-title"><?= esc($post['judul']) ?></h5>
@@ -151,7 +243,6 @@
                             </div>
                         </div>
                     </div>
-                    <?php $delay += 100; ?>
                 <?php endforeach; ?>
             <?php else: ?>
                 <p class="text-muted">Belum ada artikel.</p>
@@ -184,13 +275,20 @@
         transform: translateY(-5px) !important;
         box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
     }
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
 </style>
 
 <!-- Testimonials -->
 <section id="testimonials" class="py-5">
     <div class="container">
-        <h2 class="text-center mb-4" data-aos="fade-up">Testimoni</h2>
-        <div id="testimonialCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false" data-aos="zoom-in" data-aos-delay="100">
+        <h2 class="text-center mb-4">Testimoni</h2>
+        <div id="testimonialCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="false">
             <div class="carousel-inner">
                 <?php if (!empty($testimonials)): ?>
                     <?php foreach ($testimonials as $i => $testimonial): ?>
@@ -220,12 +318,12 @@
 <!-- Kontak Kami -->
 <section id="kontak" class="py-5">
     <div class="container">
-        <div class="h2 text-center" data-aos="fade-up"><?= esc($settings['home']['contact_title'] ?? 'Kontak') ?></div>
+        <div class="h2 text-center"><?= esc($settings['home']['contact_title'] ?? 'Kontak') ?></div>
         <div class="row">
             <!-- Form -->
             <div class="row g-4">
             <!-- Form -->
-            <div class="col-lg-6" data-aos="fade-right">
+            <div class="col-lg-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">Form Kontak Kami</h5>
@@ -251,7 +349,7 @@
             </div>
 
             <!-- Info -->
-            <div class="col-lg-6" data-aos="fade-left">
+            <div class="col-lg-6">
                 <div class="card shadow-sm border-0 text-white" style="background-color: #0d6efd;">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">Hubungi Kami.</h5>
@@ -331,54 +429,6 @@
 .pulse-button:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
-}
-
-/* Feature Box Hover */
-.feature-box {
-    padding: 20px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
-
-.feature-box:hover {
-    background-color: rgba(13, 110, 253, 0.05);
-    transform: translateY(-10px);
-}
-
-.feature-box .icon {
-    font-size: 3rem;
-    transition: transform 0.3s ease;
-}
-
-.feature-box:hover .icon {
-    transform: scale(1.2) rotate(5deg);
-}
-
-/* Blog Card Hover */
-.blog-card-hover {
-    transition: all 0.3s ease;
-}
-
-.blog-card-hover:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-/* Testimonial fade animation */
-.carousel-fade .carousel-item {
-    opacity: 0;
-    transition: opacity 0.6s ease-in-out;
-}
-
-.carousel-fade .carousel-item.active {
-    opacity: 1;
-}
-
-/* Contact Form Input Animation */
-.form-control:focus {
-    transform: scale(1.02);
-    transition: transform 0.2s ease;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 /* Smooth Scroll */

@@ -30,9 +30,21 @@ class AccountController extends BaseController
         $customerName = session()->get('nama_lengkap');
         $orders = $this->pesananModel->where('pelanggan', $customerName)->orderBy('created_at', 'DESC')->findAll();
 
-        // Fetch items for each order
-        foreach ($orders as &$order) { // Use & to modify the original array
-            $order['items'] = $this->pesananItemModel->where('pesanan_id', $order['id'])->findAll();
+        // Optimize: Fetch all items at once to prevent N+1 queries
+        if (!empty($orders)) {
+            $orderIds = array_column($orders, 'id');
+            $allItems = $this->pesananItemModel->whereIn('pesanan_id', $orderIds)->findAll();
+
+            // Group items by order_id
+            $itemsByOrder = [];
+            foreach ($allItems as $item) {
+                $itemsByOrder[$item['pesanan_id']][] = $item;
+            }
+
+            // Assign items to orders
+            foreach ($orders as &$order) {
+                $order['items'] = $itemsByOrder[$order['id']] ?? [];
+            }
         }
 
         $data = [

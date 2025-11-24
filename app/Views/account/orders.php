@@ -32,7 +32,7 @@
                                     <tr data-bs-toggle="collapse" data-bs-target="#orderDetail-<?= $order['id'] ?>" aria-expanded="false" aria-controls="orderDetail-<?= $order['id'] ?>" style="cursor: pointer;">
                                         <td class="fw-medium"><?= esc($order['kode']) ?></td>
                                         <td><?= date('d M Y, H:i', strtotime($order['created_at'])) ?></td>
-                                        <td class="text-end"><?= number_to_currency($order['total'], 'IDR') ?></td>
+                                        <td class="text-end"><?= number_to_currency($order['total_harga'], 'IDR') ?></td>
                                         <td class="text-center">
                                             <?php
                                                 $statusClass = 'bg-secondary';

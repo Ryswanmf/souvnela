@@ -66,7 +66,7 @@
                             <h5 class="card-title">Total Belanja</h5>
                             <h3 class="fw-bold"><?= number_to_currency($total, 'IDR') ?></h3>
                             <hr>
-                            <a href="<?= base_url('checkout') ?>" class="btn btn-primary w-100">Lanjut ke Checkout</a>
+                            <a href="<?= base_url('cart/checkout') ?>" class="btn btn-primary w-100">Lanjut ke Checkout</a>
                         </div>
                     </div>
                 </div>

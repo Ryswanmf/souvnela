@@ -6,6 +6,7 @@ use App\Models\BlogModel;
 use App\Models\ProdukModel;
 use App\Models\TestimonialModel;
 use App\Models\HomeSettingModel;
+use App\Models\WishlistModel;
 
 class Home extends BaseController
 {
@@ -14,11 +15,18 @@ class Home extends BaseController
         $produkModel = new ProdukModel();
         $blogModel = new BlogModel();
         $testimonialModel = new TestimonialModel();
+        $wishlistModel = new WishlistModel();
 
         $data['title'] = 'Beranda';
         $data['products'] = $produkModel->where('is_unggulan', 1)->findAll();
         $data['posts'] = $blogModel->findAll();
         $data['testimonials'] = $testimonialModel->findAll();
+        $data['wishlist'] = [];
+
+        if (session()->get('isLoggedIn')) {
+            $wishlistItems = $wishlistModel->where('user_id', session()->get('id'))->findAll();
+            $data['wishlist'] = array_column($wishlistItems, 'produk_id');
+        }
 
         return view('home', $data);
     }
@@ -37,16 +45,16 @@ class Home extends BaseController
         return view('blog/blog', $data);
     }
 
-    public function blogDetail($id)
+    public function blogDetail($id): string
     {
         $blogModel = new BlogModel();
         $post = $blogModel->find($id);
 
         if (!$post) {
-            return redirect()->to('/blog')->with('error', 'Artikel tidak ditemukan');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        $data['title'] = esc($post['judul']);
+        $data['title'] = $post['judul'];
         $data['post'] = $post;
         return view('blog/blog_detail', $data);
     }

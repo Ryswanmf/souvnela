@@ -1,7 +1,5 @@
 body {
     font-family: 'Segoe UI', sans-serif;
-    padding-top: 56px;
-    padding-bottom: 0;
 }
 
 .navbar-brand {
@@ -102,5 +100,68 @@ body {
     }
     50% {
         transform: scale(1.3);
+    }
+}
+
+/* Wishlist Badge Animation */
+.wishlist-badge {
+    top: 5px;
+    right: -5px;
+    font-size: 0.6rem;
+    min-width: 18px;
+    height: 18px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    animation: pulse 2s infinite;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link .bi-heart {
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover .bi-heart {
+    transform: scale(1.2);
+}
+
+.nav-link:hover .wishlist-badge {
+    animation: bounce 0.5s ease;
+}
+
+/* Wishlist Button on Product Card */
+.wishlist-btn {
+    transition: all 0.3s ease;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.wishlist-btn .bi-heart-fill {
+    animation: heartBeat 0.5s ease;
+}
+
+@keyframes heartBeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.3);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    75% {
+        transform: scale(1.2);
     }
 }

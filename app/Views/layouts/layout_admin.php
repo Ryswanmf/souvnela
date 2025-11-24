@@ -136,55 +136,83 @@
   </div>
 
   <nav class="nav flex-column">
-    <a href="<?= base_url('admin') ?>" class="nav-link <?= url_is('admin') ? 'active' : '' ?>">
-      <i class="bi bi-speedometer2"></i> Dashboard
-    </a>
-    <a href="<?= base_url('admin/produk') ?>" class="nav-link <?= url_is('admin/produk*') ? 'active' : '' ?>">
-      <i class="bi bi-box-seam"></i> Produk
-    </a>
-    <a href="<?= base_url('admin/kategori') ?>" class="nav-link <?= url_is('admin/kategori*') ? 'active' : '' ?>">
-      <i class="bi bi-tags"></i> Kategori Produk
-    </a>
-    <a href="<?= base_url('admin/pesanan') ?>" class="nav-link <?= url_is('admin/pesanan*') ? 'active' : '' ?>">
-      <i class="bi bi-receipt"></i> Pesanan
-    </a>
-    <a href="<?= base_url('admin/blog') ?>" class="nav-link <?= url_is('admin/blog*') ? 'active' : '' ?>">
-      <i class="bi bi-journal-text"></i> Blog
-    </a>
-<li class="nav-item">
-                <a class="nav-link" href="<?= base_url('admin/kontak') ?>">
-                    <i class="bi bi-envelope"></i>
-                    <span>Kontak</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-                    <i class="bi bi-gear"></i>
-                    <span>Pengaturan</span>
-                </a>
-                <div id="collapseSettings" class="collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSidebar">
-                    <ul class="nav flex-column ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/hero') ?>"><i class="bi bi-aspect-ratio"></i> Hero</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/features') ?>"><i class="bi bi-star"></i> Features</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/about') ?>"><i class="bi bi-info-circle"></i> Tentang</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/contact') ?>"><i class="bi bi-telephone"></i> Kontak</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/setting/general') ?>"><i class="bi bi-gear"></i> Umum</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= base_url('admin/testimonial') ?>"><i class="bi bi-chat-quote"></i> Testimoni</a>
-                        </li>
-    <a href="<?= base_url('admin/pengguna') ?>" class="nav-link <?= url_is('admin/pengguna*') ? 'active' : '' ?>">
-      <i class="bi bi-people"></i> Pengguna
-    </a>
-  </nav>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="<?= base_url('admin') ?>" class="nav-link <?= url_is('admin') ? 'active' : '' ?>">
+                <i class="bi bi-speedometer2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/produk') ?>" class="nav-link <?= url_is('admin/produk*') ? 'active' : '' ?>">
+                <i class="bi bi-box-seam"></i> Produk
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/kategori') ?>" class="nav-link <?= url_is('admin/kategori*') ? 'active' : '' ?>">
+                <i class="bi bi-tags"></i> Kategori Produk
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/pesanan') ?>" class="nav-link <?= url_is('admin/pesanan*') ? 'active' : '' ?>">
+                <i class="bi bi-receipt"></i> Pesanan
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/midtrans') ?>" class="nav-link <?= url_is('admin/midtrans*') ? 'active' : '' ?>">
+                <i class="bi bi-credit-card"></i> Midtrans
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/blog') ?>" class="nav-link <?= url_is('admin/blog*') ? 'active' : '' ?>">
+                <i class="bi bi-journal-text"></i> Blog
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('admin/kontak') ?>">
+                <i class="bi bi-envelope"></i>
+                <span>Kontak</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/info-pages') ?>" class="nav-link <?= url_is('admin/info-pages*') ? 'active' : '' ?>">
+                <i class="bi bi-file-earmark-text"></i> Halaman Informasi
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+                <i class="bi bi-gear"></i>
+                <span>Pengaturan</span>
+            </a>
+            <div id="collapseSettings" class="collapse" aria-labelledby="headingSettings" data-bs-parent="#accordionSidebar">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/hero') ?>"><i class="bi bi-aspect-ratio"></i> Hero</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/features') ?>"><i class="bi bi-star"></i> Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/about') ?>"><i class="bi bi-info-circle"></i> Tentang</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/contact') ?>"><i class="bi bi-telephone"></i> Kontak</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/setting/general') ?>"><i class="bi bi-gear"></i> Umum</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('admin/testimonial') ?>"><i class="bi bi-chat-quote"></i> Testimoni</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/pengguna') ?>" class="nav-link <?= url_is('admin/pengguna*') ? 'active' : '' ?>">
+                <i class="bi bi-people"></i> Pengguna
+            </a>
+        </li>
+    </ul>
+</nav>
 </aside>
 
 <!-- Topbar -->
@@ -195,8 +223,8 @@
   <h5 class="m-0 fw-semibold"><?= $pageTitle ?? 'Dashboard' ?></h5>
   <div class="dropdown">
       <a href="#" class="user d-flex align-items-center gap-2 text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="<?= base_url('assets/images/admin.png') ?>" alt="Admin" width="38" height="38">
-          <span class="fw-medium text-dark">Admin <i class="bi bi-chevron-down small"></i></span>
+          <img src="<?= session()->get('foto_profil') ? base_url('uploads/' . session()->get('foto_profil')) : base_url('assets/images/default-avatar.png') ?>" alt="Admin" width="38" height="38">
+          <span class="fw-medium text-dark"><?= esc(session()->get('nama_lengkap') ?? 'Admin') ?> <i class="bi bi-chevron-down small"></i></span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end shadow-sm">
           <li><a class="dropdown-item" href="<?= base_url('/') ?>" target="_blank"><i class="bi bi-house me-2"></i>Lihat Situs</a></li>
@@ -208,40 +236,6 @@
 
 <!-- Content -->
 <main>
-  <!-- Flash Messages -->
-  <?php if (session()->getFlashdata('success')): ?>
-    <div class="container-fluid mb-3">
-      <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #28a745;">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0">
-            <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
-          </div>
-          <div class="flex-grow-1">
-            <h6 class="alert-heading mb-1 fw-bold">Berhasil!</h6>
-            <p class="mb-0"><?= session()->getFlashdata('success') ?></p>
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      </div>
-    </div>
-  <?php endif; ?>
-  <?php if (session()->getFlashdata('error')): ?>
-    <div class="container-fluid mb-3">
-      <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #dc3545;">
-        <div class="d-flex align-items-center">
-          <div class="flex-shrink-0">
-            <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
-          </div>
-          <div class="flex-grow-1">
-            <h6 class="alert-heading mb-1 fw-bold">Oops!</h6>
-            <p class="mb-0"><?= session()->getFlashdata('error') ?></p>
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      </div>
-    </div>
-  <?php endif; ?>
-  
   <?= $this->renderSection('content') ?>
 </main>
 
@@ -255,51 +249,7 @@
 document.getElementById('toggleSidebar').addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('show');
 });
-
-// Auto dismiss alerts after 5 seconds with slide animation
-document.addEventListener('DOMContentLoaded', function() {
-    const alerts = document.querySelectorAll('.alert');
-    alerts.forEach(function(alert) {
-        // Add slide-in animation
-        alert.style.animation = 'slideInRight 0.5s ease-out';
-        
-        setTimeout(function() {
-            // Add slide-out animation before closing
-            alert.style.animation = 'fadeOut 0.5s ease-out';
-            setTimeout(function() {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }, 500);
-        }, 5000); // 5 seconds
-    });
-});
 </script>
-
-<style>
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
-.alert {
-    animation: slideInRight 0.5s ease-out;
-}
-</style>
 
 </body>
 </html>

@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\CartModel;
 use CodeIgniter\Controller;
 
 class Auth extends BaseController
 {
+
     public function login()
     {
         helper(['form']);
@@ -103,8 +105,28 @@ class Auth extends BaseController
             'username'    => $user['username'],
             'nama_lengkap'=> $user['nama_lengkap'],
             'role'        => $user['role'],
+            'foto_profil' => $user['foto_profil'],
             'isLoggedIn'  => true
         ]);
+
+        // Load cart from DB
+        $cartModel = new CartModel();
+        $cartItems = $cartModel->select('cart.*, produk.nama, produk.harga, produk.gambar')
+            ->join('produk', 'produk.id = cart.produk_id')
+            ->where('cart.user_id', $user['id'])
+            ->findAll();
+
+        $cart = [];
+        foreach ($cartItems as $item) {
+            $cart[$item['produk_id']] = [
+                'id' => $item['produk_id'],
+                'nama' => $item['nama'],
+                'harga' => $item['harga'],
+                'gambar' => $item['gambar'],
+                'quantity' => $item['quantity']
+            ];
+        }
+        $session->set('cart', $cart);
 
         // Login sukses -> reset attempt counters
         $session->remove('login_attempts');
@@ -141,6 +163,7 @@ class Auth extends BaseController
     {
         helper(['form']);
         $session = session();
+        $request = service('request');
         $model = new UserModel();
 
         $rules = [
@@ -150,14 +173,16 @@ class Auth extends BaseController
             'password_confirm' => 'matches[password]'
         ];
 
-        if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        $validation = \Config\Services::validation();
+        $validation->setRules($rules);
+        if (!$validation->run($request->getPost())) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $data = [
-            'nama_lengkap' => $this->request->getPost('nama'),
-            'username'     => $this->request->getPost('username'),
-            'password'     => $this->request->getPost('password'),
+            'nama_lengkap' => $request->getPost('nama'),
+            'username'     => $request->getPost('username'),
+            'password'     => password_hash($request->getPost('password'), PASSWORD_DEFAULT),
             'role'         => 'pembeli' // Set default role
         ];
 
@@ -183,7 +208,7 @@ class Auth extends BaseController
             $session->setFlashdata('success', 'Anda telah logout. Terima kasih ' . $nama . ', sampai jumpa lagi!');
         }
         
-        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn', 'email']);
+        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn', 'cart']);
         return redirect()->to('/');
     }
 }

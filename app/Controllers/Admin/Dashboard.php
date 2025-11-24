@@ -14,7 +14,7 @@ class Dashboard extends BaseController
         $pesananModel = new PesananModel();
 
         // Kalkulasi Statistik
-        $totalSales = $pesananModel->selectSum('total')->where('status', 'Selesai')->first()['total'] ?? 0;
+        $totalSales = $pesananModel->selectSum('total_harga')->where('status', 'delivered')->first()['total_harga'] ?? 0;
         $totalProducts = $produkModel->countAllResults();
         $totalOrders = $pesananModel->countAllResults();
         $lowStock = $produkModel->where('stok <', 5)->countAllResults();
@@ -27,9 +27,18 @@ class Dashboard extends BaseController
             'lowstock' => $lowStock
         ];
 
-        // Data untuk chart (statis untuk saat ini)
-        $chart_labels = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
-        $chart_sales = [120000, 150000, 90000, 170000, 140000, 190000, 220000];
+        // Data untuk chart
+        $chart_labels = [];
+        $chart_sales = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = date('Y-m-d', strtotime("-$i days"));
+            $chart_labels[] = date('D', strtotime($date));
+            $daily_sale = $pesananModel->selectSum('total_harga')
+                                      ->where('status', 'delivered')
+                                      ->where('DATE(created_at)', $date)
+                                      ->first()['total_harga'] ?? 0;
+            $chart_sales[] = $daily_sale;
+        }
 
         // Ambil beberapa produk terbaru untuk ditampilkan di tabel
         $products = $produkModel->orderBy('id', 'DESC')->limit(5)->findAll();

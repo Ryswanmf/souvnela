@@ -3,41 +3,64 @@
 <?= $this->section('content') ?>
 
 <section id="produk" class="py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-4">
-            <h2 class="fw-bold"><?= esc($title ?? 'Semua Produk') ?></h2>
-            <p class="text-muted">Pilih souvenir eksklusif Polinela favoritmu!</p>
+
+        <!-- Search Form -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body py-3">
+                        <form action="<?= base_url('produk/search') ?>" method="get">
+                            <div class="input-group">
+                                <span class="input-group-text bg-primary text-white">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text"
+                                       class="form-control"
+                                       name="q"
+                                       placeholder="Cari produk..."
+                                       value="<?= esc($keyword ?? '') ?>"
+                                       required>
+                                <button class="btn btn-primary px-3" type="submit">
+                                    <i class="bi bi-search me-1"></i>Cari
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Filter Kategori -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-lg-6 col-md-8">
-                <div class="card shadow-sm">
+        <!-- Filter Kategori Dropdown -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <label class="form-label mb-0 fw-bold">
-                                    <i class="bi bi-funnel me-2"></i>Filter Kategori:
-                                </label>
-                            </div>
-                            <div class="col">
-                                <select class="form-select" id="kategoriFilter" onchange="window.location.href=this.value">
-                                    <option value="<?= base_url('produk') ?>" <?= $selected_kategori === 'semua' ? 'selected' : '' ?>>
-                                        Semua Produk
-                                    </option>
-                                    <?php if (!empty($kategoris)): ?>
-                                        <?php foreach ($kategoris as $kat): ?>
-                                            <?php if (!empty($kat)): ?>
-                                                <option value="<?= base_url('produk?kategori=' . urlencode($kat)) ?>" 
-                                                        <?= $selected_kategori === $kat ? 'selected' : '' ?>>
+                        <form action="<?= base_url('produk') ?>" method="get" id="filterForm">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <label for="kategori" class="form-label fw-bold">
+                                        <i class="bi bi-funnel"></i> Filter Kategori:
+                                    </label>
+                                    <select name="kategori" id="kategori" class="form-select" onchange="document.getElementById('filterForm').submit()">
+                                        <option value="">Semua Kategori</option>
+                                        <?php if (!empty($kategoriList)): ?>
+                                            <?php foreach ($kategoriList as $kat): ?>
+                                                <option value="<?= esc($kat) ?>" <?= (isset($_GET['kategori']) && $_GET['kategori'] == $kat) ? 'selected' : '' ?>>
                                                     <?= esc($kat) ?>
                                                 </option>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <?php if (isset($_GET['kategori']) && !empty($_GET['kategori'])): ?>
+                                        <a href="<?= base_url('produk') ?>" class="btn btn-outline-secondary w-100">
+                                            <i class="bi bi-x-circle"></i> Reset
+                                        </a>
                                     <?php endif; ?>
-                                </select>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -57,14 +80,27 @@
                 ?>
                     <div class="carousel-item <?= $first ? 'active' : '' ?>">
 
-                                        <!-- Baris Atas -->
+                        <!-- Baris Atas -->
                         <div class="row g-3 justify-content-center mb-3">
                             <?php foreach ($atas as $p): ?>
                                 <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-                                    <div class="card shadow-sm h-100 product-card">
-                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>" 
-                                             class="card-img-top" 
-                                             alt="<?= esc($p['nama']) ?>" 
+                                    <div class="card shadow-sm h-100 product-card position-relative">
+                                        <!-- Wishlist Heart Icon -->
+                                        <?php if (session()->get('isLoggedIn')): ?>
+                                            <?php 
+                                            $wishlistModel = new \App\Models\WishlistModel();
+                                            $isInWishlist = $wishlistModel->isInWishlist(session()->get('id'), $p['id']);
+                                            ?>
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn" 
+                                                    onclick="toggleWishlist(this, <?= $p['id'] ?>)"
+                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                        
+                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>"
+                                             class="card-img-top"
+                                             alt="<?= esc($p['nama']) ?>"
                                              style="height:150px; object-fit:cover;">
                                         <div class="card-body d-flex flex-column p-2">
                                             <h6 class="card-title small mb-1" style="font-size: 0.85rem;"><?= esc($p['nama']) ?></h6>
@@ -94,10 +130,23 @@
                         <div class="row g-3 justify-content-center">
                             <?php foreach ($bawah as $p): ?>
                                 <div class="col-lg-2 col-md-3 col-sm-4 col-6">
-                                    <div class="card shadow-sm h-100 product-card">
-                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>" 
-                                             class="card-img-top" 
-                                             alt="<?= esc($p['nama']) ?>" 
+                                    <div class="card shadow-sm h-100 product-card position-relative">
+                                        <!-- Wishlist Heart Icon -->
+                                        <?php if (session()->get('isLoggedIn')): ?>
+                                            <?php 
+                                            $wishlistModel = new \App\Models\WishlistModel();
+                                            $isInWishlist = $wishlistModel->isInWishlist(session()->get('id'), $p['id']);
+                                            ?>
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn" 
+                                                    onclick="toggleWishlist(this, <?= $p['id'] ?>)"
+                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                        
+                                        <img src="<?= base_url('uploads/' . esc($p['gambar'])) ?>"
+                                             class="card-img-top"
+                                             alt="<?= esc($p['nama']) ?>"
                                              style="height:150px; object-fit:cover;">
                                         <div class="card-body d-flex flex-column p-2">
                                             <h6 class="card-title small mb-1" style="font-size: 0.85rem;"><?= esc($p['nama']) ?></h6>
@@ -129,38 +178,20 @@
                 ?>
             </div>
 
-            <!-- Navigasi Carousel -->
-            <?php if (count($chunked) > 1): ?>
-                <button class="carousel-control-prev" type="button" data-bs-target="#produkCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                    <span class="visually-hidden">Sebelumnya</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#produkCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                    <span class="visually-hidden">Berikutnya</span>
-                </button>
-
-                <!-- Indicators -->
-                <div class="carousel-indicators position-relative mt-4" style="position: relative; bottom: 0;">
-                    <?php foreach ($chunked as $index => $chunk): ?>
-                        <button type="button" 
-                                data-bs-target="#produkCarousel" 
-                                data-bs-slide-to="<?= $index ?>" 
-                                class="<?= $index === 0 ? 'active' : '' ?>"
-                                aria-current="<?= $index === 0 ? 'true' : 'false' ?>" 
-                                aria-label="Slide <?= $index + 1 ?>">
-                        </button>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
+            <!-- Navigasi -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#produkCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Sebelumnya</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#produkCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                <span class="visually-hidden">Berikutnya</span>
+            </button>
         </div>
 
         <?php else: ?>
             <div class="text-center text-muted py-5">
-                <i class="bi bi-box" style="font-size: 3rem;"></i>
-                <h5 class="mt-3">Tidak ada produk ditemukan</h5>
-                <p>Silakan pilih kategori lain atau lihat semua produk</p>
-                <a href="<?= base_url('produk') ?>" class="btn btn-primary">Lihat Semua Produk</a>
+                <i class="bi bi-box"></i> Belum ada produk.
             </div>
         <?php endif; ?>
     </div>
@@ -182,9 +213,6 @@
 .carousel-control-next {
     width: 5%;
 }
-.carousel-indicators button {
-    background-color: #002254;
-}
 </style>
 
-<?= $this->endSection() ?>
+<?= $this->endSection() ?>            <div class="text-center text-muted py-5">

@@ -5,37 +5,64 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\PesananModel;
 use App\Models\PesananItemModel;
+use App\Models\OrderStatusHistoryModel;
 
 class Pesanan extends BaseController
 {
+    protected $pesananModel;
+    protected $itemModel;
+    protected $statusHistoryModel;
+
+    public function __construct()
+    {
+        $this->pesananModel = new PesananModel();
+        $this->itemModel = new PesananItemModel();
+        $this->statusHistoryModel = new OrderStatusHistoryModel();
+    }
+
     public function index()
     {
-        $model = new PesananModel();
+        // Filter by status if provided
+        $status = $this->request->getGet('status');
+        
+        if ($status) {
+            $orders = $this->pesananModel
+                ->where('status', $status)
+                ->orderBy('created_at', 'DESC')
+                ->findAll();
+        } else {
+            $orders = $this->pesananModel
+                ->orderBy('created_at', 'DESC')
+                ->findAll();
+        }
+
         $data = [
-            'pesanan' => $model->orderBy('created_at', 'DESC')->findAll(), 
-            'pageTitle' => 'Daftar Pesanan'
+            'orders' => $orders,
+            'pageTitle' => 'Kelola Pesanan'
         ];
 
-        return view('admin/pesanan', $data);
+        return view('admin/pesanan/index', $data);
     }
 
     public function detail($id)
     {
-        $pesananModel = new PesananModel();
-        $pesananItemModel = new PesananItemModel();
+        $order = $this->pesananModel->find($id);
 
-        $pesanan = $pesananModel->find($id);
-
-        if (!$pesanan) {
+        if (!$order) {
             return redirect()->to('admin/pesanan')->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $items = $pesananItemModel->where('pesanan_id', $id)->findAll();
+        // Get order items
+        $order['items'] = $this->itemModel->getOrderItems($id);
+        
+        // Get status history
+        $statusHistory = $this->statusHistoryModel->getOrderHistory($id);
 
         $data = [
-            'title' => 'Detail Pesanan ' . $pesanan['kode'],
-            'pesanan' => $pesanan,
-            'items' => $items
+            'title' => 'Detail Pesanan #' . $order['id'],
+            'order' => $order,
+            'statusHistory' => $statusHistory,
+            'historyModel' => $this->statusHistoryModel
         ];
 
         return view('admin/pesanan/detail', $data);
@@ -43,17 +70,77 @@ class Pesanan extends BaseController
 
     public function updateStatus($id)
     {
-        $model = new PesananModel();
-        $status = $this->request->getPost('status');
-
-        // Validate the status
-        $allowedStatus = ['Proses', 'Selesai', 'Dibatalkan'];
-        if (!in_array($status, $allowedStatus)) {
-            return redirect()->to('admin/pesanan')->with('error', 'Status tidak valid.');
+        $order = $this->pesananModel->find($id);
+        
+        if (!$order) {
+            return redirect()->to('admin/pesanan')->with('error', 'Pesanan tidak ditemukan.');
         }
 
-        $model->update($id, ['status' => $status]);
+        $newStatus = $this->request->getPost('status');
+        $trackingNumber = $this->request->getPost('tracking_number');
+        $notes = $this->request->getPost('notes');
 
-        return redirect()->to('admin/pesanan')->with('success', 'Status pesanan berhasil diperbarui.');
+        // Validate status
+        $allowedStatus = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
+        if (!in_array($newStatus, $allowedStatus)) {
+            return redirect()->back()->with('error', 'Status tidak valid.');
+        }
+
+        // Start transaction
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        // Update order
+        $updateData = ['status' => $newStatus];
+        
+        if ($trackingNumber) {
+            $updateData['tracking_number'] = $trackingNumber;
+        }
+        
+        if ($newStatus === 'shipped' && empty($order['shipped_at'])) {
+            $updateData['shipped_at'] = date('Y-m-d H:i:s');
+        }
+        
+        if ($newStatus === 'delivered' && empty($order['delivered_at'])) {
+            $updateData['delivered_at'] = date('Y-m-d H:i:s');
+        }
+
+        $this->pesananModel->update($id, $updateData);
+
+        // Add status history
+        $this->statusHistoryModel->addStatus(
+            $id, 
+            $newStatus, 
+            $notes, 
+            session()->get('admin_id')
+        );
+
+        $db->transComplete();
+
+        if ($db->transStatus() === false) {
+            return redirect()->back()->with('error', 'Gagal mengupdate status.');
+        }
+
+        return redirect()->to('admin/pesanan/detail/' . $id)
+            ->with('success', 'Status pesanan berhasil diperbarui.');
+    }
+
+    public function delete($id)
+    {
+        $order = $this->pesananModel->find($id);
+        
+        if (!$order) {
+            return redirect()->to('admin/pesanan')->with('error', 'Pesanan tidak ditemukan.');
+        }
+
+        // Only allow delete for cancelled orders
+        if ($order['status'] !== 'cancelled') {
+            return redirect()->to('admin/pesanan')->with('error', 'Hanya pesanan yang dibatalkan yang bisa dihapus.');
+        }
+
+        $this->pesananModel->delete($id);
+
+        return redirect()->to('admin/pesanan')->with('success', 'Pesanan berhasil dihapus.');
     }
 }
+

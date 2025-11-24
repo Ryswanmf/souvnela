@@ -14,8 +14,19 @@ class PesananItemModel extends Model
         'pesanan_id',
         'produk_id',
         'nama_produk',
-        'quantity',
-        'harga'
+        'jumlah',
+        'harga',
+        'subtotal',
+        'gambar'
     ];
     protected $useTimestamps = false;
+    
+    // Get order items with product details
+    public function getOrderItems($pesananId)
+    {
+        return $this->select('pesanan_items.*, produk.gambar')
+                    ->join('produk', 'produk.id = pesanan_items.produk_id', 'left')
+                    ->where('pesanan_items.pesanan_id', $pesananId)
+                    ->findAll();
+    }
 }

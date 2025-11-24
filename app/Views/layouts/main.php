@@ -15,7 +15,10 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="<?= base_url('/') ?>">Souvnela</a>
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= base_url('/') ?>">
+            <img src="<?= base_url('uploads/logo.png') ?>" alt="Souvnela Logo" height="40" class="me-2" onerror="this.style.display='none'">
+            Souvnela
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -37,6 +40,46 @@
                 <li class="nav-item">
                     <a class="nav-link <?= ($title ?? '') == 'Tentang' ? 'active' : '' ?>" href="<?= base_url('tentang') ?>">Tentang Kami</a>
                 </li>
+                
+                <!-- Search Form -->
+               <li class="nav-item mt-2">
+                    <form action="<?= base_url('produk/search') ?>" method="get" class="d-flex" role="search">
+                        <div class="input-group input-group-sm">
+                            <input type="text"
+                                class="form-control"
+                                name="q"
+                                placeholder="Cari Produk"
+                                value="<?= esc($_GET['q'] ?? '') ?>"
+                                style="width: 200px;">
+                            <button class="btn btn-outline-primary btn-sm" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </li>
+
+                
+                <!-- Wishlist Icon -->
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="<?= base_url('wishlist') ?>" title="Wishlist">
+                        <i class="bi bi-heart fs-5"></i>
+                        <?php 
+                        if (session()->get('isLoggedIn')) {
+                            $wishlistModel = new \App\Models\WishlistModel();
+                            $totalWishlist = $wishlistModel->where('user_id', session()->get('id'))->countAllResults();
+                            if ($totalWishlist > 0): 
+                        ?>
+                        <span class="position-absolute translate-middle badge rounded-circle bg-danger wishlist-badge">
+                            <?= $totalWishlist > 99 ? '99+' : $totalWishlist ?>
+                            <span class="visually-hidden">wishlist items</span>
+                        </span>
+                        <?php 
+                            endif;
+                        }
+                        ?>
+                    </a>
+                </li>
+                
                 <li class="nav-item">
                     <a class="nav-link position-relative" href="<?= base_url('cart') ?>" title="Keranjang">
                         <i class="bi bi-cart3 fs-5"></i>
@@ -57,15 +100,23 @@
                 </li>
 
                 <?php if (session()->get('isLoggedIn')): ?>
+                    <!-- Orders Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= base_url('orders') ?>" title="Pesanan Saya">
+                            <i class="bi bi-bag-check fs-5"></i>
+                        </a>
+                    </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle"></i> <?= esc(session()->get('nama_lengkap')) ?>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="<?= base_url('account') ?>">Pesanan Saya</a></li>
                             <?php if (session()->get('role') === 'admin'): ?>
                                 <li><a class="dropdown-item" href="<?= base_url('admin') ?>">Dashboard Admin</a></li>
                             <?php endif; ?>
+                            <li><a class="dropdown-item" href="<?= base_url('profile') ?>">Profil Saya</a></li>
+                            <li><a class="dropdown-item" href="<?= base_url('account') ?>">Pesanan Saya</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Logout</a></li>
                         </ul>
@@ -84,41 +135,76 @@
 
 
 <!-- MAIN CONTENT -->
-<main>
-    <!-- Flash Messages -->
-    <?php if (session()->getFlashdata('success')): ?>
-        <div class="container mt-3">
-            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #28a745;">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <i class="bi bi-check-circle-fill fs-3 me-3" style="color: #28a745;"></i>
+<main style="padding-top: 76px;">
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+        <!-- Flash Messages as Toasts -->
+        <?php if (session()->getFlashdata('success')): ?>
+            <div class="toast align-items-center text-bg-success border-0 shadow-lg show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                            <div>
+                                <strong>Berhasil!</strong><br>
+                                <small class="text-white-50"><?= session()->getFlashdata('success') ?></small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="alert-heading mb-1 fw-bold">Berhasil!</h6>
-                        <p class="mb-0"><?= session()->getFlashdata('success') ?></p>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-        </div>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('error')): ?>
-        <div class="container mt-3">
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #dc3545;">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <i class="bi bi-exclamation-triangle-fill fs-3 me-3" style="color: #dc3545;"></i>
+        <?php endif; ?>
+        <?php if (session()->getFlashdata('error')): ?>
+            <div class="toast align-items-center text-bg-danger border-0 shadow-lg show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+                            <div>
+                                <strong>Oops!</strong><br>
+                                <small class="text-white-50"><?= session()->getFlashdata('error') ?></small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="alert-heading mb-1 fw-bold">Oops!</h6>
-                        <p class="mb-0"><?= session()->getFlashdata('error') ?></p>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-        </div>
-    <?php endif; ?>
-    
+        <?php endif; ?>
+        <?php if (session()->getFlashdata('warning')): ?>
+            <div class="toast align-items-center text-bg-warning border-0 shadow-lg show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle-fill fs-4 me-3"></i>
+                            <div>
+                                <strong>Perhatian!</strong><br>
+                                <small class="text-dark-50"><?= session()->getFlashdata('warning') ?></small>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if (session()->getFlashdata('info')): ?>
+            <div class="toast align-items-center text-bg-info border-0 shadow-lg show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+                            <div>
+                                <strong>Info!</strong><br>
+                                <small class="text-white-50"><?= session()->getFlashdata('info') ?></small>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
     <?= $this->renderSection('content') ?>
 </main>
 
@@ -220,22 +306,21 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const settings = <?= isset($settings) ? json_encode($settings) : '{}' ?>;
-    
-    // Auto dismiss alerts after 5 seconds with slide animation
+
+    // Initialize toasts
     document.addEventListener('DOMContentLoaded', function() {
-        const alerts = document.querySelectorAll('.alert');
-        alerts.forEach(function(alert) {
-            // Add slide-in animation
-            alert.style.animation = 'slideInDown 0.5s ease-out';
-            
-            setTimeout(function() {
-                // Add slide-out animation before closing
-                alert.style.animation = 'slideOutUp 0.5s ease-out';
-                setTimeout(function() {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 500);
-            }, 5000); // 5 seconds
+        const toasts = document.querySelectorAll('.toast.show');
+        toasts.forEach(function(toast) {
+            const bsToast = new bootstrap.Toast(toast, {
+                autohide: true,
+                delay: 5000
+            });
+            bsToast.show();
+
+            // Remove from DOM after hide
+            toast.addEventListener('hidden.bs.toast', function() {
+                toast.remove();
+            });
         });
 
         // Handle Add to Cart with Animation
@@ -363,62 +448,160 @@
     }
 
     function showNotification(type, message) {
-        const container = document.querySelector('main > .container:first-child') || document.querySelector('main');
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `container mt-3`;
-        
-        const iconClass = type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill';
-        const bgColor = type === 'success' ? '#28a745' : '#dc3545';
-        const heading = type === 'success' ? 'Berhasil!' : 'Oops!';
-        
-        alertDiv.innerHTML = `
-            <div class="alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid ${bgColor}; animation: bounceIn 0.6s ease-out;">
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0">
-                        <i class="bi ${iconClass} fs-3 me-3" style="color: ${bgColor};"></i>
+        const toastContainer = document.querySelector('.toast-container');
+        const toastDiv = document.createElement('div');
+
+        let iconClass, bgClass, heading, textColor;
+        switch(type) {
+            case 'success':
+                iconClass = 'bi-check-circle-fill';
+                bgClass = 'text-bg-success';
+                heading = 'Berhasil!';
+                textColor = 'text-white-50';
+                break;
+            case 'error':
+                iconClass = 'bi-exclamation-triangle-fill';
+                bgClass = 'text-bg-danger';
+                heading = 'Oops!';
+                textColor = 'text-white-50';
+                break;
+            case 'warning':
+                iconClass = 'bi-exclamation-circle-fill';
+                bgClass = 'text-bg-warning';
+                heading = 'Perhatian!';
+                textColor = 'text-dark-50';
+                break;
+            case 'info':
+                iconClass = 'bi-info-circle-fill';
+                bgClass = 'text-bg-info';
+                heading = 'Info!';
+                textColor = 'text-white-50';
+                break;
+            default:
+                iconClass = 'bi-info-circle-fill';
+                bgClass = 'text-bg-primary';
+                heading = 'Info!';
+                textColor = 'text-white-50';
+        }
+
+        toastDiv.className = `toast align-items-center ${bgClass} border-0 shadow-lg`;
+        toastDiv.setAttribute('role', 'alert');
+        toastDiv.setAttribute('aria-live', 'assertive');
+        toastDiv.setAttribute('aria-atomic', 'true');
+
+        toastDiv.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">
+                    <div class="d-flex align-items-center">
+                        <i class="bi ${iconClass} fs-4 me-3"></i>
+                        <div>
+                            <strong>${heading}</strong><br>
+                            <small class="${textColor}">${message}</small>
+                        </div>
                     </div>
-                    <div class="flex-grow-1">
-                        <h6 class="alert-heading mb-1 fw-bold">${heading}</h6>
-                        <p class="mb-0">${message}</p>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
+                <button type="button" class="btn-close ${type === 'warning' ? '' : 'btn-close-white'} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         `;
+
+        toastContainer.appendChild(toastDiv);
+
+        // Initialize and show toast
+        const bsToast = new bootstrap.Toast(toastDiv, {
+            autohide: true,
+            delay: 4000
+        });
+        bsToast.show();
+
+        // Remove from DOM after hide
+        toastDiv.addEventListener('hidden.bs.toast', function() {
+            toastDiv.remove();
+        });
+    }
+    
+    // Wishlist Toggle Function
+    window.toggleWishlist = function(button, produkId) {
+        if (!button || !produkId) return;
         
-        container.insertBefore(alertDiv, container.firstChild);
+        const icon = button.querySelector('i');
+        const originalClass = icon.className;
         
-        // Auto remove
-        setTimeout(function() {
-            alertDiv.querySelector('.alert').style.animation = 'fadeOutUp 0.5s ease-out';
-            setTimeout(() => alertDiv.remove(), 500);
-        }, 3000);
+        // Disable button
+        button.disabled = true;
+        
+        const formData = new FormData();
+        formData.append('produk_id', produkId);
+        
+        fetch('<?= base_url('wishlist/toggle') ?>', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Toggle icon
+                if (data.isAdded) {
+                    icon.classList.remove('bi-heart');
+                    icon.classList.add('bi-heart-fill');
+                } else {
+                    icon.classList.remove('bi-heart-fill');
+                    icon.classList.add('bi-heart');
+                }
+                
+                // Update wishlist badge
+                updateWishlistBadge(data.totalWishlist);
+                
+                // Show notification
+                showNotification('success', data.message);
+            } else {
+                // Restore icon
+                icon.className = originalClass;
+                
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    showNotification('error', data.message);
+                }
+            }
+            
+            button.disabled = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            icon.className = originalClass;
+            button.disabled = false;
+            showNotification('error', 'Terjadi kesalahan. Silakan coba lagi.');
+        });
+    }
+    
+    function updateWishlistBadge(totalWishlist) {
+        let badge = document.querySelector('.wishlist-badge');
+        const wishlistLink = document.querySelector('.bi-heart').closest('a');
+        
+        if (totalWishlist > 0) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'position-absolute translate-middle badge rounded-circle bg-danger wishlist-badge';
+                badge.innerHTML = '<span class="visually-hidden">wishlist items</span>';
+                wishlistLink.appendChild(badge);
+            }
+            badge.childNodes[0].textContent = totalWishlist > 99 ? '99+' : totalWishlist;
+            
+            // Bounce animation
+            badge.style.animation = 'none';
+            setTimeout(() => badge.style.animation = 'bounce 0.5s ease', 10);
+        } else {
+            if (badge) {
+                badge.remove();
+            }
+        }
     }
 </script>
 
 <style>
-@keyframes slideInDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOutUp {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-}
-
 @keyframes cartBounce {
     0%, 100% {
         transform: scale(1);
@@ -433,10 +616,7 @@
         transform: scale(1.2) rotate(-5deg);
     }
 }
-
-.alert {
-    animation: slideInDown 0.5s ease-out;
-}
 </style>
 </body>
 </html>
+

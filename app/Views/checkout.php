@@ -2,164 +2,185 @@
 
 <?= $this->section('content') ?>
 
-<section id="checkout" class="py-5">
+<section id="checkout" class="py-5 bg-light">
     <div class="container">
-        <h2 class="fw-bold mb-4">Checkout</h2>
-
-        <?php if (session()->getFlashdata('error')): ?>
-            <div class="alert alert-danger"><?= session()->getFlashdata('error') ?></div>
-        <?php endif; ?>
+        <h2 class="fw-bold mb-4">
+            <i class="fas fa-shopping-cart text-primary"></i> Checkout
+        </h2>
 
         <form action="<?= base_url('place-order') ?>" method="post">
             <?= csrf_field() ?>
             
             <div class="row g-4">
-                <!-- Form Checkout -->
-                <div class="col-lg-8">
-                    <!-- Informasi Kontak -->
+                <!-- Left Column: Shipping & Payment Info -->
+                <div class="col-lg-7">
+                    <!-- Shipping Address -->
                     <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-map-marker-alt"></i> Alamat Pengiriman</h5>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <i class="bi bi-person-circle me-2"></i>Informasi Kontak
-                            </h5>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nama_lengkap" class="form-label">Nama Lengkap <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="nama_lengkap" name="nama_lengkap" value="<?= esc(old('nama_lengkap', session()->get('nama_lengkap'))) ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" id="email" name="email" value="<?= esc(old('email', session()->get('email'))) ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="telepon" class="form-label">Nomor Telepon <span class="text-danger">*</span></label>
-                                    <input type="tel" class="form-control" id="telepon" name="telepon" value="<?= esc(old('telepon')) ?>" placeholder="08xxxxxxxxxx" required>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Nama Penerima <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="nama_penerima" 
+                                       value="<?= esc(session()->get('nama_lengkap')) ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">No. Telepon <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" name="no_telepon" 
+                                       placeholder="08xxxxxxxxxx" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" name="email" 
+                                       value="<?= esc(session()->get('email')) ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Alamat Lengkap <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="alamat_lengkap" rows="3" 
+                                          placeholder="Jalan, RT/RW, Kelurahan, Kecamatan, Kota, Provinsi, Kode Pos" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Catatan (Opsional)</label>
+                                <textarea class="form-control" name="catatan" rows="2" 
+                                          placeholder="Catatan untuk penjual..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Alamat Pengiriman -->
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <i class="bi bi-geo-alt me-2"></i>Alamat Pengiriman
-                            </h5>
-                            <div class="row g-3">
-                                <div class="col-12">
-                                    <label for="alamat" class="form-label">Alamat Lengkap <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="alamat" name="alamat" rows="3" placeholder="Jl. Nama Jalan No. XX" required><?= esc(old('alamat')) ?></textarea>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="kota" class="form-label">Kota/Kabupaten <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="kota" name="kota" value="<?= esc(old('kota')) ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="provinsi" class="form-label">Provinsi <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="provinsi" name="provinsi" value="<?= esc(old('provinsi')) ?>" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="kode_pos" class="form-label">Kode Pos <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="kode_pos" name="kode_pos" value="<?= esc(old('kode_pos')) ?>" placeholder="12345" required>
-                                </div>
-                            </div>
+                    <!-- Voucher Section -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0"><i class="fas fa-tag"></i> Kode Voucher</h5>
                         </div>
-                    </div>
-
-                    <!-- Metode Pembayaran -->
-                    <div class="card shadow-sm mb-4">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <i class="bi bi-credit-card me-2"></i>Metode Pembayaran
-                            </h5>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="metode_pembayaran" id="transfer_bank" value="transfer_bank" checked>
-                                <label class="form-check-label" for="transfer_bank">
-                                    <strong>Transfer Bank</strong>
-                                    <p class="mb-0 text-muted small">Transfer ke rekening bank yang tersedia</p>
-                                </label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="metode_pembayaran" id="cod" value="cod">
-                                <label class="form-check-label" for="cod">
-                                    <strong>COD (Cash on Delivery)</strong>
-                                    <p class="mb-0 text-muted small">Bayar saat barang diterima</p>
-                                </label>
-                            </div>
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="radio" name="metode_pembayaran" id="ewallet" value="ewallet">
-                                <label class="form-check-label" for="ewallet">
-                                    <strong>E-Wallet</strong>
-                                    <p class="mb-0 text-muted small">Gopay, OVO, DANA, dll</p>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                            <?php if ($voucherCode): ?>
+                                <div class="alert alert-success d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-check-circle"></i>
+                                        <strong>Voucher <?= esc($voucherCode) ?></strong> diterapkan!
+                                        <br>
+                                        <small>Diskon: Rp <?= number_format($discount, 0, ',', '.') ?></small>
+                                    </div>
+                                    <a href="<?= base_url('cart/remove-voucher') ?>" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-times"></i> Hapus
+                                    </a>
+                                </div>
+                            <?php else: ?>
+                                <form action="<?= base_url('cart/apply-voucher') ?>" method="post" class="mb-3">
+                                    <?= csrf_field() ?>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="voucher_code" 
+                                               placeholder="Masukkan kode voucher" required>
+                                        <button class="btn btn-success" type="submit">
+                                            <i class="fas fa-check"></i> Terapkan
+                                        </button>
+                                    </div>
+                                </form>
 
-                    <!-- Catatan Pesanan -->
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <i class="bi bi-chat-left-text me-2"></i>Catatan Pesanan (Opsional)
-                            </h5>
-                            <textarea class="form-control" name="catatan" rows="3" placeholder="Catatan untuk penjual, misalnya warna, ukuran, atau instruksi khusus"><?= esc(old('catatan')) ?></textarea>
+                                <?php if (!empty($vouchers)): ?>
+                                    <div class="available-vouchers">
+                                        <p class="text-muted mb-2"><small>Voucher tersedia:</small></p>
+                                        <div class="row g-2">
+                                            <?php foreach ($vouchers as $voucher): ?>
+                                                <div class="col-md-6">
+                                                    <div class="card border-success">
+                                                        <div class="card-body p-2">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <div>
+                                                                    <strong class="text-success"><?= esc($voucher['code']) ?></strong>
+                                                                    <br>
+                                                                    <small class="text-muted">
+                                                                        <?php if ($voucher['discount_type'] === 'percentage'): ?>
+                                                                            Diskon <?= $voucher['discount_value'] ?>%
+                                                                        <?php else: ?>
+                                                                            Diskon Rp <?= number_format($voucher['discount_value'], 0, ',', '.') ?>
+                                                                        <?php endif; ?>
+                                                                    </small>
+                                                                </div>
+                                                                <button type="button" class="btn btn-sm btn-outline-success copy-voucher" 
+                                                                        data-code="<?= esc($voucher['code']) ?>">
+                                                                    <i class="fas fa-copy"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
 
-                <!-- Ringkasan Pesanan -->
-                <div class="col-lg-4">
+                <!-- Right Column: Order Summary -->
+                <div class="col-lg-5">
                     <div class="card shadow-sm sticky-top" style="top: 20px;">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0"><i class="fas fa-receipt"></i> Ringkasan Pesanan</h5>
+                        </div>
                         <div class="card-body">
-                            <h5 class="card-title mb-4">Ringkasan Pesanan</h5>
-                            
-                            <!-- List Produk -->
-                            <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+                            <!-- Cart Items -->
+                            <div class="order-items mb-3" style="max-height: 300px; overflow-y: auto;">
                                 <?php foreach ($cart as $item): ?>
-                                    <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
-                                        <img src="<?= base_url('uploads/' . esc($item['gambar'])) ?>" class="rounded me-2" style="width: 50px; height: 50px; object-fit: cover;">
-                                        <div class="flex-grow-1">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="<?= base_url('uploads/produk/' . $item['gambar']) ?>" 
+                                             alt="<?= esc($item['nama']) ?>" 
+                                             class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                                        <div class="ms-3 flex-grow-1">
                                             <h6 class="mb-0 small"><?= esc($item['nama']) ?></h6>
-                                            <small class="text-muted"><?= $item['quantity'] ?> x <?= number_to_currency($item['harga'], 'IDR') ?></small>
+                                            <small class="text-muted"><?= $item['quantity'] ?> x Rp <?= number_format($item['harga'], 0, ',', '.') ?></small>
                                         </div>
-                                        <span class="fw-medium"><?= number_to_currency($item['harga'] * $item['quantity'], 'IDR') ?></span>
+                                        <div class="text-end">
+                                            <strong>Rp <?= number_format($item['harga'] * $item['quantity'], 0, ',', '.') ?></strong>
+                                        </div>
                                     </div>
+                                    <hr class="my-2">
                                 <?php endforeach; ?>
                             </div>
 
-                            <!-- Subtotal -->
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Subtotal</span>
-                                <span><?= number_to_currency($total, 'IDR') ?></span>
+                            <!-- Price Summary -->
+                            <div class="price-summary">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Subtotal</span>
+                                    <span>Rp <?= number_format($total, 0, ',', '.') ?></span>
+                                </div>
+                                
+                                <?php if ($discount > 0): ?>
+                                    <div class="d-flex justify-content-between mb-2 text-success">
+                                        <span><i class="fas fa-tag"></i> Diskon Voucher</span>
+                                        <span>- Rp <?= number_format($discount, 0, ',', '.') ?></span>
+                                    </div>
+                                <?php endif; ?>
+
+                                <hr>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Total Pembayaran</h5>
+                                    <h4 class="mb-0 text-primary">Rp <?= number_format($total - $discount, 0, ',', '.') ?></h4>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
+                                    <i class="fas fa-lock"></i> Proses Pembayaran
+                                </button>
+
+                                <div class="text-center mt-3">
+                                    <small class="text-muted">
+                                        <i class="fas fa-shield-alt"></i> Pembayaran aman dengan Midtrans
+                                    </small>
+                                </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Ongkir -->
-                            <div class="d-flex justify-content-between mb-2">
-                                <span>Ongkos Kirim</span>
-                                <span class="text-muted">Gratis</span>
-                            </div>
-
-                            <hr>
-
-                            <!-- Total -->
-                            <div class="d-flex justify-content-between align-items-center fw-bold fs-5 mb-4">
-                                <span>Total</span>
-                                <span class="text-primary"><?= number_to_currency($total, 'IDR') ?></span>
-                            </div>
-
-                            <!-- Tombol Checkout -->
-                            <button type="submit" class="btn btn-primary btn-lg w-100 mb-2">
-                                <i class="bi bi-bag-check me-2"></i>Konfirmasi Pesanan
-                            </button>
-                            <a href="<?= base_url('cart') ?>" class="btn btn-outline-secondary w-100">
-                                <i class="bi bi-arrow-left me-2"></i>Kembali ke Keranjang
-                            </a>
-
-                            <div class="mt-3">
-                                <small class="text-muted">
-                                    <i class="bi bi-shield-check me-1"></i>Pembayaran aman & terpercaya
-                                </small>
-                            </div>
+                    <div class="card shadow-sm mt-3">
+                        <div class="card-body text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> Dengan melakukan pemesanan, Anda menyetujui 
+                                <a href="#">syarat dan ketentuan</a> kami.
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -167,5 +188,23 @@
         </form>
     </div>
 </section>
+
+<script>
+// Copy voucher code
+document.querySelectorAll('.copy-voucher').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const code = this.dataset.code;
+        const input = document.querySelector('input[name="voucher_code"]');
+        input.value = code;
+        
+        // Show feedback
+        const icon = this.querySelector('i');
+        icon.className = 'fas fa-check';
+        setTimeout(() => {
+            icon.className = 'fas fa-copy';
+        }, 1500);
+    });
+});
+</script>
 
 <?= $this->endSection() ?>
