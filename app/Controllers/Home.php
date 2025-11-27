@@ -6,6 +6,7 @@ use App\Models\BlogModel;
 use App\Models\ProdukModel;
 use App\Models\TestimonialModel;
 use App\Models\HomeSettingModel;
+use App\Models\GeneralSettingModel;
 use App\Models\WishlistModel;
 
 class Home extends BaseController
@@ -17,6 +18,7 @@ class Home extends BaseController
         $testimonialModel = new TestimonialModel();
         $wishlistModel = new WishlistModel();
         $homeSettingModel = new HomeSettingModel();
+        $generalSettingModel = new GeneralSettingModel();
 
         $data['title'] = 'Beranda';
 
@@ -43,10 +45,21 @@ class Home extends BaseController
             cache()->save('testimonials', $data['testimonials'], 86400);
         }
 
-        if (!$data['settings'] = cache('home_settings')) {
-            $data['settings'] = $homeSettingModel->first();
-            cache()->save('home_settings', $data['settings'], 86400);
+        // Load settings
+        if (!$homeSettings = cache('home_settings')) {
+            $homeSettings = $homeSettingModel->first();
+            cache()->save('home_settings', $homeSettings, 86400);
         }
+
+        if (!$generalSettings = cache('general_settings')) {
+            $generalSettings = $generalSettingModel->first();
+            cache()->save('general_settings', $generalSettings, 86400);
+        }
+
+        $data['settings'] = [
+            'home' => $homeSettings,
+            'general' => $generalSettings
+        ];
 
         $data['wishlist'] = [];
 
@@ -97,12 +110,23 @@ class Home extends BaseController
     public function tentang(): string
     {
         $homeSettingModel = new HomeSettingModel();
+        $generalSettingModel = new GeneralSettingModel();
         $data['title'] = 'Tentang Kami';
 
-        if (!$data['settings'] = cache('home_settings')) {
-            $data['settings'] = $homeSettingModel->first();
-            cache()->save('home_settings', $data['settings'], 3600);
+        if (!$homeSettings = cache('home_settings')) {
+            $homeSettings = $homeSettingModel->first();
+            cache()->save('home_settings', $homeSettings, 3600);
         }
+
+        if (!$generalSettings = cache('general_settings')) {
+            $generalSettings = $generalSettingModel->first();
+            cache()->save('general_settings', $generalSettings, 3600);
+        }
+
+        $data['settings'] = [
+            'home' => $homeSettings,
+            'general' => $generalSettings
+        ];
 
         return view('tentang/tentang', $data);
     }

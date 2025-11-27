@@ -24,13 +24,13 @@ class Produk extends BaseController
         // Filter products by category if selected
         if (!empty($kategori)) {
             if (!$produk = cache('produk_kategori_' . $kategori)) {
-                $produk = $model->where('kategori', $kategori)->orderBy('id', 'DESC')->limit(50)->findAll(); // Limit for performance
+                $produk = $model->where('kategori', $kategori)->orderBy('id', 'DESC')->findAll();
                 cache()->save('produk_kategori_' . $kategori, $produk, 3600);
             }
             $title = 'Produk Kategori: ' . $kategori;
         } else {
             if (!$produk = cache('semua_produk')) {
-                $produk = $model->orderBy('id', 'DESC')->limit(50)->findAll(); // Limit for performance
+                $produk = $model->orderBy('id', 'DESC')->findAll();
                 cache()->save('semua_produk', $produk, 3600);
             }
             $title = 'Semua Produk';
@@ -69,11 +69,10 @@ class Produk extends BaseController
                             ->orLike('deskripsi', $keyword)
                             ->orLike('kategori', $keyword)
                             ->orderBy('id', 'DESC')
-                            ->limit(50) // Limit search results for performance
                             ->findAll();
             $title = 'Hasil Pencarian: "' . $keyword . '"';
         } else {
-            $produk = $model->orderBy('id', 'DESC')->limit(50)->findAll();
+            $produk = $model->orderBy('id', 'DESC')->findAll();
             $title = 'Semua Produk';
         }
 

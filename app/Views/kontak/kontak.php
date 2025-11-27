@@ -18,6 +18,7 @@
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4">Form Kontak Kami</h5>
                         <form action="<?= base_url('kontak/kirim') ?>" method="post">
+                            <?= csrf_field() ?>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <input type="text" class="form-control" name="name" placeholder="Nama" required>
@@ -48,23 +49,23 @@
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-geo-alt-fill me-2"></i>
-                            <strong>Alamat:</strong> Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141
+                            <strong>Alamat:</strong> <?= esc($settings['home']['contact_address'] ?? 'Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-telephone-fill me-2"></i>
-                            <strong>Telepon:</strong> +62 812 3456 7890
+                            <strong>Telepon:</strong> <?= esc($settings['home']['contact_phone'] ?? '+62 812 3456 7890') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-envelope-fill me-2"></i>
-                            <strong>Instagram:</strong> souvnela
+                            <strong>Instagram:</strong> <?= esc($settings['home']['contact_instagram'] ?? 'souvnela') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-tiktok me-2"></i>
-                            <strong>TikTok:</strong> @souvnela
+                            <strong>TikTok:</strong> <?= esc($settings['home']['contact_tiktok'] ?? '@souvnela') ?>
                         </p>
                         <p class="mb-0">
                             <i class="bi bi-globe me-2"></i>
-                            <strong>Email:</strong> souvnela@gmail.com
+                            <strong>Email:</strong> <?= esc($settings['home']['contact_email'] ?? 'souvnela@gmail.com') ?>
                         </p>
                     </div>
                 </div>
