@@ -27,7 +27,7 @@
                             <td><?= esc($k['email']) ?></td>
                             <td><?= esc($k['subjek']) ?></td>
                             <td><?= esc($k['pesan']) ?></td>
-                            <td><?= date('d M Y', strtotime($k['tanggal'])) ?></td>
+                            <td><?= date('d M Y', strtotime($k['created_at'])) ?></td>
                             <td class="text-end">
                                 <a href="<?= base_url('admin/kontak/hapus/'.$k['id']) ?>" onclick="return confirm('Hapus pesan ini?')" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
                             </td>

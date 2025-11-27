@@ -43,13 +43,13 @@ class Filters extends BaseFilters
      */
     public array $required = [
         'before' => [
-            'forcehttps', // Sekarang alias ini dikenali
-            'pagecache',  // Web Page Caching
+            // 'forcehttps', // Disabled for localhost development
+            // 'pagecache',  // Web Page Caching - disabled for dynamic content
         ],
         'after' => [
-            'pagecache',   // Web Page Caching
-            'performance', // Performance Metrics
-            'toolbar',     // Debug Toolbar
+            // 'pagecache',   // Web Page Caching - disabled for dynamic content
+            // 'performance', // Performance Metrics - disabled for production
+            // 'toolbar',     // Debug Toolbar - disabled for production
         ],
     ];
 

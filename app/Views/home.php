@@ -14,10 +14,10 @@
                 <p class="lead mb-4">
                     <?= esc($settings['home']['hero_subtitle2'] ?? 'Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung. Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.') ?>
                 </p>
-                <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
+                <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2 pulse-button"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid" alt="Souvenir Polinela">
+                <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid floating-image" alt="Souvenir Polinela">
             </div>
         </div>
     </div>
@@ -69,31 +69,61 @@
 <section id="produk" class="py-5 bg-light">
     <div class="container text-center">
         <h2 class="mb-4">Produk Unggulan</h2>
-        <div class="row g-4">
-            <?php if (!empty($products)): ?>
-                <?php foreach ($products as $product): ?>
-                    <div class="col-md-4">
-                        <div class="card shadow-sm product-card">
-                            <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>" class="card-img-top" alt="<?= esc($product['nama']) ?>" style="height: 240px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= esc($product['nama']) ?></h5>
-                                <p class="card-text">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
-                                <p class="card-text text-muted small"><?= esc(substr(strip_tags($product['deskripsi']), 0, 70)) ?>...</p>
-                                        <form action="<?= base_url('cart/add') ?>" method="post">
+        <?php if (!empty($products)): ?>
+        <!-- Optimized Product Grid - Faster Loading -->
+        <div class="row g-3 justify-content-center">
+            <?php foreach ($products as $product): ?>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="card shadow-sm h-100 product-card position-relative">
+                        <!-- Wishlist Heart Icon -->
+                        <?php if (session()->get('isLoggedIn')): ?>
+                            <?php $isInWishlist = in_array($product['id'], $wishlist); ?>
+                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
+                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
+                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                            </button>
+                        <?php endif; ?>
+
+                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
+                             class="card-img-top"
+                             alt="<?= esc($product['nama']) ?>"
+                             loading="lazy"
+                             style="height:200px; object-fit:cover;">
+                        <div class="card-body d-flex flex-column p-2">
+                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
+                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
+                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
+                            </p>
+                            <div class="d-flex gap-1 mt-auto">
+                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-info-circle"></i> Detail
+                                </a>
+                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                                    <button type="submit" class="btn btn-primary w-100">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
                                         <i class="bi bi-cart-plus"></i> Pesan
                                     </button>
                                 </form>
                             </div>
                         </div>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-muted">Belum ada produk unggulan.</p>
-            <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         </div>
+
+        <!-- View All Products Link -->
+        <div class="text-center mt-4">
+            <a href="<?= base_url('produk') ?>" class="btn btn-primary">Lihat Semua Produk</a>
+        </div>
+
+        <?php else: ?>
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-box"></i> Belum ada produk unggulan.
+            </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -173,6 +203,13 @@
     .features .col-md-4 .card:hover {
         transform: translateY(-5px) !important;
         box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 </style>
 
@@ -273,5 +310,23 @@
             </div>
         </div>
 </section>
+
+<!-- Optimized Styles - Removed heavy animations -->
+<style>
+/* Simplified animations for better performance */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+</style>
 
 <?= $this->endSection() ?>

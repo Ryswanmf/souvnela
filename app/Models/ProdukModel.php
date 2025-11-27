@@ -18,5 +18,7 @@ class ProdukModel extends Model
         'tanggal_dibuat',
         'is_unggulan'
     ];
-    public $useTimestamps = false; // karena kamu pakai kolom tanggal_dibuat manual
+    protected $useTimestamps = true;
+    protected $createdField  = 'tanggal_dibuat';
+    protected $updatedField  = ''; // Disable updated_at if not exists
 }

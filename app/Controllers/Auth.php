@@ -3,10 +3,12 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\CartModel;
 use CodeIgniter\Controller;
 
 class Auth extends BaseController
 {
+
     public function login()
     {
         helper(['form']);
@@ -103,24 +105,46 @@ class Auth extends BaseController
             'username'    => $user['username'],
             'nama_lengkap'=> $user['nama_lengkap'],
             'role'        => $user['role'],
+            'foto_profil' => $user['foto_profil'],
             'isLoggedIn'  => true
         ]);
+
+        // Load cart from DB
+        $cartModel = new CartModel();
+        $cartItems = $cartModel->select('cart.*, produk.nama, produk.harga, produk.gambar')
+            ->join('produk', 'produk.id = cart.produk_id')
+            ->where('cart.user_id', $user['id'])
+            ->findAll();
+
+        $cart = [];
+        foreach ($cartItems as $item) {
+            $cart[$item['produk_id']] = [
+                'id' => $item['produk_id'],
+                'nama' => $item['nama'],
+                'harga' => $item['harga'],
+                'gambar' => $item['gambar'],
+                'quantity' => $item['quantity']
+            ];
+        }
+        $session->set('cart', $cart);
 
         // Login sukses -> reset attempt counters
         $session->remove('login_attempts');
         $session->remove('login_first_at');
 
         if ($user['role'] === 'admin') {
+            $session->setFlashdata('success', 'Selamat datang Admin ' . $user['nama_lengkap'] . '! Anda berhasil login ke Dashboard Admin.');
             return redirect()->to('/admin');
         } elseif ($user['role'] === 'pembeli') {
-            $session->setFlashdata('success', 'Selamat datang kembali, ' . $user['nama_lengkap'] . '! Anda login sebagai pembeli.');
-                            if (session()->get('redirect_url')) {
-                                $redirect_url = session()->get('redirect_url');
-                                session()->remove('redirect_url');
-                                return redirect()->to($redirect_url);
-                            }
+            $session->setFlashdata('success', 'Selamat datang kembali, ' . $user['nama_lengkap'] . '! Login berhasil.');
+            if (session()->get('redirect_url')) {
+                $redirect_url = session()->get('redirect_url');
+                session()->remove('redirect_url');
+                return redirect()->to($redirect_url);
+            }
             
-                            return redirect()->to('/');        } else {
+            return redirect()->to('/');
+        } else {
             // Jika role tidak dikenali, hancurkan session dan tolak akses dengan pesan debug
             $session->destroy();
             $role_ditemukan = $user['role'] ?? '[KOSONG]'; // Ambil role, atau tampilkan [KOSONG] jika tidak ada
@@ -139,6 +163,7 @@ class Auth extends BaseController
     {
         helper(['form']);
         $session = session();
+        $request = service('request');
         $model = new UserModel();
 
         $rules = [
@@ -148,22 +173,24 @@ class Auth extends BaseController
             'password_confirm' => 'matches[password]'
         ];
 
-        if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        $validation = \Config\Services::validation();
+        $validation->setRules($rules);
+        if (!$validation->run($request->getPost())) {
+            return redirect()->back()->withInput()->with('errors', $validation->getErrors());
         }
 
         $data = [
-            'nama_lengkap' => $this->request->getPost('nama'),
-            'username'     => $this->request->getPost('username'),
-            'password'     => $this->request->getPost('password'),
+            'nama_lengkap' => $request->getPost('nama'),
+            'username'     => $request->getPost('username'),
+            'password'     => password_hash($request->getPost('password'), PASSWORD_DEFAULT),
             'role'         => 'pembeli' // Set default role
         ];
 
         if ($model->save($data)) {
-            $session->setFlashdata('success', 'Registrasi berhasil! Silakan login.');
+            $session->setFlashdata('success', 'Selamat! Registrasi berhasil. Silakan login dengan akun Anda.');
             return redirect()->to('/login');
         } else {
-            $session->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data.');
+            $session->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
             return redirect()->back()->withInput();
         }
     }
@@ -171,8 +198,17 @@ class Auth extends BaseController
     public function logout()
     {
         $session = session();
-        $session->setFlashdata('success', 'Anda berhasil logout.');
-        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn']);
+        $nama = $session->get('nama_lengkap');
+        $role = $session->get('role');
+        
+        // Set pesan sesuai role
+        if ($role === 'admin') {
+            $session->setFlashdata('success', 'Admin ' . $nama . ' telah logout. Terima kasih!');
+        } else {
+            $session->setFlashdata('success', 'Anda telah logout. Terima kasih ' . $nama . ', sampai jumpa lagi!');
+        }
+        
+        $session->remove(['id', 'username', 'nama_lengkap', 'role', 'isLoggedIn', 'cart']);
         return redirect()->to('/');
     }
 }

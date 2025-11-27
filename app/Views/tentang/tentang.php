@@ -6,7 +6,7 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="fw-bold"><?= esc($settings['about_title'] ?? 'Tentang Kami') ?></h2>
-            <p class="text-muted">Souvnela lahir dari semangat untuk menciptakan souvenir yang bukan hanya sekadar barang, tapi juga cerita dan kebanggaan. 
+            <p class="lead text-muted">Souvnela lahir dari semangat untuk menciptakan souvenir yang bukan hanya sekadar barang, tapi juga cerita dan kebanggaan. 
                 Kami adalah tim yang berdedikasi untuk menjaga kenangan Polinela tetap hidup melalui produk-produk eksklusif. Temukan kisah kami di sini.</p>
         </div>
 
@@ -37,8 +37,8 @@
         <div class="row mt-5 g-4">
             <div class="col-md-6">
                 <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-3">Visi</h4>
+                    <div class="card-body p-4 d-flex flex-column align-items-start">
+                        <h4 class="fw-bold mb-3"><i class="bi bi-eye me-2"></i>Visi</h4>
                         <p>
                             <?= esc($settings['visi'] ?? 'Menjadi platform souvenir kampus yang inovatif, terpercaya, dan mampu memperkuat kebanggaan seluruh sivitas akademika Polinela.') ?>
                         </p>
@@ -48,8 +48,8 @@
 
             <div class="col-md-6">
                 <div class="card border-0 shadow-sm h-100">
-                    <div class="card-body p-4">
-                        <h4 class="fw-bold mb-3">Misi</h4>
+                    <div class="card-body p-4 d-flex flex-column align-items-start">
+                        <h4 class="fw-bold mb-3"><i class="bi bi-flag me-2"></i>Misi</h4>
                         <div>
                             <?= $settings['misi'] ?? '<ul><li>Menyediakan produk berkualitas tinggi dengan desain eksklusif.</li><li>Mendukung kegiatan kampus dengan souvenir resmi Polinela.</li><li>Memberikan pelayanan yang cepat, ramah, dan aman.</li><li>Menghadirkan inovasi dalam setiap koleksi souvenir.</li></ul>' ?>
                         </div>

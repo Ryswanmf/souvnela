@@ -55,7 +55,7 @@ class Testimonial extends BaseController
         $photo = $this->request->getFile('photo');
         if ($photo->isValid() && !$photo->hasMoved()) {
             $newName = $photo->getRandomName();
-            $photo->move(ROOTPATH . 'public/uploads', $newName);
+            $photo->move(FCPATH . 'uploads', $newName);
             $data['photo'] = $newName;
         }
 
@@ -86,14 +86,14 @@ class Testimonial extends BaseController
         if ($photo->isValid() && !$photo->hasMoved()) {
             $testimonial = $this->testimonialModel->find($id);
             if ($testimonial && !empty($testimonial['photo'])) {
-                $oldImagePath = ROOTPATH . 'public/uploads/' . $testimonial['photo'];
+                $oldImagePath = FCPATH . 'uploads/' . $testimonial['photo'];
                 if (file_exists($oldImagePath)) {
                     unlink($oldImagePath);
                 }
             }
 
             $newName = $photo->getRandomName();
-            $photo->move(ROOTPATH . 'public/uploads', $newName);
+            $photo->move(FCPATH . 'uploads', $newName);
             $data['photo'] = $newName;
         }
 
@@ -106,7 +106,7 @@ class Testimonial extends BaseController
     {
         $testimonial = $this->testimonialModel->find($id);
         if ($testimonial && !empty($testimonial['photo'])) {
-            $oldImagePath = ROOTPATH . 'public/uploads/' . $testimonial['photo'];
+            $oldImagePath = FCPATH . 'uploads/' . $testimonial['photo'];
             if (file_exists($oldImagePath)) {
                 unlink($oldImagePath);
             }

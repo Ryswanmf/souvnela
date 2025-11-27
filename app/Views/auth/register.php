@@ -43,19 +43,53 @@
 
         <!-- Flash Messages -->
         <?php if(session()->getFlashdata('success')): ?>
-            <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #28a745;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-check-circle-fill fs-4 me-3" style="color: #28a745;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="alert-heading mb-1 fw-bold">Sukses!</h6>
+                        <p class="mb-0"><?= session()->getFlashdata('success') ?></p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        <?php endif; ?>
+        
+        <?php if(session()->getFlashdata('error')): ?>
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #dc3545;">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-exclamation-triangle-fill fs-4 me-3" style="color: #dc3545;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="alert-heading mb-1 fw-bold">Error!</h6>
+                        <p class="mb-0"><?= session()->getFlashdata('error') ?></p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
         <?php endif; ?>
         
         <?php 
         $errors = session()->getFlashdata('errors');
         if($errors): ?>
-            <div class="alert alert-danger">
-                <p class="fw-bold mb-1">Gagal mendaftar:</p>
-                <ul>
-                <?php foreach ($errors as $error): ?>
-                    <li><?= esc($error) ?></li>
-                <?php endforeach; ?>
-                </ul>
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert" style="border-left: 4px solid #dc3545;">
+                <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-exclamation-triangle-fill fs-4 me-3" style="color: #dc3545;"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="alert-heading mb-2 fw-bold">Gagal Mendaftar!</h6>
+                        <ul class="mb-0 ps-3">
+                        <?php foreach ($errors as $error): ?>
+                            <li><?= esc($error) ?></li>
+                        <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
         <?php endif; ?>
 
@@ -102,5 +136,58 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto dismiss alerts after 5 seconds with bounce animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                // Add bounce animation
+                alert.style.animation = 'bounceIn 0.6s ease-out';
+                
+                setTimeout(function() {
+                    // Add fade-out animation before closing
+                    alert.style.animation = 'fadeOutUp 0.5s ease-out';
+                    setTimeout(function() {
+                        const bsAlert = new bootstrap.Alert(alert);
+                        bsAlert.close();
+                    }, 500);
+                }, 5000); // 5 seconds
+            });
+        });
+    </script>
+    
+    <style>
+    @keyframes bounceIn {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+    
+    @keyframes fadeOutUp {
+        from {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+    }
+    
+    .alert {
+        animation: bounceIn 0.6s ease-out;
+    }
+    </style>
 </body>
 </html>

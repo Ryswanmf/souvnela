@@ -13,8 +13,8 @@ $routes->get('/', 'Home::index');
 $routes->get('produk', 'Produk::index');
 $routes->get('produk/search', 'Produk::search');
 $routes->get('produk/detail/(:num)', 'Produk::detail/$1');
-$routes->get('kontak', 'Home::kontak');
-$routes->post('kontak/kirim', 'Home::kirimPesan');
+$routes->get('kontak', 'Kontak::index');
+$routes->post('kontak/kirim', 'Kontak::kirim');
 $routes->get('blog', 'Home::blog');
 $routes->get('blog/detail/(:num)', 'Home::blogDetail/$1');
 $routes->get('tentang', 'Home::tentang');
@@ -24,12 +24,20 @@ $routes->get('mug', 'Home::mug');
 $routes->get('kaos', 'Home::kaos');
 $routes->get('tumbler', 'Home::tumbler');
 
+// Information Pages
+$routes->get('konfirmasi-pembayaran', 'Information::konfirmasiPembayaran');
+$routes->get('pembayaran-pengiriman', 'Information::pembayaranPengiriman');
+$routes->get('syarat-ketentuan', 'Information::syaratKetentuan');
+$routes->get('kebijakan-privasi', 'Information::kebijakanPrivasi');
+
 // Cart Routes
 $routes->post('cart/add', 'Cart::add');
 $routes->get('cart', 'Cart::index');
 $routes->post('cart/update', 'Cart::update');
 $routes->get('cart/remove/(:any)', 'Cart::remove/$1');
 $routes->get('cart/checkout', 'Cart::checkout');
+$routes->post('cart/apply-voucher', 'Cart::applyVoucher');
+$routes->get('cart/remove-voucher', 'Cart::removeVoucher');
 
 // Payment Routes
 $routes->post('payment/process', 'Payment::process');
@@ -70,6 +78,8 @@ $routes->post('registerProcess', 'Auth::registerProcess'); // Memproses form
 // ==========================
 $routes->get('account', 'AccountController::index');
 $routes->get('account/cancel/(:num)', 'AccountController::cancelOrder/$1');
+$routes->get('profile', 'ProfileController::index');
+$routes->post('profile/update', 'ProfileController::update');
 
 // ==========================
 // ADMIN ROUTES
@@ -85,6 +95,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('produk/toggleFeatured/(:num)', 'Produk::toggleFeatured/$1');
     $routes->get('produk/hapus/(:num)', 'Produk::hapus/$1');
     $routes->get('pesanan', 'Pesanan::index');
+    $routes->get('pesanan/detail/(:num)', 'Pesanan::detail/$1');
     $routes->post('pesanan/updateStatus/(:num)', 'Pesanan::updateStatus/$1');
     $routes->get('blog', 'Blog::index');
     $routes->get('blog/create', 'Blog::create');
@@ -102,9 +113,21 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('kategori/delete/(:num)', 'KategoriProdukController::delete/$1');
 
     $routes->get('pengguna', 'Pengguna::index');
+    $routes->get('pengguna/create', 'Pengguna::create');
+    $routes->post('pengguna/store', 'Pengguna::store');
     $routes->get('pengguna/edit/(:num)', 'Pengguna::edit/$1');
     $routes->post('pengguna/update/(:num)', 'Pengguna::update/$1');
     $routes->get('pengguna/hapus/(:num)', 'Pengguna::hapus/$1');
+    
+    // Voucher Routes
+    $routes->get('voucher', 'Voucher::index');
+    $routes->get('voucher/create', 'Voucher::create');
+    $routes->post('voucher/store', 'Voucher::store');
+    $routes->get('voucher/edit/(:num)', 'Voucher::edit/$1');
+    $routes->post('voucher/update/(:num)', 'Voucher::update/$1');
+    $routes->get('voucher/delete/(:num)', 'Voucher::delete/$1');
+    $routes->post('voucher/toggleStatus/(:num)', 'Voucher::toggleStatus/$1');
+
     $routes->get('kontak', 'Kontak::index');
     $routes->get('kontak/hapus/(:num)', 'Kontak::hapus/$1');
     $routes->get('setting/hero', 'Setting::hero');
@@ -126,8 +149,15 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('testimonial/delete/(:num)', 'Testimonial::delete/$1');
 
     // Midtrans Routes
-    $routes->get('midtrans', 'Midtrans::index');
-    $routes->post('midtrans/update', 'Midtrans::update');
+    $routes->get('midtrans', 'MidtransController::index');
+    $routes->post('midtrans/update', 'MidtransController::updateConfig');
+    $routes->get('midtrans/detail/(:num)', 'MidtransController::detail/$1');
+    $routes->get('midtrans/check-status/(:any)', 'MidtransController::checkStatus/$1');
+
+    // Info Pages Routes
+    $routes->get('info-pages', 'InfoPageController::index');
+    $routes->get('info-pages/edit/(:num)', 'InfoPageController::edit/$1');
+    $routes->post('info-pages/update/(:num)', 'InfoPageController::update/$1');
 });
 
 

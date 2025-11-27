@@ -18,6 +18,7 @@
                 <thead class="table-light">
                     <tr>
                         <th width="5%">#</th>
+                        <th width="10%">Foto</th>
                         <th>Nama Pengguna</th>
                         <th>Email</th>
                         <th>Role</th>
@@ -30,7 +31,16 @@
                         <?php foreach ($users as $i => $u): ?>
                             <tr>
                                 <td><?= $i + 1 ?></td>
-                                <td><?= esc($u['username'] ?? '-') ?></td>
+                                <td>
+                                    <img src="<?= !empty($u['foto_profil']) ? base_url('uploads/' . $u['foto_profil']) : base_url('assets/images/default-avatar.png') ?>" 
+                                         alt="Foto Profil" 
+                                         class="img-fluid rounded-circle" 
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                </td>
+                                <td>
+                                    <strong><?= esc($u['nama_lengkap'] ?? '-') ?></strong><br>
+                                    <small class="text-muted">@<?= esc($u['username'] ?? '-') ?></small>
+                                </td>
                                 <td><?= esc($u['email'] ?? '-') ?></td>
                                 <td>
                                     <span class="badge bg-<?= ($u['role'] ?? '') === 'admin' ? 'primary' : 'secondary' ?>">
@@ -55,7 +65,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" class="text-center text-muted py-4">
+                            <td colspan="7" class="text-center text-muted py-4">
                                 <i class="bi bi-exclamation-circle me-1"></i>Belum ada pengguna.
                             </td>
                         </tr>

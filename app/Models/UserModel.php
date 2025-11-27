@@ -15,7 +15,12 @@ class UserModel extends Model
         'password',
         'nama_lengkap',
         'email',
-        'role'
+        'role',
+        'foto_profil',
+        'alamat',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'nomor_telepon'
     ];
 
     // Jika ingin menambahkan helper untuk hashing password sebelum insert/update

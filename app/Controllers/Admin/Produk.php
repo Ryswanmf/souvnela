@@ -8,6 +8,8 @@ use App\Controllers\BaseController;
 
 class Produk extends BaseController
 {
+    public $validator;
+
     protected $produkModel;
     protected $kategoriProdukModel;
 
@@ -56,7 +58,7 @@ class Produk extends BaseController
 
         $gambar = $this->request->getFile('gambar');
         $namaGambar = $gambar->getRandomName();
-        $gambar->move('uploads', $namaGambar);
+        $gambar->move(FCPATH . 'uploads', $namaGambar);
 
         $this->produkModel->save([
             'nama' => $this->request->getPost('nama'),
@@ -111,11 +113,11 @@ class Produk extends BaseController
 
         if ($gambar->isValid()) {
             $produk = $this->produkModel->find($id);
-            if ($produk['gambar'] && file_exists('uploads/' . $produk['gambar'])) {
-                unlink('uploads/' . $produk['gambar']);
+            if ($produk['gambar'] && file_exists(FCPATH . 'uploads/' . $produk['gambar'])) {
+                unlink(FCPATH . 'uploads/' . $produk['gambar']);
             }
             $namaGambar = $gambar->getRandomName();
-            $gambar->move('uploads', $namaGambar);
+            $gambar->move(FCPATH . 'uploads', $namaGambar);
             $data['gambar'] = $namaGambar;
         }
 
@@ -127,8 +129,8 @@ class Produk extends BaseController
     public function hapus($id)
     {
         $produk = $this->produkModel->find($id);
-        if ($produk['gambar'] && file_exists('uploads/' . $produk['gambar'])) {
-            unlink('uploads/' . $produk['gambar']);
+        if ($produk['gambar'] && file_exists(FCPATH . 'uploads/' . $produk['gambar'])) {
+            unlink(FCPATH . 'uploads/' . $produk['gambar']);
         }
         $this->produkModel->delete($id);
         return redirect()->to('admin/produk')->with('success', 'Produk berhasil dihapus.');

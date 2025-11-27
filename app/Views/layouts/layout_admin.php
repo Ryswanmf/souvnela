@@ -174,6 +174,11 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="<?= base_url('admin/info-pages') ?>" class="nav-link <?= url_is('admin/info-pages*') ? 'active' : '' ?>">
+                <i class="bi bi-file-earmark-text"></i> Halaman Informasi
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
                 <i class="bi bi-gear"></i>
                 <span>Pengaturan</span>
@@ -218,8 +223,8 @@
   <h5 class="m-0 fw-semibold"><?= $pageTitle ?? 'Dashboard' ?></h5>
   <div class="dropdown">
       <a href="#" class="user d-flex align-items-center gap-2 text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="<?= base_url('assets/images/admin.png') ?>" alt="Admin" width="38" height="38">
-          <span class="fw-medium text-dark">Admin <i class="bi bi-chevron-down small"></i></span>
+          <img src="<?= session()->get('foto_profil') ? base_url('uploads/' . session()->get('foto_profil')) : base_url('assets/images/default-avatar.png') ?>" alt="Admin" width="38" height="38">
+          <span class="fw-medium text-dark"><?= esc(session()->get('nama_lengkap') ?? 'Admin') ?> <i class="bi bi-chevron-down small"></i></span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end shadow-sm">
           <li><a class="dropdown-item" href="<?= base_url('/') ?>" target="_blank"><i class="bi bi-house me-2"></i>Lihat Situs</a></li>

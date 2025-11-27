@@ -34,7 +34,7 @@
     <!-- Grafik -->
     <div class="card p-4 mb-4 shadow-sm">
         <h6 class="fw-semibold mb-3"><i class="bi bi-graph-up me-2"></i>Grafik Penjualan Mingguan</h6>
-        <div style="height: 300px;">
+        <div>
             <canvas id="salesChart"></canvas>
         </div>
     </div>

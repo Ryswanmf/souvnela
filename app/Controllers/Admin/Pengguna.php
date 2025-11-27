@@ -43,19 +43,37 @@ class Pengguna extends BaseController
             'email'        => 'required|valid_email|is_unique[users.email]',
             'password'     => 'required|min_length[6]',
             'role'         => 'required|in_list[admin,pembeli]',
+            'nomor_telepon' => 'permit_empty|min_length[10]|max_length[20]',
+            'jenis_kelamin' => 'permit_empty|in_list[Laki-laki,Perempuan]',
+            'tanggal_lahir' => 'permit_empty|valid_date',
+            'alamat' => 'permit_empty|string',
+            'foto_profil' => 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]',
         ];
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $this->userModel->save([
+        $data = [
             'nama_lengkap' => $this->request->getPost('nama_lengkap'),
             'username'     => $this->request->getPost('username'),
             'email'        => $this->request->getPost('email'),
             'password'     => $this->request->getPost('password'), // Hashing is handled by the model
             'role'         => $this->request->getPost('role'),
-        ]);
+            'nomor_telepon' => $this->request->getPost('nomor_telepon'),
+            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
+            'alamat' => $this->request->getPost('alamat'),
+        ];
+
+        $fotoProfil = $this->request->getFile('foto_profil');
+        if ($fotoProfil && $fotoProfil->isValid() && !$fotoProfil->hasMoved()) {
+            $newName = $fotoProfil->getRandomName();
+            $fotoProfil->move(FCPATH . 'uploads', $newName);
+            $data['foto_profil'] = $newName;
+        }
+
+        $this->userModel->save($data);
 
         return redirect()->to('admin/pengguna')->with('success', 'Pengguna baru berhasil ditambahkan.');
     }
@@ -81,6 +99,11 @@ class Pengguna extends BaseController
             'role'         => 'required|in_list[admin,pembeli]',
             'username'     => 'required|min_length[3]|is_unique[users.username,id,' . $id . ']',
             'email'        => 'required|valid_email|is_unique[users.email,id,' . $id . ']',
+            'nomor_telepon' => 'permit_empty|min_length[10]|max_length[20]',
+            'jenis_kelamin' => 'permit_empty|in_list[Laki-laki,Perempuan]',
+            'tanggal_lahir' => 'permit_empty|valid_date',
+            'alamat' => 'permit_empty|string',
+            'foto_profil' => 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]',
         ];
 
         // Password validation is optional
@@ -97,12 +120,27 @@ class Pengguna extends BaseController
             'username'     => $this->request->getPost('username'),
             'email'        => $this->request->getPost('email'),
             'role'         => $this->request->getPost('role'),
+            'nomor_telepon' => $this->request->getPost('nomor_telepon'),
+            'jenis_kelamin' => $this->request->getPost('jenis_kelamin'),
+            'tanggal_lahir' => $this->request->getPost('tanggal_lahir'),
+            'alamat' => $this->request->getPost('alamat'),
         ];
 
         // Only add password to data if it's being changed
         if ($this->request->getPost('password')) {
             $data['password'] = $this->request->getPost('password');
         }
+
+        $fotoProfil = $this->request->getFile('foto_profil');
+        if ($fotoProfil && $fotoProfil->isValid() && !$fotoProfil->hasMoved()) {
+            if ($user['foto_profil'] && file_exists(FCPATH . 'uploads/' . $user['foto_profil'])) {
+                unlink(FCPATH . 'uploads/' . $user['foto_profil']);
+            }
+            $newName = $fotoProfil->getRandomName();
+            $fotoProfil->move(FCPATH . 'uploads', $newName);
+            $data['foto_profil'] = $newName;
+        }
+
 
         $this->userModel->update($id, $data);
 

@@ -103,11 +103,11 @@ class Blog extends BaseController
 
         if ($gambar->isValid()) {
             $post = $this->blogModel->find($id);
-            if ($post['gambar'] && file_exists('uploads/' . $post['gambar'])) {
-                unlink('uploads/' . $post['gambar']);
+            if ($post['gambar'] && file_exists(FCPATH . 'uploads/' . $post['gambar'])) {
+                unlink(FCPATH . 'uploads/' . $post['gambar']);
             }
             $namaGambar = $gambar->getRandomName();
-            $gambar->move('uploads', $namaGambar);
+            $gambar->move(FCPATH . 'uploads', $namaGambar);
             $data['gambar'] = $namaGambar;
         }
 
@@ -119,8 +119,8 @@ class Blog extends BaseController
     public function hapus($id)
     {
         $post = $this->blogModel->find($id);
-        if ($post['gambar'] && file_exists('uploads/' . $post['gambar'])) {
-            unlink('uploads/' . $post['gambar']);
+        if ($post['gambar'] && file_exists(FCPATH . 'uploads/' . $post['gambar'])) {
+            unlink(FCPATH . 'uploads/' . $post['gambar']);
         }
         $this->blogModel->delete($id);
         return redirect()->to('admin/blog')->with('success', 'Artikel berhasil dihapus.');
