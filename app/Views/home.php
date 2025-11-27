@@ -6,7 +6,7 @@
 <section class="hero py-5" style="min-height: 85vh; display: flex; align-items: center;">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6 text-white text-center text-lg-start mb-4 mb-lg-0" data-aos="fade-right">
+            <div class="col-lg-6 text-white text-center text-lg-start mb-4 mb-lg-0">
                 <h1 class="display-4 fw-bold mb-3"><?= esc($settings['home']['hero_title'] ?? 'Souvenir Eksklusif Polinela') ?></h1>
                 <p class="lead mb-4">
                     <?= esc($settings['home']['hero_subtitle1'] ?? 'Selamat datang di Souvnela, pusat merchandise dan suvenir resmi Polinela. Kami mengundang Anda untuk menjelajahi koleksi yang tidak hanya unik, tetapi juga dibuat dengan kualitas premium.') ?>
@@ -16,7 +16,7 @@
                 </p>
                 <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2 pulse-button"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
             </div>
-            <div class="col-lg-6 text-center" data-aos="fade-left">
+            <div class="col-lg-6 text-center">
                 <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid floating-image" alt="Souvenir Polinela">
             </div>
         </div>
@@ -70,124 +70,53 @@
     <div class="container text-center">
         <h2 class="mb-4">Produk Unggulan</h2>
         <?php if (!empty($products)): ?>
-        <div id="produkCarousel" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
+        <!-- Optimized Product Grid - Faster Loading -->
+        <div class="row g-3 justify-content-center">
+            <?php foreach ($products as $product): ?>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="card shadow-sm h-100 product-card position-relative">
+                        <!-- Wishlist Heart Icon -->
+                        <?php if (session()->get('isLoggedIn')): ?>
+                            <?php $isInWishlist = in_array($product['id'], $wishlist); ?>
+                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
+                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
+                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
+                            </button>
+                        <?php endif; ?>
 
-                <?php
-                // 6 produk per slide (3 atas + 3 bawah)
-                $chunked = array_chunk($products, 6);
-                $first = true;
-                foreach ($chunked as $group):
-                    $atas = array_slice($group, 0, 3);
-                    $bawah = array_slice($group, 3);
-                ?>
-                    <div class="carousel-item <?= $first ? 'active' : '' ?>">
-
-                        <!-- Baris Atas -->
-                        <div class="row g-3 justify-content-center mb-3">
-                            <?php foreach ($atas as $product): ?>
-                                <div class="col-lg-4 col-md-4 col-sm-6">
-                                    <div class="card shadow-sm h-100 product-card position-relative">
-                                        <!-- Wishlist Heart Icon -->
-                                        <?php if (session()->get('isLoggedIn')): ?>
-                                            <?php
-                                            $isInWishlist = in_array($product['id'], $wishlist);
-                                            ?>
-                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
-                                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
-                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
-                                            </button>
-                                        <?php endif; ?>
-
-                                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
-                                             class="card-img-top"
-                                             alt="<?= esc($product['nama']) ?>"
-                                             style="height:200px; object-fit:cover;">
-                                        <div class="card-body d-flex flex-column p-2">
-                                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
-                                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
-                                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
-                                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
-                                            </p>
-                                            <div class="d-flex gap-1 mt-auto">
-                                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
-                                                    <i class="bi bi-info-circle"></i> Detail
-                                                </a>
-                                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
-                                                    <?= csrf_field() ?>
-                                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
-                                                        <i class="bi bi-cart-plus"></i> Pesan
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-
-                        <!-- Baris Bawah -->
-                        <div class="row g-3 justify-content-center">
-                            <?php foreach ($bawah as $product): ?>
-                                <div class="col-lg-4 col-md-4 col-sm-6">
-                                    <div class="card shadow-sm h-100 product-card position-relative">
-                                        <!-- Wishlist Heart Icon -->
-                                        <?php if (session()->get('isLoggedIn')): ?>
-                                            <?php
-                                            $isInWishlist = in_array($product['id'], $wishlist);
-                                            ?>
-                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
-                                                    onclick="toggleWishlist(this, <?= $product['id'] ?>)"
-                                                    style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                                <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
-                                            </button>
-                                        <?php endif; ?>
-
-                                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
-                                             class="card-img-top"
-                                             alt="<?= esc($product['nama']) ?>"
-                                             style="height:200px; object-fit:cover;">
-                                        <div class="card-body d-flex flex-column p-2">
-                                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
-                                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
-                                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
-                                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
-                                            </p>
-                                            <div class="d-flex gap-1 mt-auto">
-                                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
-                                                    <i class="bi bi-info-circle"></i> Detail
-                                                </a>
-                                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
-                                                    <?= csrf_field() ?>
-                                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
-                                                        <i class="bi bi-cart-plus"></i> Pesan
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                        <img src="<?= base_url('uploads/' . esc($product['gambar'])) ?>"
+                             class="card-img-top"
+                             alt="<?= esc($product['nama']) ?>"
+                             loading="lazy"
+                             style="height:200px; object-fit:cover;">
+                        <div class="card-body d-flex flex-column p-2">
+                            <h6 class="card-title small mb-1" style="font-size: 0.85rem; line-height: 1.3;"><?= esc($product['nama']) ?></h6>
+                            <p class="fw-bold mb-1" style="font-size: 0.9rem;">Rp <?= number_format($product['harga'], 0, ',', '.') ?></p>
+                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
+                                <i class="bi bi-box"></i> <?= esc($product['stok']) ?> | <i class="bi bi-tag"></i> <?= esc($product['kategori']) ?>
+                            </p>
+                            <div class="d-flex gap-1 mt-auto">
+                                <a href="<?= base_url('produk/detail/' . $product['id']) ?>" class="btn btn-outline-primary btn-sm flex-fill" style="font-size: 0.7rem;">
+                                    <i class="bi bi-info-circle"></i> Detail
+                                </a>
+                                <form action="<?= base_url('cart/add') ?>" method="post" class="flex-fill add-to-cart-form">
+                                    <?= csrf_field() ?>
+                                    <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100" style="font-size: 0.7rem;">
+                                        <i class="bi bi-cart-plus"></i> Pesan
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                <?php
-                $first = false;
-                endforeach;
-                ?>
-            </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
-            <!-- Navigasi -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#produkCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                <span class="visually-hidden">Sebelumnya</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#produkCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                <span class="visually-hidden">Berikutnya</span>
-            </button>
+        <!-- View All Products Link -->
+        <div class="text-center mt-4">
+            <a href="<?= base_url('produk') ?>" class="btn btn-primary">Lihat Semua Produk</a>
         </div>
 
         <?php else: ?>
@@ -382,53 +311,16 @@
         </div>
 </section>
 
-<!-- AOS Library -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>
-    AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false
-    });
-</script>
-
+<!-- Optimized Styles - Removed heavy animations -->
 <style>
-/* Floating Animation for Hero Image */
-@keyframes floating {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
+/* Simplified animations for better performance */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.floating-image {
-    animation: floating 3s ease-in-out infinite;
-}
-
-/* Pulse Button Animation */
-@keyframes pulse-btn {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 15px rgba(255, 193, 7, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
-    }
-}
-
-.pulse-button {
-    animation: pulse-btn 2s infinite;
-}
-
-.pulse-button:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
+.product-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 /* Smooth Scroll */

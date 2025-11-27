@@ -49,7 +49,7 @@ class Setting extends BaseController
             }
 
             $newName = $heroImage->getRandomName();
-            $heroImage->move(ROOTPATH . 'public/uploads', $newName);
+            $heroImage->move(FCPATH . 'uploads', $newName);
             $data['hero_image'] = $newName;
         }
 
@@ -59,6 +59,8 @@ class Setting extends BaseController
         } else {
             $this->homeSettingModel->insert($data);
         }
+
+        cache()->delete('app_settings'); // Clear cache
 
         return redirect()->to('admin/setting/hero')->with('success', 'Pengaturan Hero Section berhasil diperbarui.');
     }
@@ -100,7 +102,7 @@ class Setting extends BaseController
                 }
             }
             $newName = $feature1Image->getRandomName();
-            $feature1Image->move(ROOTPATH . 'public/uploads', $newName);
+            $feature1Image->move(FCPATH . 'uploads', $newName);
             $data['feature1_image'] = $newName;
         }
 
@@ -114,7 +116,7 @@ class Setting extends BaseController
                 }
             }
             $newName = $feature2Image->getRandomName();
-            $feature2Image->move(ROOTPATH . 'public/uploads', $newName);
+            $feature2Image->move(FCPATH . 'uploads', $newName);
             $data['feature2_image'] = $newName;
         }
 
@@ -128,7 +130,7 @@ class Setting extends BaseController
                 }
             }
             $newName = $feature3Image->getRandomName();
-            $feature3Image->move(ROOTPATH . 'public/uploads', $newName);
+            $feature3Image->move(FCPATH . 'uploads', $newName);
             $data['feature3_image'] = $newName;
         }
 
@@ -138,6 +140,8 @@ class Setting extends BaseController
         } else {
             $this->homeSettingModel->insert($data);
         }
+
+        cache()->delete('app_settings'); // Clear cache
 
         return redirect()->to('admin/setting/features')->with('success', 'Pengaturan Features Section berhasil diperbarui.');
     }
@@ -179,7 +183,7 @@ class Setting extends BaseController
             }
 
             $newName = $aboutImage->getRandomName();
-            $aboutImage->move(ROOTPATH . 'public/uploads', $newName);
+            $aboutImage->move(FCPATH . 'uploads', $newName);
             $data['about_image'] = $newName;
         }
 
@@ -189,6 +193,8 @@ class Setting extends BaseController
         } else {
             $this->homeSettingModel->insert($data);
         }
+
+        cache()->delete('app_settings'); // Clear cache
 
         return redirect()->to('admin/setting/about')->with('success', 'Pengaturan Tentang Section berhasil diperbarui.');
     }
@@ -222,6 +228,8 @@ class Setting extends BaseController
             $this->homeSettingModel->insert($data);
         }
 
+        cache()->delete('app_settings'); // Clear cache
+
         return redirect()->to('admin/setting/contact')->with('success', 'Pengaturan Kontak Section berhasil diperbarui.');
     }
 
@@ -250,6 +258,8 @@ class Setting extends BaseController
         } else {
             $this->generalSettingModel->insert($data);
         }
+
+        cache()->delete('app_settings'); // Clear cache
 
         return redirect()->to('admin/setting/general')->with('success', 'Pengaturan Umum berhasil diperbarui.');
     }

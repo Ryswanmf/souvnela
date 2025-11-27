@@ -29,7 +29,7 @@
                         </button>
                     <?php endif; ?>
                     
-                    <img src="<?= base_url('public/uploads/' . esc($produk['gambar'])) ?>"
+                    <img src="<?= base_url('uploads/' . esc($produk['gambar'])) ?>"
                          class="card-img-top rounded"
                          alt="<?= esc($produk['nama']) ?>"
                          style="width: 100%; height: 450px; object-fit: cover;">
@@ -190,7 +190,7 @@
                                             $photos = is_string($review['photos']) ? json_decode($review['photos'], true) : $review['photos'];
                                             if (is_array($photos)):
                                                 foreach ($photos as $photo): ?>
-                                                    <img src="<?= base_url('public/uploads/reviews/' . esc($photo)) ?>"
+                                                    <img src="<?= base_url('uploads/reviews/' . esc($photo)) ?>"
                                                          alt="Review photo"
                                                          class="rounded me-2 mb-2"
                                                          style="width: 80px; height: 80px; object-fit: cover; cursor: pointer;"

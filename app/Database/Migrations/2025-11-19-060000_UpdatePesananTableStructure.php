@@ -9,7 +9,7 @@ class UpdatePesananTableStructure extends Migration
     public function up()
     {
         // Check if columns exist and add/modify as needed
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $fields = $db->getFieldNames('pesanan');
         
         // Add user_id if not exists

@@ -87,11 +87,10 @@
                                     <div class="card shadow-sm h-100 product-card position-relative">
                                         <!-- Wishlist Heart Icon -->
                                         <?php if (session()->get('isLoggedIn')): ?>
-                                            <?php 
-                                            $wishlistModel = new \App\Models\WishlistModel();
-                                            $isInWishlist = $wishlistModel->isInWishlist(session()->get('id'), $p['id']);
+                                            <?php
+                                            $isInWishlist = in_array($p['id'], $wishlistItems);
                                             ?>
-                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn" 
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
                                                     onclick="toggleWishlist(this, <?= $p['id'] ?>)"
                                                     style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                                 <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>
@@ -133,11 +132,10 @@
                                     <div class="card shadow-sm h-100 product-card position-relative">
                                         <!-- Wishlist Heart Icon -->
                                         <?php if (session()->get('isLoggedIn')): ?>
-                                            <?php 
-                                            $wishlistModel = new \App\Models\WishlistModel();
-                                            $isInWishlist = $wishlistModel->isInWishlist(session()->get('id'), $p['id']);
+                                            <?php
+                                            $isInWishlist = in_array($p['id'], $wishlistItems);
                                             ?>
-                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn" 
+                                            <button class="btn btn-sm position-absolute top-0 end-0 m-1 wishlist-btn"
                                                     onclick="toggleWishlist(this, <?= $p['id'] ?>)"
                                                     style="z-index: 10; background: rgba(255,255,255,0.95); border: none; width: 30px; height: 30px; padding: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                                                 <i class="bi <?= $isInWishlist ? 'bi-heart-fill' : 'bi-heart' ?> text-danger" style="font-size: 0.9rem;"></i>

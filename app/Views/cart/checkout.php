@@ -163,7 +163,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= env('MIDTRANS_CLIENT_KEY') ?>"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIZUdS6vARGQyh69OBxuwMOulKagfcvuI&libraries=places&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= env('GOOGLE_MAPS_API_KEY') ?>&libraries=places&callback=initMap"></script>
+
+
 
 <script>
     let map;
@@ -319,6 +321,7 @@
         const form = document.getElementById('checkoutForm');
 
         if (!form.checkValidity()) {
+            alert("Form tidak valid. Harap periksa semua bidang yang wajib diisi (ditandai dengan *).");
             form.reportValidity();
             return;
         }
@@ -365,3 +368,4 @@
 </script>
 
 <?= $this->endSection() ?>
+

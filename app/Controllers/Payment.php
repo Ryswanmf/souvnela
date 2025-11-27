@@ -39,6 +39,7 @@ class Payment extends BaseController
      */
     public function process()
     {
+
         // Only accept AJAX request
         if (!$this->request->isAJAX()) {
             return redirect()->to('/cart');
@@ -403,6 +404,7 @@ class Payment extends BaseController
                 $paymentStatus = 'failed';
             } elseif ($transaction == 'expire') {
                 $paymentStatus = 'expired';
+                $orderStatus = 'cancelled'; // Set order status to cancelled when payment expires
             } elseif ($transaction == 'cancel') {
                 $paymentStatus = 'failed';
                 $orderStatus = 'cancelled';

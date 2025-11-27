@@ -235,8 +235,6 @@
 }
 </style>
 
-<?= $this->endSection() ?>
-
 <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= env('MIDTRANS_CLIENT_KEY') ?>"></script>
 <script type="text/javascript">
     <?php if ($order['payment_status'] === 'pending' && !empty($order['snap_token'])): ?>
@@ -258,3 +256,5 @@
     };
     <?php endif; ?>
 </script>
+
+<?= $this->endSection() ?>

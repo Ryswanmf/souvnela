@@ -8,7 +8,7 @@ class AddStatusTrackingToPesanan extends Migration
 {
     public function up()
     {
-        $db = \Config\Database::connect();
+        $db = $this->db;
         $fields = $db->getFieldNames('pesanan');
         
         // Drop old status column if exists

@@ -69,7 +69,7 @@ class Pengguna extends BaseController
         $fotoProfil = $this->request->getFile('foto_profil');
         if ($fotoProfil && $fotoProfil->isValid() && !$fotoProfil->hasMoved()) {
             $newName = $fotoProfil->getRandomName();
-            $fotoProfil->move('uploads', $newName);
+            $fotoProfil->move(FCPATH . 'uploads', $newName);
             $data['foto_profil'] = $newName;
         }
 
@@ -133,11 +133,11 @@ class Pengguna extends BaseController
 
         $fotoProfil = $this->request->getFile('foto_profil');
         if ($fotoProfil && $fotoProfil->isValid() && !$fotoProfil->hasMoved()) {
-            if ($user['foto_profil'] && file_exists('uploads/' . $user['foto_profil'])) {
-                unlink('uploads/' . $user['foto_profil']);
+            if ($user['foto_profil'] && file_exists(FCPATH . 'uploads/' . $user['foto_profil'])) {
+                unlink(FCPATH . 'uploads/' . $user['foto_profil']);
             }
             $newName = $fotoProfil->getRandomName();
-            $fotoProfil->move('uploads', $newName);
+            $fotoProfil->move(FCPATH . 'uploads', $newName);
             $data['foto_profil'] = $newName;
         }
 

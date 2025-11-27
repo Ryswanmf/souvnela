@@ -23,7 +23,7 @@ class Dashboard extends BaseController
             'sales'    => $totalSales,
             'products' => $totalProducts,
             'orders'   => $totalOrders,
-            'visitors' => 120, // Data statis untuk saat ini
+            'visitors' => rand(50, 200), // Simulasi data pengunjung harian
             'lowstock' => $lowStock
         ];
 
