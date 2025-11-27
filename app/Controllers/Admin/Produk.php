@@ -60,7 +60,7 @@ class Produk extends BaseController
         $namaGambar = $gambar->getRandomName();
         $gambar->move(FCPATH . 'uploads', $namaGambar);
 
-        $this->produkModel->save([
+        $produkId = $this->produkModel->save([
             'nama' => $this->request->getPost('nama'),
             'deskripsi' => $this->request->getPost('deskripsi'),
             'harga' => $this->request->getPost('harga'),
@@ -68,6 +68,14 @@ class Produk extends BaseController
             'kategori' => $this->request->getPost('kategori'),
             'gambar' => $namaGambar
         ]);
+
+        // Clear product caches
+        cache()->delete('semua_produk');
+        cache()->delete('kategori_list');
+        // Clear category cache for this product's category
+        cache()->delete('produk_kategori_' . $this->request->getPost('kategori'));
+        // Clear specific product cache
+        cache()->delete('produk_' . $produkId);
 
         return redirect()->to('admin/produk')->with('success', 'Produk berhasil ditambahkan!');
     }
@@ -121,7 +129,22 @@ class Produk extends BaseController
             $data['gambar'] = $namaGambar;
         }
 
+        $oldProduct = $this->produkModel->find($id);
         $this->produkModel->update($id, $data);
+
+        // Clear product caches
+        cache()->delete('semua_produk');
+        cache()->delete('kategori_list');
+        // Clear old category cache
+        if ($oldProduct) {
+            cache()->delete('produk_kategori_' . $oldProduct['kategori']);
+        }
+        // Clear new category cache if category changed
+        if ($oldProduct && $oldProduct['kategori'] !== $data['kategori']) {
+            cache()->delete('produk_kategori_' . $data['kategori']);
+        }
+        // Clear specific product cache
+        cache()->delete('produk_' . $id);
 
         return redirect()->to('admin/produk')->with('success', 'Produk berhasil diperbarui!');
     }
@@ -133,6 +156,13 @@ class Produk extends BaseController
             unlink(FCPATH . 'uploads/' . $produk['gambar']);
         }
         $this->produkModel->delete($id);
+
+        // Clear product caches
+        cache()->delete('semua_produk');
+        cache()->delete('kategori_list');
+        cache()->delete('produk_kategori_' . $produk['kategori']);
+        cache()->delete('produk_' . $id);
+
         return redirect()->to('admin/produk')->with('success', 'Produk berhasil dihapus.');
     }
 
@@ -143,6 +173,13 @@ class Produk extends BaseController
         if ($product) {
             $newStatus = $product['is_unggulan'] ? 0 : 1;
             $this->produkModel->update($id, ['is_unggulan' => $newStatus]);
+
+            // Clear product caches
+            cache()->delete('semua_produk');
+            cache()->delete('kategori_list');
+            cache()->delete('produk_kategori_' . $product['kategori']);
+            cache()->delete('produk_' . $id);
+
             $message = $newStatus ? 'Produk dijadikan unggulan.' : 'Produk dihapus dari unggulan.';
             return redirect()->to('admin/produk')->with('success', $message);
         }

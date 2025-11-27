@@ -120,7 +120,7 @@
 
 
 <!-- MAIN CONTENT -->
-<main>
+<main class="mt-5">
     <!-- Toast Container -->
     <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
         <!-- Flash Messages as Toasts -->

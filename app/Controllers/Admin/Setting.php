@@ -60,7 +60,7 @@ class Setting extends BaseController
             $this->homeSettingModel->insert($data);
         }
 
-        cache()->delete('app_settings'); // Clear cache
+        cache()->delete('home_settings'); // Clear cache
 
         return redirect()->to('admin/setting/hero')->with('success', 'Pengaturan Hero Section berhasil diperbarui.');
     }
@@ -141,7 +141,7 @@ class Setting extends BaseController
             $this->homeSettingModel->insert($data);
         }
 
-        cache()->delete('app_settings'); // Clear cache
+        cache()->delete('home_settings'); // Clear cache
 
         return redirect()->to('admin/setting/features')->with('success', 'Pengaturan Features Section berhasil diperbarui.');
     }
@@ -194,7 +194,7 @@ class Setting extends BaseController
             $this->homeSettingModel->insert($data);
         }
 
-        cache()->delete('app_settings'); // Clear cache
+        cache()->delete('home_settings'); // Clear cache
 
         return redirect()->to('admin/setting/about')->with('success', 'Pengaturan Tentang Section berhasil diperbarui.');
     }
@@ -228,7 +228,7 @@ class Setting extends BaseController
             $this->homeSettingModel->insert($data);
         }
 
-        cache()->delete('app_settings'); // Clear cache
+        cache()->delete('home_settings'); // Clear cache
 
         return redirect()->to('admin/setting/contact')->with('success', 'Pengaturan Kontak Section berhasil diperbarui.');
     }

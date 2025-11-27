@@ -7,17 +7,17 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 text-white text-center text-lg-start mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-3"><?= esc($settings['home']['hero_title'] ?? 'Souvenir Eksklusif Polinela') ?></h1>
+                <h1 class="display-4 fw-bold mb-3"><?= esc($settings['hero_title'] ?? 'Souvenir Eksklusif Polinela') ?></h1>
                 <p class="lead mb-4">
-                    <?= esc($settings['home']['hero_subtitle1'] ?? 'Selamat datang di Souvnela, pusat merchandise dan suvenir resmi Polinela. Kami mengundang Anda untuk menjelajahi koleksi yang tidak hanya unik, tetapi juga dibuat dengan kualitas premium.') ?>
+                    <?= esc($settings['hero_subtitle1'] ?? 'Selamat datang di Souvnela, pusat merchandise dan suvenir resmi Polinela. Kami mengundang Anda untuk menjelajahi koleksi yang tidak hanya unik, tetapi juga dibuat dengan kualitas premium.') ?>
                 </p>
                 <p class="lead mb-4">
-                    <?= esc($settings['home']['hero_subtitle2'] ?? 'Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung. Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.') ?>
+                    <?= esc($settings['hero_subtitle2'] ?? 'Setiap desain yang kami hadirkan adalah representasi dari semangat, kreativitas, dan sejarah Politeknik Negeri Lampung. Souvnela lebih dari sekadar toko, ini adalah perayaan identitas kampus. Baik untuk Anda para mahasiswa, alumni, dosen, atau siapa pun yang bangga menjadi bagian dari keluarga besar Polinela, temukan produk yang berbicara tentang perjalanan Anda di sini.') ?>
                 </p>
-                <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2 pulse-button"><?= esc($settings['home']['hero_button_text'] ?? 'Lihat Produk') ?></a>
+                <a href="<?= base_url('produk') ?>" class="btn btn-warning btn-lg px-4 py-2 pulse-button"><?= esc($settings['hero_button_text'] ?? 'Lihat Produk') ?></a>
             </div>
             <div class="col-lg-6 text-center">
-                <img src="<?= base_url('uploads/' . ($settings['home']['hero_image'] ?? 'oo.png')) ?>" class="img-fluid floating-image" alt="Souvenir Polinela">
+                <img src="<?= base_url('uploads/' . ($settings['hero_image'] ?? 'oo.png')) ?>" class="img-fluid floating-image" alt="Souvenir Polinela">
             </div>
         </div>
     </div>
@@ -26,40 +26,40 @@
 <!-- Features -->
 <section class="features py-5">
     <div class="container text-center">
-        <h2 class="mb-4"><?= esc($settings['home']['features_title'] ?? 'Kenapa Memilih Kami?') ?></h2>
+        <h2 class="mb-4"><?= esc($settings['features_title'] ?? 'Kenapa Memilih Kami?') ?></h2>
         <div class="row">
             <div class="col-md-4">
                 <div class="icon mb-3">
-                    <?php if (!empty($settings['home']['feature1_image'])): ?>
-                        <img src="<?= base_url('uploads/' . $settings['home']['feature1_image']) ?>" alt="Feature 1 Icon" width="50">
+                    <?php if (!empty($settings['feature1_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['feature1_image']) ?>" alt="Feature 1 Icon" width="50">
                     <?php else: ?>
-                        <?= esc($settings['home']['feature1_icon'] ?? '🎁') ?>
+                        <?= esc($settings['feature1_icon'] ?? '🎁') ?>
                     <?php endif; ?>
                 </div>
-                <h5><?= esc($settings['home']['feature1_title'] ?? 'Kualitas Premium') ?></h5>
-                <p><?= esc($settings['home']['feature1_description'] ?? 'Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.') ?></p>
+                <h5><?= esc($settings['feature1_title'] ?? 'Kualitas Premium') ?></h5>
+                <p><?= esc($settings['feature1_description'] ?? 'Souvenir terbuat dari bahan berkualitas terbaik untuk kepuasan Anda.') ?></p>
             </div>
             <div class="col-md-4">
                 <div class="icon mb-3">
-                    <?php if (!empty($settings['home']['feature2_image'])): ?>
-                        <img src="<?= base_url('uploads/' . $settings['home']['feature2_image']) ?>" alt="Feature 2 Icon" width="50">
+                    <?php if (!empty($settings['feature2_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['feature2_image']) ?>" alt="Feature 2 Icon" width="50">
                     <?php else: ?>
-                        <?= esc($settings['home']['feature2_icon'] ?? '⚡') ?>
+                        <?= esc($settings['feature2_icon'] ?? '⚡') ?>
                     <?php endif; ?>
                 </div>
-                <h5><?= esc($settings['home']['feature2_title'] ?? 'Proses Cepat') ?></h5>
-                <p><?= esc($settings['home']['feature2_description'] ?? 'Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.') ?></p>
+                <h5><?= esc($settings['feature2_title'] ?? 'Proses Cepat') ?></h5>
+                <p><?= esc($settings['feature2_description'] ?? 'Pesanan diproses dengan cepat agar segera sampai ke tangan Anda.') ?></p>
             </div>
             <div class="col-md-4">
                 <div class="icon mb-3">
-                    <?php if (!empty($settings['home']['feature3_image'])): ?>
-                        <img src="<?= base_url('uploads/' . $settings['home']['feature3_image']) ?>" alt="Feature 3 Icon" width="50">
+                    <?php if (!empty($settings['feature3_image'])): ?>
+                        <img src="<?= base_url('uploads/' . $settings['feature3_image']) ?>" alt="Feature 3 Icon" width="50">
                     <?php else: ?>
-                        <?= esc($settings['home']['feature3_icon'] ?? '💳') ?>
+                        <?= esc($settings['feature3_icon'] ?? '💳') ?>
                     <?php endif; ?>
                 </div>
-                <h5><?= esc($settings['home']['feature3_title'] ?? 'Transaksi Mudah') ?></h5>
-                <p><?= esc($settings['home']['feature3_description'] ?? 'Metode pembayaran yang fleksibel dan aman digunakan.') ?></p>
+                <h5><?= esc($settings['feature3_title'] ?? 'Transaksi Mudah') ?></h5>
+                <p><?= esc($settings['feature3_description'] ?? 'Metode pembayaran yang fleksibel dan aman digunakan.') ?></p>
             </div>
         </div>
     </div>
@@ -130,26 +130,26 @@
 <!-- Tentang -->
 <section id="tentang" class="py-5">
     <div class="container">
-        <h2 class="fw-bold text-center"><?= esc($settings['home']['about_title'] ?? 'Souvnela - Souvenir Eksklusif Polinela') ?></h2>
+        <h2 class="fw-bold text-center"><?= esc($settings['about_title'] ?? 'Souvnela - Souvenir Eksklusif Polinela') ?></h2>
         <br>
                 <p>
-                    <?= $settings['home']['about_description1'] ?? '<strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>. Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.' ?>
+                    <?= $settings['about_description1'] ?? '<strong>Souvnela</strong> adalah platform pemesanan souvenir resmi dari <em>Politeknik Negeri Lampung</em>. Kami hadir untuk menyediakan merchandise eksklusif yang mendukung rasa bangga dan identitas mahasiswa, dosen, dan alumni Polinela.' ?>
                 </p>
                 <p>
-                    <?= $settings['home']['about_description2'] ?? 'Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen untuk memberikan pengalaman terbaik bagi seluruh pelanggan.' ?>
+                    <?= $settings['about_description2'] ?? 'Dengan proses pemesanan yang mudah, produk berkualitas, dan layanan terpercaya, kami berkomitmen untuk memberikan pengalaman terbaik bagi seluruh pelanggan.' ?>
                 </p>
                 <ul class="list-unstyled">
                     <li>
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
-                        <?= esc($settings['home']['about_list1'] ?? 'Produk eksklusif dan original') ?>
+                        <?= esc($settings['about_list1'] ?? 'Produk eksklusif dan original') ?>
                     </li>
                     <li>
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
-                        <?= esc($settings['home']['about_list2'] ?? 'Bahan berkualitas premium') ?>
+                        <?= esc($settings['about_list2'] ?? 'Bahan berkualitas premium') ?>
                     </li>
                     <li>
                         <i class="bi bi-check-circle-fill text-success me-2"></i>
-                        <?= esc($settings['home']['about_list3'] ?? 'Transaksi aman & cepat') ?>
+                        <?= esc($settings['about_list3'] ?? 'Transaksi aman & cepat') ?>
                     </li>
                 </ul>
     </div>
@@ -247,7 +247,7 @@
 <!-- Kontak Kami -->
 <section id="kontak" class="py-5">
     <div class="container">
-        <div class="h2 text-center"><?= esc($settings['home']['contact_title'] ?? 'Kontak') ?></div>
+        <div class="h2 text-center"><?= esc($settings['contact_title'] ?? 'Kontak') ?></div>
         <div class="row">
             <!-- Form -->
             <div class="row g-4">
@@ -287,23 +287,23 @@
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-geo-alt-fill me-2"></i>
-                            <strong>Alamat:</strong> <?= esc($settings['home']['contact_address'] ?? 'Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141') ?>
+                            <strong>Alamat:</strong> <?= esc($settings['contact_address'] ?? 'Jl. Soekarno Hatta No.10, Rajabasa Raya, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-telephone-fill me-2"></i>
-                            <strong>Telepon:</strong> <?= esc($settings['home']['contact_phone'] ?? '+62 812 3456 7890') ?>
+                            <strong>Telepon:</strong> <?= esc($settings['contact_phone'] ?? '+62 812 3456 7890') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-envelope-fill me-2"></i>
-                            <strong>Instagram:</strong> <?= esc($settings['home']['contact_instagram'] ?? 'souvnela') ?>
+                            <strong>Instagram:</strong> <?= esc($settings['contact_instagram'] ?? 'souvnela') ?>
                         </p>
                         <p class="mb-3">
                             <i class="bi bi-tiktok me-2"></i>
-                            <strong>TikTok:</strong> <?= esc($settings['home']['contact_tiktok'] ?? '@souvnela') ?>
+                            <strong>TikTok:</strong> <?= esc($settings['contact_tiktok'] ?? '@souvnela') ?>
                         </p>
                         <p class="mb-0">
                             <i class="bi bi-globe me-2"></i>
-                            <strong>Email:</strong> <?= esc($settings['home']['contact_email'] ?? 'souvnela@gmail.com') ?>
+                            <strong>Email:</strong> <?= esc($settings['contact_email'] ?? 'souvnela@gmail.com') ?>
                         </p>
                     </div>
                 </div>

@@ -49,6 +49,9 @@ class KategoriProdukController extends BaseController
             'nama_kategori' => $this->request->getPost('nama_kategori'),
         ]);
 
+        // Clear category cache
+        cache()->delete('kategori_list');
+
         return redirect()->to('admin/kategori')->with('success', 'Kategori baru berhasil ditambahkan.');
     }
 
@@ -77,6 +80,9 @@ class KategoriProdukController extends BaseController
             'nama_kategori' => $this->request->getPost('nama_kategori'),
         ]);
 
+        // Clear category cache
+        cache()->delete('kategori_list');
+
         return redirect()->to('admin/kategori')->with('success', 'Kategori berhasil diperbarui.');
     }
 
@@ -85,6 +91,10 @@ class KategoriProdukController extends BaseController
         // Optional: Check if the category is being used by any product before deleting.
         // For now, we'll just delete it.
         $this->kategoriProdukModel->delete($id);
+
+        // Clear category cache
+        cache()->delete('kategori_list');
+
         return redirect()->to('admin/kategori')->with('success', 'Kategori berhasil dihapus.');
     }
 }

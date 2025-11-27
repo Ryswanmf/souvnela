@@ -47,8 +47,12 @@ class Pengguna extends BaseController
             'jenis_kelamin' => 'permit_empty|in_list[Laki-laki,Perempuan]',
             'tanggal_lahir' => 'permit_empty|valid_date',
             'alamat' => 'permit_empty|string',
-            'foto_profil' => 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]',
         ];
+
+        // Only validate foto_profil if a file is uploaded
+        if ($this->request->getFile('foto_profil') && $this->request->getFile('foto_profil')->isValid()) {
+            $rules['foto_profil'] = 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]';
+        }
 
         if (!$this->validate($rules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
@@ -69,8 +73,12 @@ class Pengguna extends BaseController
         $fotoProfil = $this->request->getFile('foto_profil');
         if ($fotoProfil && $fotoProfil->isValid() && !$fotoProfil->hasMoved()) {
             $newName = $fotoProfil->getRandomName();
-            $fotoProfil->move(FCPATH . 'uploads', $newName);
-            $data['foto_profil'] = $newName;
+            if ($fotoProfil->move(FCPATH . 'uploads', $newName)) {
+                $data['foto_profil'] = $newName;
+            } else {
+                // Handle move failure
+                return redirect()->back()->withInput()->with('errors', ['foto_profil' => 'Gagal mengupload foto profil.']);
+            }
         }
 
         $this->userModel->save($data);
@@ -103,8 +111,12 @@ class Pengguna extends BaseController
             'jenis_kelamin' => 'permit_empty|in_list[Laki-laki,Perempuan]',
             'tanggal_lahir' => 'permit_empty|valid_date',
             'alamat' => 'permit_empty|string',
-            'foto_profil' => 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]',
         ];
+
+        // Only validate foto_profil if a file is uploaded
+        if ($this->request->getFile('foto_profil') && $this->request->getFile('foto_profil')->isValid()) {
+            $rules['foto_profil'] = 'is_image[foto_profil]|mime_in[foto_profil,image/jpg,image/jpeg,image/png,image/webp]|max_size[foto_profil,2048]';
+        }
 
         // Password validation is optional
         if ($this->request->getPost('password')) {
@@ -137,8 +149,12 @@ class Pengguna extends BaseController
                 unlink(FCPATH . 'uploads/' . $user['foto_profil']);
             }
             $newName = $fotoProfil->getRandomName();
-            $fotoProfil->move(FCPATH . 'uploads', $newName);
-            $data['foto_profil'] = $newName;
+            if ($fotoProfil->move(FCPATH . 'uploads', $newName)) {
+                $data['foto_profil'] = $newName;
+            } else {
+                // Handle move failure
+                return redirect()->back()->withInput()->with('errors', ['foto_profil' => 'Gagal mengupload foto profil.']);
+            }
         }
 
 
