@@ -128,7 +128,14 @@
                                 <button id="pay-button" class="btn btn-primary btn-lg">
                                     <i class="bi bi-credit-card-fill me-2"></i>Bayar Sekarang
                                 </button>
-                            <?php elseif ($order['status'] === 'delivered' || $order['payment_status'] === 'settlement' || $order['payment_status'] === 'capture'): ?>
+                            <?php elseif ($order['status'] === 'delivered'): ?>
+                                <p class="text-success fw-bold text-center mb-3">
+                                    Pesanan telah diterima. Silakan berikan ulasan untuk produk yang Anda beli!
+                                </p>
+                                <a href="<?= base_url('orders/invoice/' . $order['id']) ?>" class="btn btn-success btn-lg" target="_blank">
+                                    <i class="bi bi-printer-fill me-2"></i>Cetak Invoice
+                                </a>
+                            <?php elseif ($order['payment_status'] === 'settlement' || $order['payment_status'] === 'capture'): ?>
                                 <a href="<?= base_url('orders/invoice/' . $order['id']) ?>" class="btn btn-success btn-lg" target="_blank">
                                     <i class="bi bi-printer-fill me-2"></i>Cetak Invoice
                                 </a>

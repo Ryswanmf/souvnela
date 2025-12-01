@@ -218,7 +218,7 @@
         <div class="totals">
             <div class="totals-row">
                 <span>Subtotal</span>
-                <span>Rp <?= number_format($order['subtotal'], 0, ',', '.') ?></span>
+                <span>Rp <?= number_format($order['total_harga'] - $order['ongkir'] + ($order['discount_amount'] ?? 0), 0, ',', '.') ?></span>
             </div>
             <div class="totals-row">
                 <span>Ongkos Kirim</span>
