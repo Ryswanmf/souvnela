@@ -158,6 +158,16 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="<?= base_url('admin/invoice') ?>" class="nav-link <?= url_is('admin/invoice*') ? 'active' : '' ?>">
+                <i class="bi bi-receipt-cutoff"></i> Invoice
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="<?= base_url('admin/voucher') ?>" class="nav-link <?= url_is('admin/voucher*') ? 'active' : '' ?>">
+                <i class="bi bi-ticket-perforated"></i> Voucher
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="<?= base_url('admin/midtrans') ?>" class="nav-link <?= url_is('admin/midtrans*') ? 'active' : '' ?>">
                 <i class="bi bi-credit-card"></i> Midtrans
             </a>

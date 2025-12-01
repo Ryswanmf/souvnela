@@ -99,6 +99,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('pesanan/detail/(:num)', 'Pesanan::detail/$1');
     $routes->get('pesanan/invoice/(:num)', 'Pesanan::invoice/$1'); // Admin Invoice Route
     $routes->post('pesanan/updateStatus/(:num)', 'Pesanan::updateStatus/$1');
+
+    // Invoice Routes (Listing)
+    $routes->get('invoice', 'Invoice::index');
+    $routes->get('invoice/print/(:num)', 'Invoice::print/$1');
+
     $routes->get('blog', 'Blog::index');
     $routes->get('blog/create', 'Blog::create');
     $routes->post('blog/store', 'Blog::store');
