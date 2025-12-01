@@ -4,9 +4,14 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h4 class="fw-bold"><i class="bi bi-receipt-cutoff me-2"></i><?= esc($title) ?></h4>
-        <a href="<?= base_url('admin/pesanan') ?>" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pesanan
-        </a>
+        <div>
+            <a href="<?= base_url('admin/pesanan/invoice/' . $order['id']) ?>" target="_blank" class="btn btn-primary me-2">
+                <i class="bi bi-printer"></i> Cetak Invoice
+            </a>
+            <a href="<?= base_url('admin/pesanan') ?>" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Kembali ke Daftar Pesanan
+            </a>
+        </div>
     </div>
 
     <?php if (session()->getFlashdata('success')): ?>
@@ -103,8 +108,8 @@
                         <div class="col-md-6">
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Subtotal
-                                    <span>Rp <?= number_format($order['subtotal'], 0, ',', '.') ?></span>
+                                    Subtotal (Estimasi)
+                                    <span>Rp <?= number_format($order['total_harga'] - $order['ongkir'] + ($order['discount_amount'] ?? 0), 0, ',', '.') ?></span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     Ongkir
@@ -112,7 +117,7 @@
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center text-danger">
                                     Diskon
-                                    <span>- Rp <?= number_format($order['diskon'], 0, ',', '.') ?></span>
+                                    <span>- Rp <?= number_format($order['discount_amount'] ?? 0, 0, ',', '.') ?></span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center fw-bold fs-5">
                                     TOTAL
@@ -138,11 +143,11 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" id="status" class="form-select">
-                                <option value="pending" <?= $order['status'] === 'pending' ? 'selected' : '' ?>>Pending</option>
-                                <option value="processing" <?= $order['status'] === 'processing' ? 'selected' : '' ?>>Processing</option>
-                                <option value="shipped" <?= $order['status'] === 'shipped' ? 'selected' : '' ?>>Shipped</option>
-                                <option value="delivered" <?= $order['status'] === 'delivered' ? 'selected' : '' ?>>Delivered</option>
-                                <option value="cancelled" <?= $order['status'] === 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                                <option value="pending" <?= $order['status'] === 'pending' ? 'selected' : '' ?>>Menunggu Pembayaran (Pending)</option>
+                                <option value="processing" <?= $order['status'] === 'processing' ? 'selected' : '' ?>>Sedang Diproses (Processing)</option>
+                                <option value="shipped" <?= $order['status'] === 'shipped' ? 'selected' : '' ?>>Sedang Dikirim (Shipped)</option>
+                                <option value="delivered" <?= $order['status'] === 'delivered' ? 'selected' : '' ?>>Sudah Diterima (Delivered)</option>
+                                <option value="cancelled" <?= $order['status'] === 'cancelled' ? 'selected' : '' ?>>Dibatalkan (Cancelled)</option>
                             </select>
                         </div>
                         <div class="mb-3">

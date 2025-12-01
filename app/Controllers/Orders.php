@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\PesananModel;
 use App\Models\OrderStatusHistoryModel;
+use App\Models\ReviewsModel;
 
 class Orders extends BaseController
 {
@@ -34,6 +35,7 @@ class Orders extends BaseController
 
         $pesananModel = new PesananModel();
         $historyModel = new OrderStatusHistoryModel();
+        $reviewsModel = new ReviewsModel(); // Load ReviewsModel
         
         $order = $pesananModel->getOrderWithItems($id);
         
@@ -42,6 +44,19 @@ class Orders extends BaseController
         }
 
         $statusHistory = $historyModel->getOrderHistory($id);
+        $userId = session()->get('id');
+
+        // Check for reviews on each item if order is delivered
+        if ($order['status'] === 'delivered' && !empty($order['items'])) {
+            foreach ($order['items'] as $key => $item) {
+                $review = $reviewsModel->where([
+                    'user_id' => $userId,
+                    'produk_id' => $item['produk_id'],
+                    'pesanan_id' => $id // Optional: link review to specific order
+                ])->first();
+                $order['items'][$key]['user_review'] = $review;
+            }
+        }
 
         $data = [
             'title' => 'Detail Pesanan #' . $order['id'],
@@ -116,5 +131,41 @@ class Orders extends BaseController
         ];
 
         return view('orders/pending', $data);
+    }
+
+    public function invoice($id)
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $pesananModel = new PesananModel();
+        $settingModel = new \App\Models\SettingModel();
+        
+        // Get order with items
+        $order = $pesananModel->getOrderWithItems($id);
+
+        // Security check: Ensure order belongs to logged-in user
+        if (!$order || $order['user_id'] != session()->get('id')) {
+            return redirect()->to('/orders')->with('error', 'Pesanan tidak ditemukan atau Anda tidak memiliki akses.');
+        }
+
+        // Fetch Store Settings
+        $settings = $settingModel->findAll();
+        $storeData = [];
+        foreach ($settings as $setting) {
+            $storeData[$setting['key']] = $setting['value'];
+        }
+
+        $data = [
+            'order' => $order,
+            'store_name' => $storeData['store_name'] ?? 'Souvnela',
+            'store_address' => $storeData['store_address'] ?? null,
+            'store_phone' => $storeData['store_phone'] ?? null,
+            'store_logo' => $storeData['store_logo'] ?? null, // Assuming logo filename is stored
+            'store_website' => base_url()
+        ];
+
+        return view('invoice/print', $data);
     }
 }

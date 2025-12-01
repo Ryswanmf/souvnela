@@ -55,6 +55,7 @@ $routes->get('wishlist/remove/(:num)', 'Wishlist::remove/$1');
 // Order Routes
 $routes->get('orders', 'Orders::index');
 $routes->get('orders/detail/(:num)', 'Orders::detail/$1');
+$routes->get('orders/invoice/(:num)', 'Orders::invoice/$1'); // Invoice Route
 $routes->get('orders/track/(:num)', 'Orders::track/$1');
 $routes->get('orders/success/(:num)', 'Orders::success/$1');
 $routes->get('orders/pending/(:num)', 'Orders::pending/$1');
@@ -96,6 +97,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'ad
     $routes->get('produk/hapus/(:num)', 'Produk::hapus/$1');
     $routes->get('pesanan', 'Pesanan::index');
     $routes->get('pesanan/detail/(:num)', 'Pesanan::detail/$1');
+    $routes->get('pesanan/invoice/(:num)', 'Pesanan::invoice/$1'); // Admin Invoice Route
     $routes->post('pesanan/updateStatus/(:num)', 'Pesanan::updateStatus/$1');
     $routes->get('blog', 'Blog::index');
     $routes->get('blog/create', 'Blog::create');

@@ -142,5 +142,35 @@ class Pesanan extends BaseController
 
         return redirect()->to('admin/pesanan')->with('success', 'Pesanan berhasil dihapus.');
     }
+
+    public function invoice($id)
+    {
+        $order = $this->pesananModel->find($id);
+        
+        if (!$order) {
+            return redirect()->to('admin/pesanan')->with('error', 'Pesanan tidak ditemukan.');
+        }
+
+        $order['items'] = $this->itemModel->getOrderItems($id);
+
+        // Fetch Store Settings
+        $settingModel = new \App\Models\SettingModel();
+        $settings = $settingModel->findAll();
+        $storeData = [];
+        foreach ($settings as $setting) {
+            $storeData[$setting['key']] = $setting['value'];
+        }
+
+        $data = [
+            'order' => $order,
+            'store_name' => $storeData['store_name'] ?? 'Souvnela',
+            'store_address' => $storeData['store_address'] ?? null,
+            'store_phone' => $storeData['store_phone'] ?? null,
+            'store_logo' => $storeData['store_logo'] ?? null,
+            'store_website' => base_url()
+        ];
+
+        return view('invoice/print', $data);
+    }
 }
 

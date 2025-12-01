@@ -47,14 +47,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <!-- Pay Now Button -->
-                        <?php if ($order['payment_status'] === 'pending' && !empty($order['snap_token'])): ?>
-                        <div class="d-grid gap-2 mt-4">
-                            <button id="pay-button" class="btn btn-primary btn-lg">
-                                <i class="bi bi-credit-card-fill me-2"></i>Bayar Sekarang
-                            </button>
-                        </div>
-                        <?php endif; ?>
+                        
 
                         <!-- Shipping Address -->
                         <div class="border-top pt-3 mt-3">
@@ -82,6 +75,9 @@
                                                 <th class="text-center">Jumlah</th>
                                                 <th class="text-end">Harga</th>
                                                 <th class="text-end">Subtotal</th>
+                                                <?php if ($order['status'] === 'delivered'): ?>
+                                                    <th class="text-center">Ulasan</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -99,6 +95,17 @@
                                                     <td class="text-center"><?= $item['jumlah'] ?></td>
                                                     <td class="text-end">Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
                                                     <td class="text-end fw-bold">Rp <?= number_format($item['subtotal'], 0, ',', '.') ?></td>
+                                                    <?php if ($order['status'] === 'delivered'): ?>
+                                                        <td class="text-center">
+                                                            <?php if (!empty($item['user_review'])): ?>
+                                                                <span class="badge bg-primary">Ulasan Anda (<?= $item['user_review']['rating'] ?> <i class="bi bi-star-fill"></i>)</span>
+                                                            <?php else: ?>
+                                                                <a href="<?= base_url('reviews/add/' . $item['produk_id']) ?>" class="btn btn-sm btn-outline-primary">
+                                                                    <i class="bi bi-star-fill me-1"></i>Berikan Ulasan
+                                                                </a>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                    <?php endif; ?>
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
@@ -112,6 +119,19 @@
                                         </tfoot>
                                     </table>
                                 </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Payment Action Buttons -->
+                        <div class="d-grid gap-2 mt-4">
+                            <?php if ($order['payment_status'] === 'pending' && !empty($order['snap_token'])): ?>
+                                <button id="pay-button" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-credit-card-fill me-2"></i>Bayar Sekarang
+                                </button>
+                            <?php elseif ($order['status'] === 'delivered' || $order['payment_status'] === 'settlement' || $order['payment_status'] === 'capture'): ?>
+                                <a href="<?= base_url('orders/invoice/' . $order['id']) ?>" class="btn btn-success btn-lg" target="_blank">
+                                    <i class="bi bi-printer-fill me-2"></i>Cetak Invoice
+                                </a>
                             <?php endif; ?>
                         </div>
                     </div>
