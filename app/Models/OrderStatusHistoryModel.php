@@ -12,14 +12,15 @@ class OrderStatusHistoryModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['pesanan_id', 'status', 'notes', 'created_by'];
+    protected $allowedFields    = ['pesanan_id', 'status', 'notes', 'created_by', 'created_at'];
 
     protected bool $allowEmptyInserts = false;
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
+    protected $updatedField  = ''; // Disable updated_at
 
     // Get status history for an order
     public function getOrderHistory($pesananId)
@@ -36,8 +37,7 @@ class OrderStatusHistoryModel extends Model
             'pesanan_id' => $pesananId,
             'status' => $status,
             'notes' => $notes,
-            'created_by' => $createdBy,
-            'created_at' => date('Y-m-d H:i:s')
+            'created_by' => $createdBy
         ]);
     }
 

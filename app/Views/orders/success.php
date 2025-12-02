@@ -45,6 +45,9 @@
                             <a href="<?= base_url('orders/detail/' . $order['id']) ?>" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm">
                                 <i class="bi bi-receipt me-2"></i>Detail Pesanan
                             </a>
+                            <a href="<?= base_url('orders/invoice/' . $order['id']) ?>" class="btn btn-info px-4 py-2 fw-semibold shadow-sm" target="_blank">
+                                <i class="bi bi-printer me-2"></i>Cetak Invoice
+                            </a>
                             <a href="<?= base_url('orders') ?>" class="btn btn-outline-secondary px-4 py-2 fw-semibold">
                                 <i class="bi bi-list-ul me-2"></i>Riwayat Pesanan
                             </a>

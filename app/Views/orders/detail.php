@@ -172,7 +172,12 @@
                                         <div class="timeline-content">
                                             <h6 class="fw-bold mb-1"><?= $statusLabel ?></h6>
                                             <p class="text-muted small mb-1">
-                                                <?= date('d M Y, H:i', strtotime($history['created_at'])) ?> WIB
+                                                <?php
+                                                    $timestamp = strtotime($history['created_at'] ?? '');
+                                                    // Check if valid date and not roughly year 1970 (local timezone might shift it slightly)
+                                                    $isValidDate = $timestamp && $timestamp > 946080000; // > Year 2000
+                                                ?>
+                                                <?= $isValidDate ? date('d M Y, H:i', $timestamp) : '-' ?> WIB
                                             </p>
                                             <?php if (!empty($history['notes'])): ?>
                                                 <p class="small mb-0 text-secondary">

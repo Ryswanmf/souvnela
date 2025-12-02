@@ -57,9 +57,9 @@ class Payment extends BaseController
 
             // Get form data (sanitize/trim)
             $nama_penerima = trim($this->request->getPost('nama_penerima'));
-            $telepon_raw   = trim($this->request->getPost('telepon'));
+            $telepon_raw   = trim($this->request->getPost('no_telepon'));
             $email         = trim($this->request->getPost('email'));
-            $alamat        = trim($this->request->getPost('alamat'));
+            $alamat        = trim($this->request->getPost('alamat_lengkap'));
             $kota          = trim($this->request->getPost('kota'));
             $kode_pos      = trim($this->request->getPost('kode_pos'));
             $catatan       = trim($this->request->getPost('catatan'));
@@ -297,51 +297,33 @@ class Payment extends BaseController
      */
     public function checkVoucher()
     {
+        // Ensure JSON response header
+        $this->response->setHeader('Content-Type', 'application/json');
+
         if (!$this->request->isAJAX()) {
             return $this->response->setJSON(['success' => false, 'message' => 'Invalid request']);
         }
 
         $voucherCode = $this->request->getPost('voucher_code');
         $subtotal = (int)$this->request->getPost('subtotal');
+        $userId = session()->get('id'); // Get logged-in user ID for usage check
 
         $voucherModel = new \App\Models\VoucherModel();
-        $voucher = $voucherModel->where('code', $voucherCode)->first();
+        $validationResult = $voucherModel->validateVoucher($voucherCode, $subtotal, $userId);
 
-        if (!$voucher) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Kode voucher tidak valid']);
+        if (!$validationResult['valid']) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => $validationResult['message']
+            ]);
         }
 
-        if (!$voucher['is_active']) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Voucher tidak aktif']);
-        }
-
-        $now = date('Y-m-d H:i:s');
-        if ($voucher['valid_from'] > $now || $voucher['valid_until'] < $now) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Voucher sudah kadaluarsa atau belum aktif']);
-        }
-
-        if ($voucher['usage_limit'] > 0 && $voucher['used_count'] >= $voucher['usage_limit']) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Voucher sudah mencapai batas penggunaan']);
-        }
-
-        if ($voucher['minimum_purchase'] > 0 && $subtotal < $voucher['minimum_purchase']) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Total belanja Anda belum mencapai minimum pembelian untuk voucher ini (Rp ' . number_format($voucher['minimum_purchase'], 0, ',', '.') . ')']);
-        }
-
-        $discount = 0;
-        if ($voucher['discount_type'] === 'percentage') {
-            $discount = ($subtotal * $voucher['discount_value']) / 100;
-            if ($voucher['max_discount'] > 0 && $discount > $voucher['max_discount']) {
-                $discount = $voucher['max_discount'];
-            }
-        } else {
-            $discount = $voucher['discount_value'];
-        }
-
+        // If validation is successful, return the discount details
         return $this->response->setJSON([
             'success' => true,
-            'voucher_id' => $voucher['id'],
-            'discount' => (int)$discount
+            'voucher_id' => $validationResult['voucher']['id'],
+            'discount' => (int)$validationResult['discount'],
+            'message' => 'Voucher berhasil diterapkan!'
         ]);
     }
 
