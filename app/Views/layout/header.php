@@ -70,7 +70,7 @@
                         $cart = session()->get('cart') ?? [];
                         $totalItems = 0;
                         foreach ($cart as $item) {
-                            $totalItems += $item['quantity'];
+                            $totalItems += ($item['quantity'] ?? $item['jumlah'] ?? 0); // Use 0 as fallback for count
                         }
                         if ($totalItems > 0):
                         ?>

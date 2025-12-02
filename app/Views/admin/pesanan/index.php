@@ -38,23 +38,23 @@
                         </a>
                         <a href="<?= base_url('admin/pesanan?status=pending') ?>" 
                            class="btn btn-outline-warning <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'active' : '' ?>">
-                            Pending
+                            Menunggu
                         </a>
                         <a href="<?= base_url('admin/pesanan?status=processing') ?>" 
                            class="btn btn-outline-info <?= isset($_GET['status']) && $_GET['status'] == 'processing' ? 'active' : '' ?>">
-                            Processing
+                            Diproses
                         </a>
                         <a href="<?= base_url('admin/pesanan?status=shipped') ?>" 
                            class="btn btn-outline-primary <?= isset($_GET['status']) && $_GET['status'] == 'shipped' ? 'active' : '' ?>">
-                            Shipped
+                            Dikirim
                         </a>
                         <a href="<?= base_url('admin/pesanan?status=delivered') ?>" 
                            class="btn btn-outline-success <?= isset($_GET['status']) && $_GET['status'] == 'delivered' ? 'active' : '' ?>">
-                            Delivered
+                            Diterima
                         </a>
                         <a href="<?= base_url('admin/pesanan?status=cancelled') ?>" 
                            class="btn btn-outline-danger <?= isset($_GET['status']) && $_GET['status'] == 'cancelled' ? 'active' : '' ?>">
-                            Cancelled
+                            Dibatalkan
                         </a>
                     </div>
                 </div>
@@ -130,11 +130,11 @@
                                                         <div class="form-group">
                                                             <label>Status Baru</label>
                                                             <select name="status" class="form-control" required>
-                                                                <option value="pending" <?= $order['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                                                                <option value="processing" <?= $order['status'] == 'processing' ? 'selected' : '' ?>>Processing</option>
-                                                                <option value="shipped" <?= $order['status'] == 'shipped' ? 'selected' : '' ?>>Shipped</option>
-                                                                <option value="delivered" <?= $order['status'] == 'delivered' ? 'selected' : '' ?>>Delivered</option>
-                                                                <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                                                                <option value="pending" <?= $order['status'] == 'pending' ? 'selected' : '' ?>>Menunggu (Pending)</option>
+                                                                <option value="processing" <?= $order['status'] == 'processing' ? 'selected' : '' ?>>Diproses (Processing)</option>
+                                                                <option value="shipped" <?= $order['status'] == 'shipped' ? 'selected' : '' ?>>Dikirim (Shipped)</option>
+                                                                <option value="delivered" <?= $order['status'] == 'delivered' ? 'selected' : '' ?>>Diterima (Delivered)</option>
+                                                                <option value="cancelled" <?= $order['status'] == 'cancelled' ? 'selected' : '' ?>>Dibatalkan (Cancelled)</option>
                                                             </select>
                                                         </div>
                                                         <div class="form-group">

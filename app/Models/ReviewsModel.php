@@ -101,7 +101,12 @@ class ReviewsModel extends Model
                         ->join('pesanan_items', 'pesanan_items.pesanan_id = pesanan.id')
                         ->where('pesanan.user_id', $userId)
                         ->where('pesanan_items.produk_id', $produkId)
-                        ->where('pesanan.status', 'delivered')
+                        ->groupStart()
+                            ->where('pesanan.status', 'delivered')
+                            ->orWhere('pesanan.status', 'completed')
+                            ->orWhere('pesanan.status', 'selesai')
+                            ->orWhere('pesanan.status', 'diterima')
+                        ->groupEnd()
                         ->get()
                         ->getRow();
         

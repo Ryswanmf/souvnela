@@ -182,7 +182,7 @@ class Auth extends BaseController
         $data = [
             'nama_lengkap' => $request->getPost('nama'),
             'username'     => $request->getPost('username'),
-            'password'     => password_hash($request->getPost('password'), PASSWORD_DEFAULT),
+            'password'     => $request->getPost('password'),
             'role'         => 'pembeli' // Set default role
         ];
 

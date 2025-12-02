@@ -41,6 +41,7 @@
       flex-direction: column;
       box-shadow: 2px 0 15px rgba(0,0,0,0.05);
       transition: transform 0.3s ease;
+      overflow-y: auto;
     }
 
     .brand {

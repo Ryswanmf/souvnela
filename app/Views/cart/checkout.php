@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-12 mt-5">
             <h1 class="text-center mb-4">
                 <i class="bi bi-bag-check-fill text-primary me-2"></i>
                 Checkout Pesanan
@@ -41,12 +41,6 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Alamat Lengkap *</label>
                             <textarea class="form-control" name="alamat" id="alamat" rows="3" required placeholder="Masukkan alamat lengkap pengiriman"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Pilih Lokasi di Peta</label>
-                            <div id="map" style="height: 400px; width: 100%;" class="bg-light border"></div>
-                            <small class="form-text text-muted">Klik pada peta untuk menentukan lokasi, atau cari alamat di atas.</small>
                         </div>
 
                         <input type="hidden" name="latitude" id="latitude" value="">
@@ -162,105 +156,19 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= env('MIDTRANS_CLIENT_KEY') ?>"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=<?= env('GOOGLE_MAPS_API_KEY') ?>&libraries=places&callback=initMap"></script>
+<?php 
+    // Use key passed from controller, fallback to env helper if not set
+    $clientKey = $midtransClientKey ?? env('MIDTRANS_CLIENT_KEY'); 
+?>
+<?php if (empty($clientKey)): ?>
+    <script>console.error("MIDTRANS_CLIENT_KEY is missing! Check .env file and restart server.");</script>
+    <div class="alert alert-danger text-center my-3">
+        <strong>Konfigurasi Error:</strong> Client Key Midtrans belum diset. Pembayaran tidak dapat dilakukan.
+    </div>
+<?php else: ?>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?= esc($clientKey) ?>"></script>
+<?php endif; ?>
 
-
-
-<script>
-    let map;
-    let marker;
-    const defaultPosition = { lat: -2.548926, lng: 118.0148634 }; // Center of Indonesia
-
-    function initMap() {
-        // Try to get user's current location
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                const userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                createMap(userLocation, 15);
-            }, function() {
-                // Geolocation failed, use default
-                createMap(defaultPosition, 5);
-            });
-        } else {
-            // Browser doesn't support Geolocation, use default
-            createMap(defaultPosition, 5);
-        }
-    }
-
-    function createMap(center, zoom) {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: center,
-            zoom: zoom
-        });
-
-        marker = new google.maps.Marker({
-            position: center,
-            map: map,
-            draggable: true,
-            title: "Geser untuk menentukan lokasi"
-        });
-
-        // Autocomplete search box
-        const input = document.createElement('input');
-        input.setAttribute('id', 'pac-input');
-        input.setAttribute('class', 'form-control');
-        input.setAttribute('type', 'text');
-        input.setAttribute('placeholder', 'Cari alamat...');
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-        
-        const autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', map);
-        autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
-
-        autocomplete.addListener('place_changed', function() {
-            const place = autocomplete.getPlace();
-            if (!place.geometry) {
-                window.alert("Alamat tidak ditemukan: '" + place.name + "'");
-                return;
-            }
-
-            if (place.geometry.viewport) {
-                map.fitBounds(place.geometry.viewport);
-            } else {
-                map.setCenter(place.geometry.location);
-                map.setZoom(17);
-            }
-            marker.setPosition(place.geometry.location);
-            updateCoordinates(place.geometry.location.lat(), place.geometry.location.lng());
-            
-            let address = '';
-            if (place.address_components) {
-                address = [
-                  (place.address_components[0] && place.address_components[0].short_name || ''),
-                  (place.address_components[1] && place.address_components[1].short_name || ''),
-                  (place.address_components[2] && place.address_components[2].short_name || '')
-                ].join(' ');
-            }
-            document.getElementById('alamat').value = place.name + ', ' + address;
-        });
-
-        // Map click listener
-        map.addListener('click', function(e) {
-            marker.setPosition(e.latLng);
-            updateCoordinates(e.latLng.lat(), e.latLng.lng());
-        });
-
-        // Marker drag listener
-        marker.addListener('dragend', function(e) {
-            updateCoordinates(e.latLng.lat(), e.latLng.lng());
-        });
-
-        updateCoordinates(center.lat, center.lng);
-    }
-
-    function updateCoordinates(lat, lng) {
-        document.getElementById('latitude').value = lat;
-        document.getElementById('longitude').value = lng;
-    }
 
     // Update shipping cost
     document.getElementById('shippingMethod').addEventListener('change', function() {
@@ -290,15 +198,29 @@
             return;
         }
 
+        // Try to get fresh CSRF token if available in form, otherwise use rendered one
+        let csrfName = '<?= csrf_token() ?>';
+        let csrfHash = '<?= csrf_hash() ?>';
+        const formInput = document.querySelector('input[name="' + csrfName + '"]');
+        if (formInput) {
+            csrfHash = formInput.value;
+        }
+
         $.ajax({
             url: '<?= base_url('payment/check-voucher') ?>',
             type: 'POST',
             data: {
-                '<?= csrf_token() ?>': '<?= csrf_hash() ?>',
+                [csrfName]: csrfHash,
                 voucher_code: voucherCode,
                 subtotal: document.getElementById('subtotalValue').value
             },
             success: function(response) {
+                // Update CSRF hash if provided in response (good practice)
+                if (response.token) {
+                    if (formInput) formInput.value = response.token;
+                    csrfHash = response.token;
+                }
+
                 if (response.success) {
                     document.getElementById('voucherId').value = response.voucher_id;
                     document.getElementById('discountValue').value = response.discount;
@@ -311,14 +233,20 @@
                     $('#voucherMessage').html('<div class="alert alert-danger">' + response.message + '</div>');
                 }
             },
-            error: function() {
-                $('#voucherMessage').html('<div class="alert alert-danger">Terjadi kesalahan</div>');
+            error: function(xhr, status, error) {
+                console.error("Voucher Error:", xhr.responseText);
+                let msg = 'Terjadi kesalahan saat mengecek voucher.';
+                if (xhr.status === 403) {
+                    msg = 'Sesi atau Token Keamanan kadaluarsa. Silakan refresh halaman.';
+                }
+                $('#voucherMessage').html('<div class="alert alert-danger">' + msg + '</div>');
             }
         });
     }
 
     function processCheckout() {
         const form = document.getElementById('checkoutForm');
+        const btn = document.querySelector('button[onclick="processCheckout()"]');
 
         if (!form.checkValidity()) {
             alert("Form tidak valid. Harap periksa semua bidang yang wajib diisi (ditandai dengan *).");
@@ -326,8 +254,17 @@
             return;
         }
 
+        // Disable button to prevent double submit
+        const originalBtnText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Memproses...';
+
         const formData = new FormData(form);
-        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>');
+        // Use dynamic CSRF token if available, fallback to rendered one
+        // It is recommended to have <meta name="<?= csrf_token() ?>" content="<?= csrf_hash() ?>"> in head
+        // But here we stick to what is available or standard CI4 behavior
+        formData.append('<?= csrf_token() ?>', '<?= csrf_hash() ?>'); 
+        
         formData.append('total', document.getElementById('grandTotal').textContent.replace(/[^0-9]/g, ''));
         formData.append('voucher_id', document.getElementById('voucherId').value);
         formData.append('shipping_cost', document.getElementById('shippingValue').value);
@@ -341,6 +278,13 @@
             contentType: false,
             success: function(response) {
                 if (response.success) {
+                    // Check if Snap is loaded
+                    if (typeof snap === 'undefined') {
+                        alert("Error: Library Pembayaran (Midtrans) gagal dimuat. Kemungkinan Client Key belum dikonfigurasi di server.");
+                        console.error("Midtrans Snap JS not found. Check your internet connection or MIDTRANS_CLIENT_KEY configuration.");
+                        return;
+                    }
+
                     // Open Midtrans Snap
                     snap.pay(response.snap_token, {
                         onSuccess: function(result) {
@@ -350,18 +294,26 @@
                             window.location.href = '<?= base_url('orders/pending') ?>/' + response.order_id;
                         },
                         onError: function(result) {
-                            alert('Pembayaran gagal!');
+                            alert('Pembayaran gagal! Silakan coba lagi.');
+                            console.error(result);
                         },
                         onClose: function() {
-                            alert('Anda menutup popup pembayaran');
+                            alert('Anda menutup popup pembayaran. Silakan selesaikan pembayaran melalui riwayat pesanan.');
                         }
                     });
                 } else {
-                    alert(response.message);
+                    alert('Gagal: ' + response.message);
                 }
             },
-            error: function() {
-                alert('Terjadi kesalahan saat memproses pesanan');
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                console.log(xhr.responseText);
+                alert('Terjadi kesalahan sistem saat memproses pesanan. Coba refresh halaman.');
+            },
+            complete: function() {
+                // Re-enable button
+                btn.disabled = false;
+                btn.innerHTML = originalBtnText;
             }
         });
     }

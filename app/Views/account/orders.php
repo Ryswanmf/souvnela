@@ -59,12 +59,13 @@
                                                 <h6>Detail Item:</h6>
                                                 <ul class="list-group list-group-flush">
                                                     <?php foreach ($order['items'] as $item): ?>
+                                                        <?php $qty = $item['quantity'] ?? $item['jumlah'] ?? 0; ?>
                                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                                             <div>
                                                                 <?= esc($item['nama_produk']) ?> 
-                                                                <span class="text-muted small">x <?= $item['quantity'] ?></span>
+                                                                <span class="text-muted small">x <?= $qty ?></span>
                                                             </div>
-                                                            <span><?= number_to_currency($item['harga'] * $item['quantity'], 'IDR') ?></span>
+                                                            <span><?= number_to_currency($item['harga'] * $qty, 'IDR') ?></span>
                                                         </li>
                                                     <?php endforeach; ?>
                                                 </ul>

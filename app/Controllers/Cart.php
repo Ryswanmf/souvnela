@@ -216,10 +216,20 @@ class Cart extends BaseController
             $total += $item['harga'] * $item['quantity'];
         }
 
+        // Get Midtrans Client Key safely
+        $midtransClientKey = getenv('MIDTRANS_CLIENT_KEY');
+        if (!$midtransClientKey && isset($_ENV['MIDTRANS_CLIENT_KEY'])) {
+            $midtransClientKey = $_ENV['MIDTRANS_CLIENT_KEY'];
+        }
+        if (!$midtransClientKey && isset($_SERVER['MIDTRANS_CLIENT_KEY'])) {
+            $midtransClientKey = $_SERVER['MIDTRANS_CLIENT_KEY'];
+        }
+
         $data = [
             'cart_items' => $cart_items,
             'total' => $total,
-            'title' => 'Checkout'
+            'title' => 'Checkout',
+            'midtransClientKey' => $midtransClientKey
         ];
 
         return view('cart/checkout', $data);
@@ -257,7 +267,7 @@ class Cart extends BaseController
 
         // Check expiry
         $now = date('Y-m-d H:i:s');
-        if ($voucher['start_date'] > $now || $voucher['end_date'] < $now) {
+        if ($voucher['valid_from'] > $now || $voucher['valid_until'] < $now) {
             return redirect()->back()->with('error', 'Voucher sudah kadaluarsa atau belum aktif.');
         }
 

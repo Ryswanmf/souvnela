@@ -15,12 +15,19 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background: linear-gradient(rgba(0, 123, 255, 0.2), rgba(0, 123, 255, 0.2)), url('<?= base_url('assets/images/polinela.jpg') ?>');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            animation: moveBg 30s linear infinite;
         }
         .card {
             border: none;
             border-radius: 1rem;
             width: 100%;
             max-width: 400px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
         }
         .btn-primary {
             background-color: #0049b7;
@@ -31,6 +38,12 @@
         }
         .input-group-text {
             background-color: #e9ecef;
+        }
+
+        @keyframes moveBg {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
         }
     </style>
 </head>

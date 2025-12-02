@@ -34,6 +34,7 @@
                     </thead>
                     <tbody>
                         <?php foreach ($cart as $item): ?>
+                            <?php $qty = $item['quantity'] ?? $item['jumlah'] ?? 1; ?>
                             <tr>
                                 <td style="width: 100px;">
                                     <img src="<?= base_url('uploads/' . esc($item['gambar'])) ?>" class="img-fluid rounded">
@@ -44,10 +45,10 @@
                                     <form action="<?= base_url('cart/update') ?>" method="post" class="d-flex">
                                         <?= csrf_field() ?>
                                         <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
-                                        <input type="number" name="quantity" value="<?= $item['quantity'] ?>" class="form-control form-control-sm" min="1" onchange="this.form.submit()">
+                                        <input type="number" name="quantity" value="<?= $qty ?>" class="form-control form-control-sm" min="1" onchange="this.form.submit()">
                                     </form>
                                 </td>
-                                <td class="text-end"><?= number_to_currency($item['harga'] * $item['quantity'], 'IDR') ?></td>
+                                <td class="text-end"><?= number_to_currency($item['harga'] * $qty, 'IDR') ?></td>
                                 <td class="text-end">
                                     <a href="<?= base_url('cart/remove/' . $item['id']) ?>" class="btn btn-sm btn-outline-danger" title="Hapus">
                                         <i class="bi bi-trash"></i>

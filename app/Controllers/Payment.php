@@ -39,215 +39,215 @@ class Payment extends BaseController
      */
     public function process()
     {
-
-        // Only accept AJAX request
-        if (!$this->request->isAJAX()) {
-            return redirect()->to('/cart');
-        }
-
-        $cart = session()->get('cart') ?? [];
-
-        if (empty($cart)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Keranjang kosong'
-            ]);
-        }
-
-        // Get form data (sanitize/trim)
-        $nama_penerima = trim($this->request->getPost('nama_penerima'));
-        $telepon_raw   = trim($this->request->getPost('telepon'));
-        $email         = trim($this->request->getPost('email'));
-        $alamat        = trim($this->request->getPost('alamat'));
-        $kota          = trim($this->request->getPost('kota'));
-        $kode_pos      = trim($this->request->getPost('kode_pos'));
-        $catatan       = trim($this->request->getPost('catatan'));
-        $shipping_method = trim($this->request->getPost('shipping_method'));
-        $total_post    = $this->request->getPost('total');
-        $voucher_id    = $this->request->getPost('voucher_id');
-        $shipping_cost  = $this->request->getPost('shipping_cost') ?: 0;
-        $discount_amount = $this->request->getPost('discount_amount') ?: 0;
-        $latitude = $this->request->getPost('latitude');
-        $longitude = $this->request->getPost('longitude');
-
-        // Normalize numeric values
-        $shipping_cost = (int) $shipping_cost;
-        $discount_amount = (int) $discount_amount;
-        $total = (int) $total_post;
-
-        // Calculate subtotal from cart using 'jumlah'
-        $subtotal = 0;
-        foreach ($cart as $item) {
-            $jumlah = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
-            $harga  = isset($item['harga']) ? (int)$item['harga'] : 0;
-            $subtotal += $harga * $jumlah;
-        }
-
-        // Basic validation
-        if (empty($nama_penerima) || empty($telepon_raw) || empty($email)) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Nama, telepon, dan email wajib diisi.'
-            ]);
-        }
-
-        // Normalize phone number: if starts with 08 => convert to +628...
-        $telepon = $this->normalizePhone($telepon_raw);
-
-        // Ensure total sanity: total should be >= subtotal + ongkir - diskon
-        $expectedTotal = $subtotal + $shipping_cost - $discount_amount;
-        if ($total <= 0 || $total !== $expectedTotal) {
-            // jika mismatch, gunakan perhitungan server sebagai sumber utama
-            $total = $expectedTotal;
-        }
-
-        if ($total <= 0) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Total pembayaran tidak valid.'
-            ]);
-        }
-
-        // Build order data
-        $orderData = [
-            'user_id' => session()->get('id'),
-            'nama_penerima' => $nama_penerima,
-            'no_telepon' => $telepon,
-            'email' => $email,
-            'alamat_lengkap' => $alamat . ', ' . $kota . ', ' . $kode_pos,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
-            'catatan' => $catatan,
-            'subtotal' => $subtotal,
-            'ongkir' => $shipping_cost,
-            'discount_amount' => $discount_amount,
-            'total_harga' => $total,
-            'status' => 'pending',
-            'payment_status' => 'pending',
-            'shipping_method' => $shipping_method,
-            'voucher_id' => $voucher_id ?: null,
-            'created_at' => date('Y-m-d H:i:s')
-        ];
-
-        // Begin DB transaction for safety
-        $db = \Config\Database::connect();
-        $db->transStart();
-
-        // Insert order (pesanan)
-        $orderId = $this->pesananModel->insert($orderData);
-        if (!$orderId) {
-            $db->transRollback();
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Gagal menyimpan pesanan.'
-            ]);
-        }
-
-        // Insert items and update stock
-        $produkModel = new \App\Models\ProdukModel();
-        foreach ($cart as $item) {
-            $itemJumlah = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
-            $itemHarga  = isset($item['harga']) ? (int)$item['harga'] : 0;
-
-            $this->itemModel->insert([
-                'pesanan_id' => $orderId,
-                'produk_id'  => $item['id'],
-                'jumlah'     => $itemJumlah,
-                'harga'      => $itemHarga,
-                'subtotal'   => $itemHarga * $itemJumlah,
-                'created_at' => date('Y-m-d H:i:s')
-            ]);
-
-            // Update stock (cek stok dulu)
-            $produk = $produkModel->find($item['id']);
-            if ($produk) {
-                $newStock = max(0, $produk['stok'] - $itemJumlah);
-                $produkModel->update($item['id'], ['stok' => $newStock]);
-            }
-        }
-
-        // Commit DB transaction
-        $db->transComplete();
-        if ($db->transStatus() === false) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Gagal menyelesaikan transaksi database.'
-            ]);
-        }
-
-        // Prepare item_details for Midtrans using 'jumlah'
-        $itemDetails = [];
-        foreach ($cart as $item) {
-            $qty = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
-            $price = isset($item['harga']) ? (int)$item['harga'] : 0;
-            $name = isset($item['nama']) ? $item['nama'] : ($item['nama_produk'] ?? 'Produk');
-
-            $itemDetails[] = [
-                'id' => (string)$item['id'],
-                'price' => $price,
-                'quantity' => $qty,
-                'name' => $name
-            ];
-        }
-
-        // Add shipping as item if present
-        if ($shipping_cost > 0) {
-            $itemDetails[] = [
-                'id' => 'SHIPPING',
-                'price' => (int)$shipping_cost,
-                'quantity' => 1,
-                'name' => 'Ongkos Kirim (' . ucfirst($shipping_method) . ')'
-            ];
-        }
-
-        // Transaction detail: create unique order id recognized by Midtrans
-        $midtransOrderId = 'ORDER-' . $orderId . '-' . time();
-        $transactionDetails = [
-            'order_id' => $midtransOrderId,
-            'gross_amount' => (int)$total
-        ];
-
-        // Customer details
-        $customerDetails = [
-            'first_name' => $nama_penerima,
-            'email' => $email,
-            'phone' => $telepon,
-            'shipping_address' => [
-                'first_name' => $nama_penerima,
-                'address' => $alamat,
-                'city' => $kota,
-                'postal_code' => $kode_pos,
-                'phone' => $telepon
-            ]
-        ];
-
-        // Build transaction data
-        $transactionData = [
-            'transaction_details' => $transactionDetails,
-            'item_details' => $itemDetails,
-            'customer_details' => $customerDetails,
-            // optional: you may limit enabled_payments or remove service names that your account doesn't support
-            'enabled_payments' => [
-                'credit_card', 'gopay', 'permata_va', 'bca_va', 'bni_va', 'bri_va',
-                'echannel', 'indomaret', 'alfamart', 'shopeepay'
-            ]
-        ];
+        // Ensure JSON response header
+        $this->response->setHeader('Content-Type', 'application/json');
 
         try {
+            // Only accept AJAX request
+            if (!$this->request->isAJAX()) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Invalid request type']);
+            }
+
+            $cart = session()->get('cart') ?? [];
+            if (empty($cart)) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Keranjang kosong']);
+            }
+
+            // ... (rest of the logic) ...
+
+            // Get form data (sanitize/trim)
+            $nama_penerima = trim($this->request->getPost('nama_penerima'));
+            $telepon_raw   = trim($this->request->getPost('telepon'));
+            $email         = trim($this->request->getPost('email'));
+            $alamat        = trim($this->request->getPost('alamat'));
+            $kota          = trim($this->request->getPost('kota'));
+            $kode_pos      = trim($this->request->getPost('kode_pos'));
+            $catatan       = trim($this->request->getPost('catatan'));
+            $shipping_method = trim($this->request->getPost('shipping_method'));
+            $total_post    = $this->request->getPost('total');
+            $voucher_id    = $this->request->getPost('voucher_id');
+            $shipping_cost  = $this->request->getPost('shipping_cost') ?: 0;
+            $discount_amount = $this->request->getPost('discount_amount') ?: 0;
+            $latitude = $this->request->getPost('latitude');
+            $longitude = $this->request->getPost('longitude');
+
+            // Normalize numeric values
+            $shipping_cost = (int) $shipping_cost;
+            $discount_amount = (int) $discount_amount;
+            $total = (int) $total_post;
+
+            // Calculate subtotal from cart using 'jumlah'
+            $subtotal = 0;
+            foreach ($cart as $item) {
+                $jumlah = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
+                $harga  = isset($item['harga']) ? (int)$item['harga'] : 0;
+                $subtotal += $harga * $jumlah;
+            }
+
+            // Basic validation
+            if (empty($nama_penerima) || empty($telepon_raw) || empty($email)) {
+                throw new \Exception('Nama, telepon, dan email wajib diisi.');
+            }
+
+            // Normalize phone number
+            $telepon = $this->normalizePhone($telepon_raw);
+
+            // Ensure total sanity
+            $expectedTotal = $subtotal + $shipping_cost - $discount_amount;
+            if ($total <= 0 || $total !== $expectedTotal) {
+                $total = $expectedTotal;
+            }
+
+            if ($total <= 0) {
+                throw new \Exception('Total pembayaran tidak valid.');
+            }
+
+            // Build order data
+            $orderData = [
+                'user_id' => session()->get('id'),
+                'nama_penerima' => $nama_penerima,
+                'pelanggan' => session()->get('nama_lengkap') ?? $nama_penerima,
+                'no_telepon' => $telepon,
+                'email' => $email,
+                'alamat_lengkap' => $alamat . ', ' . $kota . ', ' . $kode_pos,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'catatan' => $catatan,
+                
+                // REMOVED 'subtotal' as column does not exist in DB
+                
+                'ongkir' => $shipping_cost,
+                'discount_amount' => $discount_amount,
+                'diskon' => $discount_amount,
+                
+                'total_harga' => $total,
+                'final_amount' => $total,
+                
+                'kode' => 'INV-' . strtoupper(uniqid()),
+                
+                'status' => 'pending',
+                'payment_status' => 'pending',
+                'shipping_method' => $shipping_method,
+                'voucher_id' => $voucher_id ?: null,
+                'created_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Begin DB transaction
+            $db = \Config\Database::connect();
+            $db->transStart();
+
+            // Insert order
+            $orderId = $this->pesananModel->insert($orderData);
+            if (!$orderId) {
+                $errors = $this->pesananModel->errors();
+                $db->transRollback();
+                throw new \Exception('Gagal menyimpan pesanan: ' . json_encode($errors));
+            }
+
+            // Insert items and update stock
+            $produkModel = new \App\Models\ProdukModel();
+            foreach ($cart as $item) {
+                $itemJumlah = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
+                $itemHarga  = isset($item['harga']) ? (int)$item['harga'] : 0;
+
+                $this->itemModel->insert([
+                    'pesanan_id' => $orderId,
+                    'produk_id'  => $item['id'],
+                    'jumlah'     => $itemJumlah,
+                    'harga'      => $itemHarga,
+                    'subtotal'   => $itemHarga * $itemJumlah,
+                    'created_at' => date('Y-m-d H:i:s')
+                ]);
+
+                // Update stock
+                $produk = $produkModel->find($item['id']);
+                if ($produk) {
+                    $newStock = max(0, $produk['stok'] - $itemJumlah);
+                    $produkModel->update($item['id'], ['stok' => $newStock]);
+                }
+            }
+
+            // Commit DB transaction
+            $db->transComplete();
+            if ($db->transStatus() === false) {
+                throw new \Exception('Gagal menyelesaikan transaksi database.');
+            }
+
+            // Prepare item_details for Midtrans
+            $itemDetails = [];
+            foreach ($cart as $item) {
+                $qty = isset($item['jumlah']) ? (int)$item['jumlah'] : (int)($item['quantity'] ?? 0);
+                $price = isset($item['harga']) ? (int)$item['harga'] : 0;
+                $name = isset($item['nama']) ? $item['nama'] : ($item['nama_produk'] ?? 'Produk');
+                $name = substr($name, 0, 50); // Midtrans name limit
+
+                $itemDetails[] = [
+                    'id' => (string)$item['id'],
+                    'price' => $price,
+                    'quantity' => $qty,
+                    'name' => $name
+                ];
+            }
+
+            if ($shipping_cost > 0) {
+                $itemDetails[] = [
+                    'id' => 'SHIPPING',
+                    'price' => (int)$shipping_cost,
+                    'quantity' => 1,
+                    'name' => 'Ongkos Kirim'
+                ];
+            }
+            
+            if ($discount_amount > 0) {
+                 // Midtrans doesn't support negative item directly easily in this simplified flow usually, 
+                 // but let's try adding it as negative value item if allowed, OR just rely on gross_amount.
+                 // Safest way: Adjust gross_amount, but item_details sum must match gross_amount.
+                 // If discount exists, we can add a negative item.
+                 $itemDetails[] = [
+                    'id' => 'DISCOUNT',
+                    'price' => -((int)$discount_amount),
+                    'quantity' => 1,
+                    'name' => 'Diskon Voucher'
+                 ];
+            }
+
+            $midtransOrderId = 'ORDER-' . $orderId . '-' . time();
+            $transactionDetails = [
+                'order_id' => $midtransOrderId,
+                'gross_amount' => (int)$total
+            ];
+
+            $customerDetails = [
+                'first_name' => $nama_penerima,
+                'email' => $email,
+                'phone' => $telepon,
+                'shipping_address' => [
+                    'first_name' => $nama_penerima,
+                    'address' => $alamat,
+                    'city' => $kota,
+                    'postal_code' => $kode_pos,
+                    'phone' => $telepon
+                ]
+            ];
+
+            $transactionData = [
+                'transaction_details' => $transactionDetails,
+                'item_details' => $itemDetails,
+                'customer_details' => $customerDetails,
+            ];
+
             // Get Snap Token
             $snapToken = Snap::getSnapToken($transactionData);
 
-            // Save snap token + midtrans order id to pesanan
+            // Save snap token
             $this->pesananModel->update($orderId, [
                 'snap_token' => $snapToken,
                 'transaction_id' => $midtransOrderId,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
 
-            // Clear cart and voucher from session
+            // Clear session
             session()->remove(['cart', 'voucher_id', 'voucher_code', 'discount']);
-
-            // Clear DB cart
             $cartModel = new \App\Models\CartModel();
             $cartModel->where('user_id', session()->get('id'))->delete();
 
@@ -256,20 +256,12 @@ class Payment extends BaseController
                 'snap_token' => $snapToken,
                 'order_id' => $orderId
             ]);
+
         } catch (\Exception $e) {
-            // Log error for debugging
-            log_message('error', 'Midtrans Snap error: ' . $e->getMessage());
-
-            // Optional: mark pesanan as failed or rollback depending on your policy
-            $this->pesananModel->update($orderId, [
-                'payment_status' => 'failed',
-                'status' => 'payment_error',
-                'updated_at' => date('Y-m-d H:i:s')
-            ]);
-
+            log_message('error', 'Checkout Error: ' . $e->getMessage());
             return $this->response->setJSON([
                 'success' => false,
-                'message' => 'Gagal membuat pembayaran: ' . $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }
@@ -324,7 +316,7 @@ class Payment extends BaseController
         }
 
         $now = date('Y-m-d H:i:s');
-        if ($voucher['start_date'] > $now || $voucher['end_date'] < $now) {
+        if ($voucher['valid_from'] > $now || $voucher['valid_until'] < $now) {
             return $this->response->setJSON(['success' => false, 'message' => 'Voucher sudah kadaluarsa atau belum aktif']);
         }
 

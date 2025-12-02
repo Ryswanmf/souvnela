@@ -22,14 +22,23 @@ class Home extends BaseController
 
         $data['title'] = 'Beranda';
 
-        // Optimized caching with longer TTL (24 hours instead of 1 hour)
+        // Optimized caching
         if (!$data['products'] = cache('featured_products')) {
             // Use select to get only needed fields and limit to 6 for faster loading
             $data['products'] = $produkModel->select('id, nama, harga, gambar, stok, kategori')
                                            ->where('is_unggulan', 1)
                                            ->limit(6)
                                            ->findAll();
-            cache()->save('featured_products', $data['products'], 86400); // 24 hours
+            
+            // Fallback: If no featured products, get latest products
+            if (empty($data['products'])) {
+                 $data['products'] = $produkModel->select('id, nama, harga, gambar, stok, kategori')
+                                           ->orderBy('id', 'DESC')
+                                           ->limit(6)
+                                           ->findAll();
+            }
+
+            cache()->save('featured_products', $data['products'], 60); // 60 seconds dev mode
         }
 
         if (!$data['posts'] = cache('blog_posts')) {
@@ -76,7 +85,7 @@ class Home extends BaseController
             }
         }
 
-        return view('home', $data);
+        return view('index', $data);
     }
 
     public function kontak(): string
